@@ -1,115 +1,20 @@
-/* ROISection — Boss Wallet Logic
-   Design: Dark charcoal bg, gold accent, stark contrast
-   Layout: 3-column comparison table + animated cost counter
-   Strategy: Boss journey step 1 — "Show me the math"
-   Key message: Hiring a team costs ¥30k+/month. I cost a fraction. Here's the proof. */
+/* ROISection — Boss Wallet Logic v2
+   Design: Dark charcoal bg, gold accent
+   Layout: Tab switcher (Hiring Cost / Platform Cost) + animated savings counter
+   Strategy: "Show me the math" — two ways to lose money, one way to win
+   Key message: You're either paying a team ¥33k/mo or Amazon 15%. Both are optional. */
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 import type { Locale } from "@/i18n/translations";
 
-// ─── Copy ────────────────────────────────────────────────────────────────────
-
-const COPY: Record<Locale, {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-  colHeaders: [string, string, string];
-  rows: { label: string; agency: string; team: string; me: string; highlight?: boolean }[];
-  savingsLabel: string;
-  savingsValue: string;
-  savingsNote: string;
-  timelineTitle: string;
-  timelineRows: { phase: string; agency: string; me: string }[];
-}> = {
-  en: {
-    eyebrow: "THE MATH",
-    title: "What you're actually paying for",
-    subtitle: "Compare the real cost of building and running a cross-border e-commerce store — agency, in-house team, or working with me.",
-    colHeaders: ["Agency / Outsource", "In-House Team", "Work with Bob"],
-    rows: [
-      { label: "Brand website", agency: "¥15,000–50,000", team: "¥30,000+", me: "¥3,800", highlight: true },
-      { label: "Full e-commerce store", agency: "¥30,000–120,000", team: "¥80,000+", me: "¥8,800", highlight: true },
-      { label: "Monthly maintenance", agency: "¥2,000–8,000/mo", team: "¥15,000/mo (salary)", me: "¥800/mo" },
-      { label: "SEO setup", agency: "¥5,000–20,000", team: "Extra hire needed", me: "Included" },
-      { label: "Order automation", agency: "Not included", team: "Dev time required", me: "Included" },
-      { label: "Social media auto-post", agency: "Not included", team: "Extra hire needed", me: "Included" },
-      { label: "CMS + content dashboard", agency: "¥5,000–15,000", team: "Dev time required", me: "Included" },
-      { label: "Delivery timeline", agency: "60–90 days", team: "3–6 months", me: "7–21 days", highlight: true },
-    ],
-    savingsLabel: "Your estimated annual savings vs. in-house team",
-    savingsValue: "¥278,000",
-    savingsNote: "Based on avg. Shenzhen salary data from Boss直聘 (2024): Shopify dev ¥15k/mo, content ops ¥8k/mo, designer ¥10k/mo",
-    timelineTitle: "Delivery speed comparison",
-    timelineRows: [
-      { phase: "Brand website", agency: "60 days", me: "7 days" },
-      { phase: "E-commerce store", agency: "90 days", me: "21 days" },
-      { phase: "Automation setup", agency: "Not offered", me: "3 days" },
-      { phase: "First revision", agency: "7–14 days", me: "24 hours" },
-    ],
-  },
-  zh: {
-    eyebrow: "成本算法",
-    title: "你实际在为什么付费？",
-    subtitle: "对比搭建和运营跨境电商独立站的真实成本——外包机构、自建团队，还是找我合作。",
-    colHeaders: ["外包机构", "自建团队", "找 Bob 合作"],
-    rows: [
-      { label: "品牌官网", agency: "¥15,000–50,000", team: "¥30,000+", me: "¥3,800", highlight: true },
-      { label: "完整电商独立站", agency: "¥30,000–120,000", team: "¥80,000+", me: "¥8,800", highlight: true },
-      { label: "月度维护", agency: "¥2,000–8,000/月", team: "¥15,000/月（工资）", me: "¥800/月" },
-      { label: "SEO 优化", agency: "¥5,000–20,000", team: "需额外招人", me: "已包含" },
-      { label: "订单自动化", agency: "不包含", team: "需开发时间", me: "已包含" },
-      { label: "社媒自动发布", agency: "不包含", team: "需额外招人", me: "已包含" },
-      { label: "CMS 内容管理后台", agency: "¥5,000–15,000", team: "需开发时间", me: "已包含" },
-      { label: "交付周期", agency: "60–90 天", team: "3–6 个月", me: "7–21 天", highlight: true },
-    ],
-    savingsLabel: "对比自建团队，你的预估年节省金额",
-    savingsValue: "¥278,000",
-    savingsNote: "数据来源：Boss直聘 2024 年深圳薪资数据：Shopify 开发 ¥15k/月、内容运营 ¥8k/月、设计师 ¥10k/月",
-    timelineTitle: "交付速度对比",
-    timelineRows: [
-      { phase: "品牌官网", agency: "60 天", me: "7 天" },
-      { phase: "电商独立站", agency: "90 天", me: "21 天" },
-      { phase: "自动化搭建", agency: "不提供", me: "3 天" },
-      { phase: "首次修改", agency: "7–14 天", me: "24 小时" },
-    ],
-  },
-  ja: {
-    eyebrow: "コスト計算",
-    title: "実際に何にお金を払っているか",
-    subtitle: "越境EC独立サイトの構築・運営にかかる本当のコストを比較 — 外注、社内チーム、Bob との協業。",
-    colHeaders: ["外注エージェンシー", "社内チーム", "Bobと協業"],
-    rows: [
-      { label: "ブランドサイト", agency: "¥15,000–50,000", team: "¥30,000以上", me: "¥3,800", highlight: true },
-      { label: "完全ECストア", agency: "¥30,000–120,000", team: "¥80,000以上", me: "¥8,800", highlight: true },
-      { label: "月次メンテナンス", agency: "¥2,000–8,000/月", team: "¥15,000/月（給与）", me: "¥800/月" },
-      { label: "SEO設定", agency: "¥5,000–20,000", team: "追加採用が必要", me: "含む" },
-      { label: "注文自動化", agency: "含まない", team: "開発時間が必要", me: "含む" },
-      { label: "SNS自動投稿", agency: "含まない", team: "追加採用が必要", me: "含む" },
-      { label: "CMSダッシュボード", agency: "¥5,000–15,000", team: "開発時間が必要", me: "含む" },
-      { label: "納期", agency: "60〜90日", team: "3〜6ヶ月", me: "7〜21日", highlight: true },
-    ],
-    savingsLabel: "社内チーム比 年間推定節約額",
-    savingsValue: "¥278,000",
-    savingsNote: "出典：Boss直聘 2024年深セン給与データ：Shopify開発 ¥15k/月、コンテンツ運用 ¥8k/月、デザイナー ¥10k/月",
-    timelineTitle: "納期比較",
-    timelineRows: [
-      { phase: "ブランドサイト", agency: "60日", me: "7日" },
-      { phase: "ECストア", agency: "90日", me: "21日" },
-      { phase: "自動化設定", agency: "提供なし", me: "3日" },
-      { phase: "初回修正", agency: "7〜14日", me: "24時間" },
-    ],
-  },
-};
-
 // ─── Animated counter ────────────────────────────────────────────────────────
 
-function AnimatedNumber({ target, prefix = "" }: { target: number; prefix?: string }) {
+function AnimatedNumber({ target, prefix = "", suffix = "" }: { target: number; prefix?: string; suffix?: string }) {
   const [val, setVal] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
-
   useEffect(() => {
     if (!inView) return;
     const duration = 1800;
@@ -122,255 +27,339 @@ function AnimatedNumber({ target, prefix = "" }: { target: number; prefix?: stri
     };
     requestAnimationFrame(animate);
   }, [inView, target]);
-
-  return <span ref={ref}>{prefix}{val.toLocaleString()}</span>;
+  return <span ref={ref}>{prefix}{val.toLocaleString()}{suffix}</span>;
 }
+
+// ─── Copy ────────────────────────────────────────────────────────────────────
+
+const COPY: Record<Locale, {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  tab1: string;
+  tab2: string;
+  hiringTitle: string;
+  hiringSubtitle: string;
+  hiringRows: { role: string; salary: string; note: string }[];
+  hiringTotal: string;
+  hiringTotalNote: string;
+  hiringVsBob: string;
+  hiringVsBobNote: string;
+  platformTitle: string;
+  platformSubtitle: string;
+  platformRows: { item: string; platform: string; independent: string; highlight?: boolean }[];
+  platformNote: string;
+  savingsLabel: string;
+  savingsNote: string;
+  timelineTitle: string;
+  timelineRows: { phase: string; them: string; me: string }[];
+  timelineNote: string;
+}> = {
+  zh: {
+    eyebrow: "成本算法",
+    title: "你的钱，正在两个地方悄悄流失",
+    subtitle: "一边是招人成本，一边是平台佣金。两个都是可以避免的。",
+    tab1: "招人 vs 找我",
+    tab2: "平台 vs 独立站",
+    hiringTitle: "自建团队需要多少钱？",
+    hiringSubtitle: "数据来源：Boss直聘 2024 年深圳跨境电商岗位薪资",
+    hiringRows: [
+      { role: "Shopify 独立站开发", salary: "¥12,000–18,000/月", note: "还需要 3–6 个月磨合期" },
+      { role: "独立站设计师", salary: "¥8,000–15,000/月", note: "外包单次报价 ¥5,000–20,000" },
+      { role: "内容运营 / 文案", salary: "¥6,000–10,000/月", note: "SEO 文章、产品描述、社媒" },
+      { role: "社媒运营 / 社群管理", salary: "¥5,000–8,000/月", note: "Instagram / TikTok / Facebook" },
+      { role: "订单管理 / 客服", salary: "¥4,000–7,000/月", note: "旺季还需要临时工" },
+    ],
+    hiringTotal: "¥35,000–58,000/月",
+    hiringTotalNote: "这还不包括：社保、招聘费、试错成本、离职补偿、设备采购……",
+    hiringVsBob: "找 Bob：¥8,800 一次性",
+    hiringVsBobNote: "包含以上所有功能，7–21 天交付，月维护 ¥800",
+    platformTitle: "平台卖货 vs 独立站，差距有多大？",
+    platformSubtitle: "以月销售额 ¥100,000 为例",
+    platformRows: [
+      { item: "平台佣金/月", platform: "¥15,000（15%）", independent: "¥0", highlight: true },
+      { item: "广告费/月", platform: "¥20,000–40,000", independent: "¥3,000–8,000（SEO 长期免费流量）", highlight: true },
+      { item: "品牌溢价空间", platform: "低（同质化竞争）", independent: "高（品牌背书，客单价提升 30–50%）" },
+      { item: "客户数据归属", platform: "平台所有，你看不到", independent: "完全属于你，可复购营销" },
+      { item: "封号/下架风险", platform: "随时可能，无预警", independent: "无，你控制一切" },
+      { item: "多币种/多语言", platform: "受限，手续费高", independent: "全球支付，自动换算" },
+      { item: "年利润差距", platform: "基准", independent: "多赚 ¥180,000–300,000", highlight: true },
+    ],
+    platformNote: "* 以上为估算，实际数据因品类和运营策略而异",
+    savingsLabel: "对比自建团队，年节省",
+    savingsNote: "¥35,000/月 × 12 - ¥8,800（建站）- ¥9,600（维护）= 节省 ¥401,600/年",
+    timelineTitle: "时间成本对比",
+    timelineRows: [
+      { phase: "品牌官网上线", them: "机构：60–90 天", me: "我：7 天" },
+      { phase: "电商独立站上线", them: "自建团队：3–6 个月", me: "我：21 天" },
+      { phase: "SEO 内容体系搭建", them: "内容运营：3–6 个月", me: "我：同步完成" },
+      { phase: "支付 + 订单系统", them: "开发：1–2 个月", me: "我：内置，即开即用" },
+      { phase: "自动化运营上线", them: "需额外招人", me: "我：包含在方案内" },
+    ],
+    timelineNote: "每晚一天上线 = 少一天收款。你的竞争对手不会等你。",
+  },
+  en: {
+    eyebrow: "THE MATH",
+    title: "Your money is leaking from two places",
+    subtitle: "Hiring costs on one side, platform commissions on the other. Both are optional.",
+    tab1: "Hiring vs. Me",
+    tab2: "Platform vs. Store",
+    hiringTitle: "What does building a team actually cost?",
+    hiringSubtitle: "Source: Boss直聘 2024 Shenzhen cross-border e-commerce salary data",
+    hiringRows: [
+      { role: "Shopify / store developer", salary: "¥12,000–18,000/mo", note: "Plus 3–6 months ramp-up time" },
+      { role: "UI/UX designer", salary: "¥8,000–15,000/mo", note: "Or ¥5,000–20,000 per project outsourced" },
+      { role: "Content writer / copywriter", salary: "¥6,000–10,000/mo", note: "SEO articles, product copy, social" },
+      { role: "Social media manager", salary: "¥5,000–8,000/mo", note: "Instagram / TikTok / Facebook" },
+      { role: "Order manager / customer service", salary: "¥4,000–7,000/mo", note: "Extra temp staff during peak season" },
+    ],
+    hiringTotal: "¥35,000–58,000/mo",
+    hiringTotalNote: "Excludes: social insurance, recruitment fees, trial-and-error costs, severance, equipment...",
+    hiringVsBob: "Work with Bob: ¥8,800 one-time",
+    hiringVsBobNote: "All of the above included. 7–21 day delivery. ¥800/mo maintenance.",
+    platformTitle: "Platform selling vs. your own store — the real gap",
+    platformSubtitle: "Based on ¥100,000/month in sales",
+    platformRows: [
+      { item: "Platform commission/mo", platform: "¥15,000 (15%)", independent: "¥0", highlight: true },
+      { item: "Advertising/mo", platform: "¥20,000–40,000", independent: "¥3,000–8,000 (SEO = long-term free traffic)", highlight: true },
+      { item: "Brand premium potential", platform: "Low (commoditized)", independent: "High (brand trust lifts AOV 30–50%)" },
+      { item: "Customer data ownership", platform: "Platform owns it — you're blind", independent: "100% yours — retarget and repurchase" },
+      { item: "Account suspension risk", platform: "Anytime, no warning", independent: "None — you control everything" },
+      { item: "Multi-currency / multi-language", platform: "Limited, high fees", independent: "Global payments, auto-converted" },
+      { item: "Annual profit difference", platform: "Baseline", independent: "+¥180,000–300,000 more", highlight: true },
+    ],
+    platformNote: "* Estimates based on typical cross-border e-commerce operations",
+    savingsLabel: "Annual savings vs. in-house team",
+    savingsNote: "¥35,000/mo × 12 − ¥8,800 (build) − ¥9,600 (maintenance) = ¥401,600 saved/year",
+    timelineTitle: "Time cost comparison",
+    timelineRows: [
+      { phase: "Brand website live", them: "Agency: 60–90 days", me: "Me: 7 days" },
+      { phase: "E-commerce store live", them: "In-house team: 3–6 months", me: "Me: 21 days" },
+      { phase: "SEO content system", them: "Content team: 3–6 months", me: "Me: built in simultaneously" },
+      { phase: "Payment + order system", them: "Dev: 1–2 months", me: "Me: built-in, ready on day 1" },
+      { phase: "Automation live", them: "Requires extra hire", me: "Me: included in package" },
+    ],
+    timelineNote: "Every day without a store = one day without revenue. Your competitors aren't waiting.",
+  },
+  ja: {
+    eyebrow: "コスト計算",
+    title: "お金が2か所から漏れている",
+    subtitle: "採用コストとプラットフォーム手数料。どちらも回避できる。",
+    tab1: "採用 vs 私",
+    tab2: "プラットフォーム vs 独立サイト",
+    hiringTitle: "チームを作るといくらかかる？",
+    hiringSubtitle: "出典：Boss直聘 2024年深セン越境EC給与データ",
+    hiringRows: [
+      { role: "Shopify開発者", salary: "¥12,000–18,000/月", note: "3〜6ヶ月の立ち上げ期間も必要" },
+      { role: "UIデザイナー", salary: "¥8,000–15,000/月", note: "外注なら¥5,000–20,000/プロジェクト" },
+      { role: "コンテンツライター", salary: "¥6,000–10,000/月", note: "SEO記事、商品説明、SNS" },
+      { role: "SNS運用担当", salary: "¥5,000–8,000/月", note: "Instagram / TikTok / Facebook" },
+      { role: "注文管理・カスタマーサービス", salary: "¥4,000–7,000/月", note: "繁忙期は追加スタッフも必要" },
+    ],
+    hiringTotal: "¥35,000–58,000/月",
+    hiringTotalNote: "社会保険、採用費、試行錯誤コスト、退職金、設備費は含まず",
+    hiringVsBob: "Bobと協業：¥8,800 一回払い",
+    hiringVsBobNote: "上記すべて含む。7〜21日納品。月次メンテ¥800。",
+    platformTitle: "プラットフォーム販売 vs 独立サイト",
+    platformSubtitle: "月間売上¥100,000の場合",
+    platformRows: [
+      { item: "プラットフォーム手数料/月", platform: "¥15,000（15%）", independent: "¥0", highlight: true },
+      { item: "広告費/月", platform: "¥20,000–40,000", independent: "¥3,000–8,000（SEO=長期無料流入）", highlight: true },
+      { item: "ブランドプレミアム", platform: "低い（コモディティ競争）", independent: "高い（ブランド力でAOV30〜50%向上）" },
+      { item: "顧客データの所有権", platform: "プラットフォームが所有", independent: "完全にあなたのもの" },
+      { item: "アカウント停止リスク", platform: "いつでも、予告なし", independent: "なし、すべてコントロール可能" },
+      { item: "多通貨・多言語", platform: "制限あり、手数料高", independent: "グローバル決済、自動換算" },
+      { item: "年間利益差", platform: "基準", independent: "+¥180,000–300,000", highlight: true },
+    ],
+    platformNote: "* 典型的な越境EC運営に基づく推定値",
+    savingsLabel: "社内チーム比 年間節約額",
+    savingsNote: "¥35,000/月 × 12 − ¥8,800（構築）− ¥9,600（保守）= ¥401,600/年節約",
+    timelineTitle: "時間コスト比較",
+    timelineRows: [
+      { phase: "ブランドサイト公開", them: "エージェンシー：60〜90日", me: "私：7日" },
+      { phase: "ECストア公開", them: "社内チーム：3〜6ヶ月", me: "私：21日" },
+      { phase: "SEOコンテンツ体制", them: "コンテンツチーム：3〜6ヶ月", me: "私：同時に完成" },
+      { phase: "決済＋注文システム", them: "開発：1〜2ヶ月", me: "私：内蔵、初日から使用可能" },
+      { phase: "自動化稼働", them: "追加採用が必要", me: "私：プランに含む" },
+    ],
+    timelineNote: "1日遅れるごとに1日分の売上を失う。競合他社はあなたを待ってくれない。",
+  },
+};
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function ROISection() {
   const { locale } = useI18n();
   const c = COPY[locale];
+  const [activeTab, setActiveTab] = useState<0 | 1>(0);
 
   return (
-    <section
-      id="roi"
-      style={{
-        background: "#111111",
-        padding: "120px 0",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Subtle grid overlay */}
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-        backgroundSize: "60px 60px", pointerEvents: "none",
-      }} />
+    <section id="roi" style={{ background: "#111111", padding: "120px 0", position: "relative", overflow: "hidden" }}>
+      {/* Grid overlay */}
+      <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }} />
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px", position: "relative" }}>
 
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: 72 }}
-        >
-          <div style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em",
-            textTransform: "uppercase", color: "#8B6914", marginBottom: 20,
-          }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 56 }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
             {c.eyebrow}
           </div>
-          <h2 style={{
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600,
-            color: "#FAFAF8", margin: "0 0 20px", lineHeight: 1.1,
-          }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#FAFAF8", margin: "0 0 16px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 15,
-            color: "rgba(255,255,255,0.45)", maxWidth: 600, lineHeight: 1.75,
-          }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "rgba(255,255,255,0.4)", maxWidth: 560, lineHeight: 1.75 }}>
             {c.subtitle}
           </p>
         </motion.div>
 
-        {/* Comparison table */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.65, delay: 0.1 }}
-          style={{ marginBottom: 80, overflowX: "auto" }}
-        >
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
-            <thead>
-              <tr>
-                <th style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em",
-                  textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
-                  padding: "0 0 20px", textAlign: "left", fontWeight: 400,
-                  borderBottom: "1px solid rgba(255,255,255,0.08)",
-                }}>
-                  {locale === "zh" ? "服务项目" : locale === "ja" ? "サービス項目" : "Service"}
-                </th>
-                {c.colHeaders.map((h, i) => (
-                  <th key={i} style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em",
-                    textTransform: "uppercase", padding: "0 0 20px 24px", textAlign: "right",
-                    fontWeight: 400, borderBottom: "1px solid rgba(255,255,255,0.08)",
-                    color: i === 2 ? "#D4C49A" : "rgba(255,255,255,0.3)",
-                  }}>
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {c.rows.map((row, i) => (
-                <tr
-                  key={i}
-                  style={{
-                    background: row.highlight ? "rgba(139,105,20,0.06)" : "transparent",
-                    transition: "background 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = row.highlight ? "rgba(139,105,20,0.06)" : "transparent")}
-                >
-                  <td style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    color: "rgba(255,255,255,0.7)", padding: "16px 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    display: "flex", alignItems: "center", gap: 8,
-                  }}>
-                    {row.highlight && (
-                      <span style={{ width: 3, height: 14, background: "#8B6914", borderRadius: 2, flexShrink: 0 }} />
-                    )}
-                    {row.label}
-                  </td>
-                  <td style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 12,
-                    color: "rgba(255,255,255,0.35)", padding: "16px 0 16px 24px",
-                    textAlign: "right", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  }}>
-                    {row.agency}
-                  </td>
-                  <td style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 12,
-                    color: "rgba(255,255,255,0.35)", padding: "16px 0 16px 24px",
-                    textAlign: "right", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  }}>
-                    {row.team}
-                  </td>
-                  <td style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 12,
-                    color: "#D4C49A", padding: "16px 0 16px 24px",
-                    textAlign: "right", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    fontWeight: 600,
-                  }}>
-                    {row.me}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Tab switcher */}
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} style={{ display: "flex", gap: 2, marginBottom: 48 }}>
+          {[c.tab1, c.tab2].map((tab, i) => (
+            <button key={i} onClick={() => setActiveTab(i as 0 | 1)}
+              style={{
+                fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
+                padding: "12px 28px", border: "none", cursor: "pointer", transition: "all 0.2s",
+                background: activeTab === i ? "#8B6914" : "rgba(255,255,255,0.05)",
+                color: activeTab === i ? "#FAFAF8" : "rgba(255,255,255,0.35)",
+              }}
+            >
+              {tab}
+            </button>
+          ))}
         </motion.div>
 
-        {/* Bottom: Savings counter + Timeline */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+        {/* Tab 1: Hiring Cost */}
+        {activeTab === 0 && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
 
-          {/* Savings counter */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{
-              background: "rgba(139,105,20,0.08)",
-              border: "1px solid rgba(139,105,20,0.25)",
-              padding: "48px 40px",
-            }}
-          >
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em",
-              textTransform: "uppercase", color: "#8B6914", marginBottom: 20,
-            }}>
-              {c.savingsLabel}
-            </div>
-            <div style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "clamp(48px, 6vw, 80px)", fontWeight: 700,
-              color: "#D4C49A", lineHeight: 1, marginBottom: 20,
-            }}>
-              <AnimatedNumber target={278000} prefix="¥" />
-            </div>
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-              color: "rgba(255,255,255,0.3)", lineHeight: 1.6,
-            }}>
-              {c.savingsNote}
-            </div>
-          </motion.div>
+              {/* Hiring table */}
+              <div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 600, color: "#FAFAF8", marginBottom: 8 }}>{c.hiringTitle}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 28 }}>{c.hiringSubtitle}</div>
 
-          {/* Timeline comparison */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              padding: "48px 40px",
-            }}
-          >
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em",
-              textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 32,
-            }}>
-              {c.timelineTitle}
-            </div>
-            {c.timelineRows.map((row, i) => (
-              <div key={i} style={{ marginBottom: i < c.timelineRows.length - 1 ? 24 : 0 }}>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                  color: "rgba(255,255,255,0.5)", marginBottom: 8,
-                }}>
-                  {row.phase}
-                </div>
-                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  {/* Agency bar */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{
-                      height: 6, background: "rgba(255,255,255,0.08)",
-                      borderRadius: 3, overflow: "hidden",
-                    }}>
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "100%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.1 * i }}
-                        style={{ height: "100%", background: "rgba(255,255,255,0.15)", borderRadius: 3 }}
-                      />
-                    </div>
-                    <div style={{
-                      fontFamily: "'DM Mono', monospace", fontSize: 9,
-                      color: "rgba(255,255,255,0.25)", marginTop: 4,
-                    }}>
-                      {row.agency}
+                {c.hiringRows.map((row, i) => (
+                  <div key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "16px 0" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+                      <div>
+                        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.75)", marginBottom: 4 }}>{row.role}</div>
+                        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: "0.05em" }}>{row.note}</div>
+                      </div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: "#D4C49A", whiteSpace: "nowrap", flexShrink: 0 }}>{row.salary}</div>
                     </div>
                   </div>
-                  {/* My bar */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{
-                      height: 6, background: "rgba(139,105,20,0.15)",
-                      borderRadius: 3, overflow: "hidden",
-                    }}>
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "25%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.1 * i + 0.2 }}
-                        style={{ height: "100%", background: "#8B6914", borderRadius: 3 }}
-                      />
-                    </div>
-                    <div style={{
-                      fontFamily: "'DM Mono', monospace", fontSize: 9,
-                      color: "#D4C49A", marginTop: 4,
-                    }}>
-                      {row.me}
-                    </div>
+                ))}
+
+                {/* Total */}
+                <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px 24px", marginTop: 16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{locale === "zh" ? "自建团队月成本" : locale === "ja" ? "社内チーム月額コスト" : "In-house team monthly cost"}</div>
+                    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 28, fontWeight: 700, color: "#FF6B6B" }}>{c.hiringTotal}</div>
+                  </div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 8, letterSpacing: "0.05em" }}>{c.hiringTotalNote}</div>
+                </div>
+              </div>
+
+              {/* Right: savings panel */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {/* Bob cost */}
+                <div style={{ background: "rgba(139,105,20,0.1)", border: "1px solid rgba(139,105,20,0.3)", padding: "36px 32px", flex: 1 }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
+                    {locale === "zh" ? "对比方案" : locale === "ja" ? "比較プラン" : "Alternative"}
+                  </div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 40, fontWeight: 700, color: "#D4C49A", lineHeight: 1, marginBottom: 12 }}>
+                    {c.hiringVsBob}
+                  </div>
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>
+                    {c.hiringVsBobNote}
+                  </div>
+                </div>
+
+                {/* Annual savings */}
+                <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", padding: "32px" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 16 }}>
+                    {c.savingsLabel}
+                  </div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 52, fontWeight: 700, color: "#D4C49A", lineHeight: 1, marginBottom: 12 }}>
+                    <AnimatedNumber target={401600} prefix="¥" />
+                  </div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", lineHeight: 1.6, letterSpacing: "0.05em" }}>
+                    {c.savingsNote}
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Timeline comparison */}
+            <div style={{ marginTop: 56, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 48 }}>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 32 }}>
+                {c.timelineTitle}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 2 }}>
+                {c.timelineRows.map((row, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.02)", padding: "24px 20px" }}>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>{row.phase}</div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.25)", marginBottom: 6 }}>{row.them}</div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#D4C49A", fontWeight: 600 }}>{row.me}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#8B6914", marginTop: 24, fontStyle: "italic" }}>
+                {c.timelineNote}
+              </div>
+            </div>
           </motion.div>
-        </div>
+        )}
+
+        {/* Tab 2: Platform vs Independent */}
+        {activeTab === 1 && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 600, color: "#FAFAF8", marginBottom: 8 }}>{c.platformTitle}</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 36 }}>{c.platformSubtitle}</div>
+
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 600 }}>
+                <thead>
+                  <tr>
+                    <th style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", padding: "0 0 20px", textAlign: "left", fontWeight: 400, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                      {locale === "zh" ? "对比项目" : locale === "ja" ? "比較項目" : "Item"}
+                    </th>
+                    <th style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", padding: "0 0 20px 24px", textAlign: "right", fontWeight: 400, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                      {locale === "zh" ? "平台（亚马逊/速卖通）" : locale === "ja" ? "プラットフォーム" : "Platform (Amazon etc.)"}
+                    </th>
+                    <th style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#D4C49A", padding: "0 0 20px 24px", textAlign: "right", fontWeight: 400, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                      {locale === "zh" ? "你的独立站" : locale === "ja" ? "独立サイト" : "Your own store"}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {c.platformRows.map((row, i) => (
+                    <tr key={i}
+                      style={{ background: row.highlight ? "rgba(139,105,20,0.05)" : "transparent" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = row.highlight ? "rgba(139,105,20,0.05)" : "transparent")}
+                    >
+                      <td style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", padding: "16px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", gap: 8 }}>
+                        {row.highlight && <span style={{ width: 3, height: 14, background: "#8B6914", borderRadius: 2, flexShrink: 0 }} />}
+                        {row.item}
+                      </td>
+                      <td style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", padding: "16px 0 16px 24px", textAlign: "right", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                        {row.platform}
+                      </td>
+                      <td style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#D4C49A", padding: "16px 0 16px 24px", textAlign: "right", borderBottom: "1px solid rgba(255,255,255,0.05)", fontWeight: 600 }}>
+                        {row.independent}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 16, letterSpacing: "0.05em" }}>
+              {c.platformNote}
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   );
