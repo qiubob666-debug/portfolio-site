@@ -1,11 +1,13 @@
-/* GEOMETRIC SILENCE — Nav: thin, flat, no decoration. 1px rule on scroll only. */
-import { useEffect, useState } from "react";
+/* Navbar — Kinetic Precision design system
+   Fixed top bar, hairline border on scroll, left-anchored identity,
+   right nav links with animated underline, availability indicator */
 
-const links = [
+import { useState, useEffect } from "react";
+
+const NAV_LINKS = [
+  { label: "Stack", href: "#stack" },
+  { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Work", href: "#projects" },
-  { label: "Résumé", href: "#resume" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -14,91 +16,126 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <header
-      className={`gs-nav${scrolled ? " scrolled" : ""}`}
-      style={{ fontFamily: "inherit" }}
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: "rgba(250,250,250,0.92)",
+        backdropFilter: "blur(12px)",
+        borderBottom: scrolled ? "1px solid #E8E8E8" : "1px solid transparent",
+        transition: "border-color 0.3s",
+      }}
     >
       <div
-        className="gs-container"
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}
+        className="container"
+        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 56 }}
       >
-        {/* Wordmark */}
-        <a
-          href="#about"
-          style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 16,
-            fontWeight: 400,
-            letterSpacing: "-0.03em",
-            color: "#111111",
-          }}
-        >
-          Portfolio
+        {/* Identity mark */}
+        <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+          <div
+            style={{
+              width: 18,
+              height: 18,
+              border: "1px solid #0A0A0A",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ width: 7, height: 7, background: "#0057FF" }} />
+          </div>
+          <span
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "#0A0A0A",
+            }}
+          >
+            Bob Qiushao
+          </span>
         </a>
 
-        {/* Desktop links */}
-        <nav
-          style={{ display: "flex", gap: 40 }}
-          className="hidden md:flex"
-        >
-          {links.map((l) => (
+        {/* Desktop nav */}
+        <nav className="hidden md:flex" style={{ gap: 36, alignItems: "center" }}>
+          {NAV_LINKS.map((link) => (
             <a
-              key={l.href}
-              href={l.href}
+              key={link.href}
+              href={link.href}
+              className="link-underline"
               style={{
-                fontFamily: "inherit",
-                fontSize: 13,
-                fontWeight: 400,
-                letterSpacing: "0.04em",
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                color: "#767676",
-                transition: "color 0.15s",
+                color: "#555",
+                textDecoration: "none",
+                transition: "color 0.2s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#111111")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#767676")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#0A0A0A")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
             >
-              {l.label}
+              {link.label}
             </a>
           ))}
         </nav>
 
-        {/* GitHub */}
+        {/* Availability CTA */}
         <a
-          href="https://github.com/qiubob666-debug"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2"
+          href="mailto:contact@bobqiushao.online"
+          className="hidden md:flex"
           style={{
-            fontSize: 13,
-            fontWeight: 400,
-            letterSpacing: "0.04em",
+            alignItems: "center",
+            gap: 8,
+            border: "1px solid #0A0A0A",
+            padding: "7px 16px",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: 10,
+            letterSpacing: "0.12em",
             textTransform: "uppercase",
-            color: "#767676",
-            transition: "color 0.15s",
+            color: "#0A0A0A",
+            textDecoration: "none",
+            transition: "background 0.2s, color 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#111111")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "#767676")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#0A0A0A";
+            e.currentTarget.style.color = "#FAFAFA";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "#0A0A0A";
+          }}
         >
-          GitHub ↗
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "#00C853",
+              display: "inline-block",
+              animation: "pulse 2s infinite",
+            }}
+          />
+          Available
         </a>
 
         {/* Mobile toggle */}
         <button
           className="md:hidden"
           onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", padding: 4, color: "#111111" }}
+          style={{ background: "none", border: "none", padding: 4, cursor: "none" }}
           aria-label="Menu"
         >
-          <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-            <line x1="0" y1="1" x2="20" y2="1" stroke="#111111" strokeWidth="1" style={{ opacity: open ? 0 : 1, transition: "opacity 0.2s" }} />
-            <line x1="0" y1="7" x2="20" y2="7" stroke="#111111" strokeWidth="1" />
-            <line x1="0" y1="13" x2="20" y2="13" stroke="#111111" strokeWidth="1" style={{ opacity: open ? 0 : 1, transition: "opacity 0.2s" }} />
+          <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+            <line x1="0" y1="0.5" x2="20" y2="0.5" stroke="#111" strokeWidth="1" />
+            <line x1="0" y1="6" x2="20" y2="6" stroke="#111" strokeWidth="1" />
+            <line x1="0" y1="11.5" x2="20" y2="11.5" stroke="#111" strokeWidth="1" />
           </svg>
         </button>
       </div>
@@ -112,25 +149,28 @@ export default function Navbar() {
             left: 0,
             right: 0,
             background: "#FAFAFA",
-            borderBottom: "1px solid #E0E0E0",
-            padding: "8px 48px 24px",
+            borderBottom: "1px solid #E8E8E8",
+            padding: "8px 24px 24px",
           }}
         >
-          {links.map((l) => (
+          {NAV_LINKS.map((link) => (
             <a
-              key={l.href}
-              href={l.href}
+              key={link.href}
+              href={link.href}
               onClick={() => setOpen(false)}
               style={{
                 display: "block",
                 padding: "14px 0",
-                fontSize: 15,
-                color: "#111111",
-                borderBottom: "1px solid #E0E0E0",
-                letterSpacing: "-0.01em",
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "#0A0A0A",
+                borderBottom: "1px solid #E8E8E8",
+                textDecoration: "none",
               }}
             >
-              {l.label}
+              {link.label}
             </a>
           ))}
         </div>
