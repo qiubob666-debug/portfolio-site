@@ -1,56 +1,54 @@
 /* HeroSection — Kinetic Precision design system
    Asymmetric layout: left text column with typewriter role titles,
-   right circuit-board image. Stats row. Scroll indicator. */
+   right circuit-board image. Stats row. Scroll indicator.
+   i18n: reads roles, description, stats, CTAs from translations */
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const ROLES = [
-  "Full-Stack Engineer",
-  "Systems Architect",
-  "Automation Builder",
-  "UI/UX Implementer",
-];
-
-const STATS = [
-  { value: "6+", label: "Repos in Production" },
-  { value: "300+", label: "n8n Workflow Nodes" },
-  { value: "5", label: "Tech Domains" },
-];
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function HeroSection() {
+  const { t } = useI18n();
   const [visible, setVisible] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayed, setDisplayed] = useState("");
   const [typing, setTyping] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 60);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setVisible(true), 60);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Reset typewriter when language changes
+  useEffect(() => {
+    setRoleIndex(0);
+    setDisplayed("");
+    setTyping(true);
+  }, [t]);
 
   // Typewriter effect
   useEffect(() => {
-    const target = ROLES[roleIndex];
+    const roles = t.hero.roles;
+    const target = roles[roleIndex];
     let i = displayed.length;
     if (typing) {
       if (i < target.length) {
-        const t = setTimeout(() => setDisplayed(target.slice(0, i + 1)), 65);
-        return () => clearTimeout(t);
+        const timer = setTimeout(() => setDisplayed(target.slice(0, i + 1)), 65);
+        return () => clearTimeout(timer);
       } else {
-        const t = setTimeout(() => setTyping(false), 1800);
-        return () => clearTimeout(t);
+        const timer = setTimeout(() => setTyping(false), 1800);
+        return () => clearTimeout(timer);
       }
     } else {
       if (i > 0) {
-        const t = setTimeout(() => setDisplayed(target.slice(0, i - 1)), 38);
-        return () => clearTimeout(t);
+        const timer = setTimeout(() => setDisplayed(target.slice(0, i - 1)), 38);
+        return () => clearTimeout(timer);
       } else {
-        setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
         setTyping(true);
       }
     }
-  }, [displayed, typing, roleIndex]);
+  }, [displayed, typing, roleIndex, t]);
 
   const fade = (delay = 0): React.CSSProperties => ({
     opacity: visible ? 1 : 0,
@@ -86,7 +84,7 @@ export default function HeroSection() {
         <div style={{ ...fade(0), display: "flex", alignItems: "center", gap: 12, marginBottom: 36 }}>
           <div style={{ width: 28, height: 1, background: "#0057FF" }} />
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#AAAAAA" }}>
-            01 — Identity
+            {t.hero.index}
           </span>
         </div>
 
@@ -133,14 +131,12 @@ export default function HeroSection() {
             marginBottom: 44,
           }}
         >
-          Building end-to-end systems — from React interfaces to Python APIs,
-          Docker infrastructure, and n8n automation pipelines.
-          This site is the portfolio. The interaction is the proof.
+          {t.hero.description}
         </p>
 
         {/* Stats */}
         <div style={{ ...fade(0.26), display: "flex", gap: 36, marginBottom: 48, borderTop: "1px solid #E8E8E8", paddingTop: 32 }}>
-          {STATS.map((s) => (
+          {t.hero.stats.map((s) => (
             <div key={s.label}>
               <div style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 30, color: "#0A0A0A", lineHeight: 1 }}>
                 {s.value}
@@ -167,7 +163,7 @@ export default function HeroSection() {
             onMouseEnter={(e) => (e.currentTarget.style.background = "#0057FF")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "#0A0A0A")}
           >
-            Explore Stack →
+            {t.hero.cta_stack}
           </a>
           <a
             href="https://github.com/qiubob666-debug"
@@ -184,7 +180,7 @@ export default function HeroSection() {
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#0A0A0A"; e.currentTarget.style.color = "#0A0A0A"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E8E8E8"; e.currentTarget.style.color = "#555"; }}
           >
-            GitHub ↗
+            {t.hero.cta_github}
           </a>
         </div>
       </div>
@@ -217,7 +213,7 @@ export default function HeroSection() {
               color: "#CCCCCC",
             }}
           >
-            Interactive tech graph below ↓
+            {t.hero.graph_hint}
           </div>
         </motion.div>
       </div>
@@ -236,7 +232,7 @@ export default function HeroSection() {
         }}
       >
         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#CCCCCC" }}>
-          Scroll
+          {t.hero.scroll}
         </span>
         <div
           style={{

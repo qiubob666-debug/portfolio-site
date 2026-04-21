@@ -1,19 +1,22 @@
 /* Navbar — Kinetic Precision design system
    Fixed top bar, hairline border on scroll, left-anchored identity,
-   right nav links with animated underline, availability indicator */
+   right nav links with animated underline, language switcher, availability indicator */
 
 import { useState, useEffect } from "react";
-
-const NAV_LINKS = [
-  { label: "Stack", href: "#stack" },
-  { label: "Process", href: "#process" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
+import { useI18n } from "@/contexts/I18nContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Navbar() {
+  const { t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const NAV_LINKS = [
+    { label: t.nav.stack, href: "#stack" },
+    { label: t.nav.process, href: "#process" },
+    { label: t.nav.about, href: "#about" },
+    { label: t.nav.contact, href: "#contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -86,58 +89,63 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Availability CTA */}
-        <a
-          href="mailto:contact@bobqiushao.online"
-          className="hidden md:flex"
-          style={{
-            alignItems: "center",
-            gap: 8,
-            border: "1px solid #0A0A0A",
-            padding: "7px 16px",
-            fontFamily: "'DM Mono', monospace",
-            fontSize: 10,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "#0A0A0A",
-            textDecoration: "none",
-            transition: "background 0.2s, color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#0A0A0A";
-            e.currentTarget.style.color = "#FAFAFA";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "#0A0A0A";
-          }}
-        >
-          <span
+        {/* Right side: Language switcher + Availability CTA */}
+        <div className="hidden md:flex" style={{ alignItems: "center", gap: 12 }}>
+          <LanguageSwitcher />
+          <a
+            href="mailto:contact@bobqiushao.online"
             style={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              background: "#00C853",
-              display: "inline-block",
-              animation: "pulse 2s infinite",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              border: "1px solid #0A0A0A",
+              padding: "7px 16px",
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "#0A0A0A",
+              textDecoration: "none",
+              transition: "background 0.2s, color 0.2s",
             }}
-          />
-          Available
-        </a>
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#0A0A0A";
+              e.currentTarget.style.color = "#FAFAFA";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#0A0A0A";
+            }}
+          >
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "#00C853",
+                display: "inline-block",
+                animation: "pulse 2s infinite",
+              }}
+            />
+            {t.nav.available}
+          </a>
+        </div>
 
         {/* Mobile toggle */}
-        <button
-          className="md:hidden"
-          onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", padding: 4, cursor: "none" }}
-          aria-label="Menu"
-        >
-          <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
-            <line x1="0" y1="0.5" x2="20" y2="0.5" stroke="#111" strokeWidth="1" />
-            <line x1="0" y1="6" x2="20" y2="6" stroke="#111" strokeWidth="1" />
-            <line x1="0" y1="11.5" x2="20" y2="11.5" stroke="#111" strokeWidth="1" />
-          </svg>
-        </button>
+        <div className="md:hidden" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <LanguageSwitcher />
+          <button
+            onClick={() => setOpen(!open)}
+            style={{ background: "none", border: "none", padding: 4, cursor: "none" }}
+            aria-label="Menu"
+          >
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+              <line x1="0" y1="0.5" x2="20" y2="0.5" stroke="#111" strokeWidth="1" />
+              <line x1="0" y1="6" x2="20" y2="6" stroke="#111" strokeWidth="1" />
+              <line x1="0" y1="11.5" x2="20" y2="11.5" stroke="#111" strokeWidth="1" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile drawer */}

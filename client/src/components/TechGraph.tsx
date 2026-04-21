@@ -2,10 +2,12 @@
    Interactive Canvas-based technology constellation.
    Nodes represent tech skills, edges show relationships.
    Mouse proximity causes nodes to repel/attract.
-   Click a node to see depth info. */
+   Click a node to see depth info.
+   i18n: node depth descriptions and category labels from translations */
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface Node {
   id: string;
@@ -24,65 +26,92 @@ interface Edge {
   to: string;
 }
 
-const NODES_DATA: Omit<Node, "x" | "y" | "vx" | "vy">[] = [
-  // Frontend
-  { id: "react", label: "React", category: "frontend", radius: 10, depth: "Production-grade SPA architecture, custom hooks, context, performance optimization" },
-  { id: "typescript", label: "TypeScript", category: "frontend", radius: 9, depth: "Strict mode, generics, utility types, declaration files" },
-  { id: "vite", label: "Vite", category: "frontend", radius: 7, depth: "Custom plugins, SSR config, build optimization" },
-  { id: "tailwind", label: "Tailwind", category: "frontend", radius: 7, depth: "Design tokens, custom themes, v4 OKLCH palette" },
-  { id: "framer", label: "Framer Motion", category: "frontend", radius: 6, depth: "Gesture animations, layout transitions, scroll-driven effects" },
-  // Backend
-  { id: "python", label: "Python", category: "backend", radius: 10, depth: "FastAPI services, data pipelines, automation scripts" },
-  { id: "fastapi", label: "FastAPI", category: "backend", radius: 8, depth: "REST + async endpoints, Pydantic validation, JWT auth" },
-  { id: "nodejs", label: "Node.js", category: "backend", radius: 8, depth: "Express APIs, serverless functions, CLI tools" },
-  { id: "php", label: "PHP/WP", category: "backend", radius: 6, depth: "WordPress custom plugins, REST API extensions" },
-  // Infra
-  { id: "docker", label: "Docker", category: "infra", radius: 9, depth: "Multi-service Compose stacks, custom images, networking" },
-  { id: "vercel", label: "Vercel", category: "infra", radius: 7, depth: "Edge functions, CI/CD pipelines, domain management" },
-  { id: "nginx", label: "Nginx", category: "infra", radius: 6, depth: "Reverse proxy, SSL termination, load balancing config" },
-  { id: "github", label: "GitHub Actions", category: "infra", radius: 7, depth: "CI/CD workflows, automated testing, deployment pipelines" },
-  // Automation
-  { id: "n8n", label: "n8n", category: "automation", radius: 9, depth: "300+ node workflows, webhook integrations, scheduled automation" },
-  { id: "sanity", label: "Sanity CMS", category: "automation", radius: 7, depth: "Custom schemas, GROQ queries, real-time content sync" },
-  // Data
-  { id: "supabase", label: "Supabase", category: "data", radius: 8, depth: "PostgreSQL, Row Level Security, real-time subscriptions" },
-  { id: "postgresql", label: "PostgreSQL", category: "data", radius: 7, depth: "Schema design, indexing, query optimization" },
+// Static node structure (labels and depth descriptions are i18n-overridden below)
+const NODES_BASE: Omit<Node, "x" | "y" | "vx" | "vy" | "depth">[] = [
+  { id: "react",      label: "React",          category: "frontend",   radius: 10 },
+  { id: "typescript", label: "TypeScript",     category: "frontend",   radius: 9  },
+  { id: "vite",       label: "Vite",           category: "frontend",   radius: 7  },
+  { id: "tailwind",   label: "Tailwind",       category: "frontend",   radius: 7  },
+  { id: "framer",     label: "Framer Motion",  category: "frontend",   radius: 6  },
+  { id: "python",     label: "Python",         category: "backend",    radius: 10 },
+  { id: "fastapi",    label: "FastAPI",        category: "backend",    radius: 8  },
+  { id: "nodejs",     label: "Node.js",        category: "backend",    radius: 8  },
+  { id: "php",        label: "PHP/WP",         category: "backend",    radius: 6  },
+  { id: "docker",     label: "Docker",         category: "infra",      radius: 9  },
+  { id: "vercel",     label: "Vercel",         category: "infra",      radius: 7  },
+  { id: "nginx",      label: "Nginx",          category: "infra",      radius: 6  },
+  { id: "github",     label: "GitHub Actions", category: "infra",      radius: 7  },
+  { id: "n8n",        label: "n8n",            category: "automation", radius: 9  },
+  { id: "sanity",     label: "Sanity CMS",     category: "automation", radius: 7  },
+  { id: "supabase",   label: "Supabase",       category: "data",       radius: 8  },
+  { id: "postgresql", label: "PostgreSQL",     category: "data",       radius: 7  },
 ];
 
 const EDGES: Edge[] = [
-  { from: "react", to: "typescript" },
-  { from: "react", to: "vite" },
-  { from: "react", to: "tailwind" },
-  { from: "react", to: "framer" },
-  { from: "typescript", to: "nodejs" },
-  { from: "fastapi", to: "python" },
-  { from: "python", to: "n8n" },
-  { from: "nodejs", to: "vercel" },
-  { from: "docker", to: "nginx" },
-  { from: "docker", to: "fastapi" },
-  { from: "github", to: "vercel" },
-  { from: "github", to: "docker" },
-  { from: "n8n", to: "sanity" },
-  { from: "supabase", to: "postgresql" },
-  { from: "supabase", to: "fastapi" },
-  { from: "sanity", to: "react" },
+  { from: "react",      to: "typescript" },
+  { from: "react",      to: "vite"       },
+  { from: "react",      to: "tailwind"   },
+  { from: "react",      to: "framer"     },
+  { from: "typescript", to: "nodejs"     },
+  { from: "fastapi",    to: "python"     },
+  { from: "python",     to: "n8n"        },
+  { from: "nodejs",     to: "vercel"     },
+  { from: "docker",     to: "nginx"      },
+  { from: "docker",     to: "fastapi"    },
+  { from: "github",     to: "vercel"     },
+  { from: "github",     to: "docker"     },
+  { from: "n8n",        to: "sanity"     },
+  { from: "supabase",   to: "postgresql" },
+  { from: "supabase",   to: "fastapi"    },
+  { from: "sanity",     to: "react"      },
 ];
 
 const CATEGORY_COLORS: Record<Node["category"], string> = {
-  frontend: "#0057FF",
-  backend: "#111111",
-  infra: "#555555",
+  frontend:   "#0057FF",
+  backend:    "#111111",
+  infra:      "#555555",
   automation: "#0057FF",
-  data: "#888888",
+  data:       "#888888",
 };
 
 export default function TechGraph() {
+  const { t } = useI18n();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nodesRef = useRef<Node[]>([]);
   const mouseRef = useRef({ x: -999, y: -999 });
   const rafRef = useRef<number>(0);
   const [selected, setSelected] = useState<Node | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+
+  // Build i18n-aware node depth descriptions from translations
+  const nodeDepths: Record<string, string> = {
+    react:      t.graph.react,
+    typescript: t.graph.typescript,
+    vite:       t.graph.vite,
+    tailwind:   t.graph.tailwind,
+    framer:     t.graph.framer,
+    python:     t.graph.python,
+    fastapi:    t.graph.fastapi,
+    nodejs:     t.graph.nodejs,
+    php:        t.graph.php,
+    docker:     t.graph.docker,
+    vercel:     t.graph.vercel,
+    nginx:      t.graph.nginx,
+    github:     t.graph.github,
+    n8n:        t.graph.n8n,
+    sanity:     t.graph.sanity,
+    supabase:   t.graph.supabase,
+    postgresql: t.graph.postgresql,
+  };
+
+  // Category labels from translations
+  const categoryLabels: Record<Node["category"], string> = {
+    frontend:   t.stack.categories[0]?.label ?? "Frontend",
+    backend:    t.stack.categories[1]?.label ?? "Backend",
+    infra:      t.stack.categories[2]?.label ?? "Infrastructure",
+    data:       t.stack.categories[3]?.label ?? "Data & Storage",
+    automation: t.stack.categories[4]?.label ?? "Automation & CMS",
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -99,12 +128,13 @@ export default function TechGraph() {
     const initNodes = () => {
       const W = canvas.offsetWidth;
       const H = canvas.offsetHeight;
-      nodesRef.current = NODES_DATA.map((n) => ({
+      nodesRef.current = NODES_BASE.map((n) => ({
         ...n,
-        x: 80 + Math.random() * (W - 160),
-        y: 60 + Math.random() * (H - 120),
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        depth: nodeDepths[n.id] ?? "",
+        x: W * 0.1 + Math.random() * W * 0.8,
+        y: H * 0.1 + Math.random() * H * 0.8,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
       }));
     };
 
@@ -114,68 +144,71 @@ export default function TechGraph() {
       ctx.clearRect(0, 0, W, H);
 
       const nodes = nodesRef.current;
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
+      const mouse = mouseRef.current;
 
-      // Physics: repulsion between nodes + mouse repulsion
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[j].x - nodes[i].x;
-          const dy = nodes[j].y - nodes[i].y;
-          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const minDist = nodes[i].radius + nodes[j].radius + 60;
-          if (dist < minDist) {
-            const force = (minDist - dist) / minDist * 0.015;
-            nodes[i].vx -= dx * force;
-            nodes[i].vy -= dy * force;
-            nodes[j].vx += dx * force;
-            nodes[j].vy += dy * force;
-          }
-        }
+      // Physics
+      nodes.forEach((node) => {
         // Mouse repulsion
-        const mdx = nodes[i].x - mx;
-        const mdy = nodes[i].y - my;
-        const mdist = Math.sqrt(mdx * mdx + mdy * mdy) || 1;
-        if (mdist < 100) {
-          const force = (100 - mdist) / 100 * 0.08;
-          nodes[i].vx += mdx * force;
-          nodes[i].vy += mdy * force;
+        const dx = node.x - mouse.x;
+        const dy = node.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100 && dist > 0) {
+          const force = (100 - dist) / 100;
+          node.vx += (dx / dist) * force * 0.8;
+          node.vy += (dy / dist) * force * 0.8;
         }
+
+        // Node-node repulsion
+        nodes.forEach((other) => {
+          if (other.id === node.id) return;
+          const ddx = node.x - other.x;
+          const ddy = node.y - other.y;
+          const d = Math.sqrt(ddx * ddx + ddy * ddy);
+          const minDist = node.radius + other.radius + 40;
+          if (d < minDist && d > 0) {
+            const force = (minDist - d) / minDist;
+            node.vx += (ddx / d) * force * 0.3;
+            node.vy += (ddy / d) * force * 0.3;
+          }
+        });
+
         // Center gravity
-        nodes[i].vx += (W / 2 - nodes[i].x) * 0.0002;
-        nodes[i].vy += (H / 2 - nodes[i].y) * 0.0002;
+        node.vx += (W / 2 - node.x) * 0.0002;
+        node.vy += (H / 2 - node.y) * 0.0002;
+
         // Damping
-        nodes[i].vx *= 0.96;
-        nodes[i].vy *= 0.96;
-        // Move
-        nodes[i].x += nodes[i].vx;
-        nodes[i].y += nodes[i].vy;
-        // Bounds
-        nodes[i].x = Math.max(nodes[i].radius + 20, Math.min(W - nodes[i].radius - 20, nodes[i].x));
-        nodes[i].y = Math.max(nodes[i].radius + 20, Math.min(H - nodes[i].radius - 20, nodes[i].y));
-      }
+        node.vx *= 0.92;
+        node.vy *= 0.92;
+
+        // Clamp speed
+        const speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
+        if (speed > 3) { node.vx = (node.vx / speed) * 3; node.vy = (node.vy / speed) * 3; }
+
+        node.x = Math.max(node.radius + 20, Math.min(W - node.radius - 20, node.x + node.vx));
+        node.y = Math.max(node.radius + 20, Math.min(H - node.radius - 20, node.y + node.vy));
+      });
 
       // Draw edges
-      EDGES.forEach(({ from, to }) => {
-        const a = nodes.find((n) => n.id === from);
-        const b = nodes.find((n) => n.id === to);
-        if (!a || !b) return;
-        const isHighlighted = hovered === from || hovered === to;
+      EDGES.forEach((edge) => {
+        const from = nodes.find((n) => n.id === edge.from);
+        const to = nodes.find((n) => n.id === edge.to);
+        if (!from || !to) return;
         ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = isHighlighted ? "rgba(0,87,255,0.35)" : "rgba(0,0,0,0.08)";
-        ctx.lineWidth = isHighlighted ? 1.5 : 0.75;
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        ctx.strokeStyle = "#E8E8E8";
+        ctx.lineWidth = 0.8;
+        ctx.globalAlpha = 0.6;
         ctx.stroke();
+        ctx.globalAlpha = 1;
       });
 
       // Draw nodes
       nodes.forEach((node) => {
+        const color = CATEGORY_COLORS[node.category];
         const isHov = hovered === node.id;
         const isSel = selected?.id === node.id;
-        const color = CATEGORY_COLORS[node.category];
 
-        // Outer ring for hovered/selected
         if (isHov || isSel) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, node.radius + 8, 0, Math.PI * 2);
@@ -186,15 +219,13 @@ export default function TechGraph() {
           ctx.globalAlpha = 1;
         }
 
-        // Node circle
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = isSel ? color : isHov ? color : color;
+        ctx.fillStyle = color;
         ctx.globalAlpha = isSel ? 1 : isHov ? 0.9 : 0.65;
         ctx.fill();
         ctx.globalAlpha = 1;
 
-        // Label
         ctx.font = `${isHov || isSel ? "500" : "400"} 9px 'DM Mono', monospace`;
         ctx.fillStyle = isHov || isSel ? "#0A0A0A" : "#555555";
         ctx.textAlign = "center";
@@ -212,7 +243,7 @@ export default function TechGraph() {
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [hovered, selected]);
+  }, [hovered, selected, nodeDepths]);
 
   const getNodeAt = (x: number, y: number): Node | null => {
     const canvas = canvasRef.current;
@@ -247,7 +278,7 @@ export default function TechGraph() {
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        style={{ cursor: hovered ? "none" : "none" }}
+        style={{ cursor: "none" }}
         onMouseMove={handleMouseMove}
         onClick={handleClick}
         onMouseLeave={() => { mouseRef.current = { x: -999, y: -999 }; setHovered(null); }}
@@ -266,7 +297,7 @@ export default function TechGraph() {
           >
             <div className="flex items-start justify-between mb-2">
               <span className="font-mono-label text-[10px] tracking-widest uppercase" style={{ color: CATEGORY_COLORS[selected.category] }}>
-                {selected.category}
+                {categoryLabels[selected.category]}
               </span>
               <button
                 onClick={() => setSelected(null)}
@@ -277,7 +308,7 @@ export default function TechGraph() {
             </div>
             <p className="font-display text-lg text-[#0A0A0A] mb-2">{selected.label}</p>
             <p className="text-xs text-[#666] leading-relaxed" style={{ fontFamily: "'DM Mono', monospace" }}>
-              {selected.depth}
+              {nodeDepths[selected.id]}
             </p>
           </motion.div>
         )}
@@ -288,7 +319,7 @@ export default function TechGraph() {
         {(Object.entries(CATEGORY_COLORS) as [Node["category"], string][]).map(([cat, color]) => (
           <div key={cat} className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full" style={{ background: color, opacity: 0.7 }} />
-            <span className="font-mono-label text-[9px] text-[#AAAAAA]">{cat}</span>
+            <span className="font-mono-label text-[9px] text-[#AAAAAA]">{categoryLabels[cat]}</span>
           </div>
         ))}
       </div>

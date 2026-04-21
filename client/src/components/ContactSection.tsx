@@ -1,15 +1,13 @@
-/* ContactSection + Footer — Kinetic Precision
-   Dark background section. Email CTA, social links, footer. */
+/* ContactSection — Kinetic Precision design system
+   Dark background section. Email CTA, social links, footer.
+   i18n: reads all text from translations */
 
 import { motion } from "framer-motion";
-
-const LINKS = [
-  { label: "GitHub", href: "https://github.com/qiubob666-debug", external: true },
-  { label: "Email", href: "mailto:contact@bobqiushao.online", external: false },
-  { label: "Portfolio Repo", href: "https://github.com/qiubob666-debug/portfolio-site", external: true },
-];
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function ContactSection() {
+  const { t } = useI18n();
+
   return (
     <>
       <section id="contact" style={{ background: "#0A0A0A", padding: "120px 0" }}>
@@ -24,7 +22,7 @@ export default function ContactSection() {
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
               <div style={{ width: 28, height: 1, background: "#0057FF" }} />
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#555" }}>
-                05 — Contact
+                {t.contact.index}
               </span>
             </div>
 
@@ -38,17 +36,16 @@ export default function ContactSection() {
                 marginBottom: 24,
               }}
             >
-              Let's build<br />
-              <em style={{ fontStyle: "italic", color: "#444" }}>something together</em>
+              {t.contact.headline}<br />
+              <em style={{ fontStyle: "italic", color: "#444" }}>{t.contact.headline_em}</em>
             </h2>
 
             <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, lineHeight: 1.85, color: "#666", marginBottom: 48, maxWidth: 400 }}>
-              Available for freelance projects, technical consulting, and full-time opportunities.
-              Response within 24 hours.
+              {t.contact.description}
             </p>
 
             <a
-              href="mailto:contact@bobqiushao.online"
+              href={`mailto:${t.contact.cta}`}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
                 border: "1px solid #333", color: "#FAFAFA",
@@ -62,11 +59,11 @@ export default function ContactSection() {
               onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#FAFAFA"; e.currentTarget.style.borderColor = "#333"; }}
             >
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#00C853", display: "inline-block" }} />
-              contact@bobqiushao.online
+              {t.contact.cta}
             </a>
 
             <div style={{ display: "flex", gap: 32, borderTop: "1px solid #1A1A1A", paddingTop: 32, flexWrap: "wrap" }}>
-              {LINKS.map((link) => (
+              {t.contact.links.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
@@ -81,7 +78,7 @@ export default function ContactSection() {
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#FAFAFA")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#444")}
                 >
-                  {link.label} {link.external && "↗"}
+                  {link.label} {link.external ? "↗" : ""}
                 </a>
               ))}
             </div>
@@ -89,16 +86,14 @@ export default function ContactSection() {
         </div>
       </section>
 
-      <footer style={{ background: "#0A0A0A", borderTop: "1px solid #1A1A1A", padding: "24px 0" }}>
+      {/* Footer */}
+      <footer style={{ background: "#050505", borderTop: "1px solid #111", padding: "24px 0" }}>
         <div
           className="container"
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}
         >
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "#2A2A2A" }}>
-            © 2025 Bob Qiushao
-          </span>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "#2A2A2A" }}>
-            React · TypeScript · Vite · Vercel
+          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "#333" }}>
+            {t.contact.footer_built}
           </span>
           <a
             href="https://github.com/qiubob666-debug/portfolio-site"
@@ -107,13 +102,13 @@ export default function ContactSection() {
             style={{
               fontFamily: "'DM Mono', monospace", fontSize: 9,
               letterSpacing: "0.12em", textTransform: "uppercase",
-              color: "#2A2A2A", textDecoration: "none",
+              color: "#333", textDecoration: "none",
               transition: "color 0.2s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#FAFAFA")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#2A2A2A")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#333")}
           >
-            View Source ↗
+            {t.contact.footer_source}
           </a>
         </div>
       </footer>
