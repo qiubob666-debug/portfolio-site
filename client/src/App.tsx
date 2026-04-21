@@ -1,6 +1,3 @@
-/* App — Kinetic Precision design system
-   Light theme. Single page portfolio. i18n enabled. */
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";

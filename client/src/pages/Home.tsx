@@ -1,25 +1,27 @@
-/* Home — Kinetic Precision design system
-   Full page composition: CustomCursor + Navbar + Hero + Stack + Process + About + Contact
-   No screenshots. The interaction is the portfolio. */
+/* Home.tsx — Considered Authority
+   Boss journey: Hero → Services → Capabilities → Process → Trust → About → Contact
+   Each section answers one question the boss has as they scroll */
 
 import CustomCursor from "@/components/CustomCursor";
-import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import StackSection from "@/components/StackSection";
+import ServicesSection from "@/components/ServicesSection";
+import CapabilitiesSection from "@/components/CapabilitiesSection";
 import ProcessSection from "@/components/ProcessSection";
+import TrustSection from "@/components/TrustSection";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
-    <div style={{ minHeight: "100vh", background: "#FAFAFA" }}>
+    <>
       <CustomCursor />
-      <Navbar />
       <HeroSection />
-      <StackSection />
+      <ServicesSection />
+      <CapabilitiesSection />
       <ProcessSection />
+      <TrustSection />
       <AboutSection />
       <ContactSection />
-    </div>
+    </>
   );
 }

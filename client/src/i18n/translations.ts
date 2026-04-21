@@ -1,18 +1,65 @@
-/* i18n translations — Kinetic Precision
-   Supported languages: en (English), zh (中文), ja (日本語)
-   Auto-detected from navigator.language, manually switchable via LanguageSwitcher */
+/* translations.ts — Considered Authority
+   Supported: en, zh, ja
+   Strategy: Boss-as-customer journey map
+   Sections: hero → services → capabilities → process → trust → about → contact */
 
 export type Locale = "en" | "zh" | "ja";
 
+export interface ServiceItem {
+  id: string;
+  tag: string;
+  title: string;
+  desc: string;
+  price: string;
+  priceNote: string;
+  features: string[];
+  cta: string;
+  featured?: boolean;
+}
+
+export interface CapCategory {
+  label: string;
+  items: string[];
+}
+
+export interface ProcessStep {
+  step: string;
+  title: string;
+  desc: string;
+}
+
+export interface TrustItem {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
 export interface Translations {
   nav: {
-    stack: string;
+    services: string;
     process: string;
     about: string;
     contact: string;
     available: string;
   };
   hero: {
+    badge: string;
+    headline1: string;
+    headline2: string;
+    headline3: string;
+    sub: string;
+    cta_primary: string;
+    cta_secondary: string;
+    stat1_num: string; stat1_label: string;
+    stat2_num: string; stat2_label: string;
+    stat3_num: string; stat3_label: string;
+    stat4_num: string; stat4_label: string;
+    // legacy compat
     index: string;
     roles: string[];
     description: string;
@@ -22,29 +69,40 @@ export interface Translations {
     scroll: string;
     graph_hint: string;
   };
-  stack: {
+  services: {
     index: string;
     headline: string;
     headline_em: string;
-    graph_hint: string;
-    categories: Array<{ label: string; items: string[] }>;
+    sub: string;
+    items: ServiceItem[];
+    note: string;
+  };
+  capabilities: {
+    index: string;
+    headline: string;
+    headline_em: string;
+    sub: string;
+    categories: CapCategory[];
   };
   process: {
     index: string;
     headline: string;
     headline_em: string;
+    sub: string;
+    steps: ProcessStep[];
+    // legacy compat
     workflow_label: string;
     adr_label: string;
-    workflow: Array<{ step: string; title: string; desc: string }>;
-    decisions: Array<{
-      id: string;
-      title: string;
-      category: string;
-      tags: string[];
-      summary: string;
-      reasoning: string[];
-      tradeoff: string;
-    }>;
+    workflow: ProcessStep[];
+    decisions: any[];
+  };
+  trust: {
+    index: string;
+    headline: string;
+    headline_em: string;
+    items: TrustItem[];
+    faq_label: string;
+    faqs: FaqItem[];
   };
   about: {
     index: string;
@@ -60,181 +118,251 @@ export interface Translations {
     headline: string;
     headline_em: string;
     description: string;
+    form_name: string;
+    form_email: string;
+    form_budget: string;
+    form_message: string;
+    form_submit: string;
+    form_success: string;
+    form_name_ph: string;
+    form_email_ph: string;
+    form_message_ph: string;
+    budget_options: string[];
     cta: string;
     links: Array<{ label: string; href: string; external: boolean }>;
     footer_built: string;
     footer_source: string;
   };
-  graph: {
-    react: string;
-    typescript: string;
-    vite: string;
-    tailwind: string;
-    framer: string;
-    python: string;
-    fastapi: string;
-    nodejs: string;
-    php: string;
-    docker: string;
-    vercel: string;
-    nginx: string;
-    github: string;
-    n8n: string;
-    sanity: string;
-    supabase: string;
-    postgresql: string;
+  stack: {
+    index: string;
+    headline: string;
+    headline_em: string;
+    graph_hint: string;
+    categories: CapCategory[];
   };
+  graph: Record<string, string>;
 }
 
 export const translations: Record<Locale, Translations> = {
   en: {
     nav: {
-      stack: "Stack",
+      services: "Services",
       process: "Process",
       about: "About",
       contact: "Contact",
-      available: "Available",
+      available: "Available for projects",
     },
     hero: {
+      badge: "Full-Stack Engineer · Cross-Border E-Commerce Specialist",
+      headline1: "Your brand deserves",
+      headline2: "a website that",
+      headline3: "actually converts.",
+      sub: "I build high-performance websites and digital systems for cross-border e-commerce brands, independent sellers, and global businesses — from Shopify storefronts to custom brand portals.",
+      cta_primary: "View Services",
+      cta_secondary: "See My Stack",
+      stat1_num: "6+", stat1_label: "Live Projects",
+      stat2_num: "5", stat2_label: "Tech Domains",
+      stat3_num: "3", stat3_label: "Languages",
+      stat4_num: "24h", stat4_label: "Response Time",
+      // legacy
       index: "01 — Identity",
-      roles: [
-        "Full-Stack Engineer",
-        "Systems Architect",
-        "Automation Builder",
-        "UI/UX Implementer",
-      ],
-      description:
-        "Building end-to-end systems — from React interfaces to Python APIs, Docker infrastructure, and n8n automation pipelines. This site is the portfolio. The interaction is the proof.",
+      roles: ["Full-Stack Engineer", "E-Commerce Specialist", "Automation Builder", "Brand Web Consultant"],
+      description: "Building high-performance websites and digital systems for cross-border brands.",
       stats: [
-        { value: "6+", label: "Repos in Production" },
-        { value: "300+", label: "n8n Workflow Nodes" },
+        { value: "6+", label: "Live Projects" },
         { value: "5", label: "Tech Domains" },
+        { value: "24h", label: "Response Time" },
       ],
       cta_stack: "Explore Stack →",
       cta_github: "GitHub ↗",
       scroll: "Scroll",
       graph_hint: "Interactive tech graph below ↓",
     },
-    stack: {
-      index: "02 — Technology Stack",
-      headline: "The constellation",
-      headline_em: "of tools I build with",
-      graph_hint: "Click any node to see depth — drag to explore",
+    services: {
+      index: "01 — What I Deliver",
+      headline: "Services built for",
+      headline_em: "brands that sell globally",
+      sub: "Every engagement is scoped, priced transparently, and delivered with full documentation. No surprises.",
+      items: [
+        {
+          id: "brand-site",
+          tag: "Most Popular",
+          title: "Brand Website",
+          desc: "A custom-designed, high-performance brand site that tells your story and converts visitors into buyers.",
+          price: "From ¥8,000",
+          priceNote: "One-time project fee",
+          features: [
+            "Custom design — no templates",
+            "Mobile-first, sub-2s load time",
+            "SEO-ready structure",
+            "CMS for self-editing",
+            "3 rounds of revision",
+            "1 month post-launch support",
+          ],
+          cta: "Get a Quote",
+          featured: false,
+        },
+        {
+          id: "ecom-store",
+          tag: "Best Value",
+          title: "E-Commerce Store",
+          desc: "Full-featured online store with product management, payment integration, and conversion-optimized checkout.",
+          price: "From ¥15,000",
+          priceNote: "One-time project fee",
+          features: [
+            "Shopify / WooCommerce / Custom",
+            "Multi-currency & multi-language",
+            "Payment gateway integration",
+            "Inventory & order management",
+            "Analytics dashboard",
+            "3 months post-launch support",
+          ],
+          cta: "Get a Quote",
+          featured: true,
+        },
+        {
+          id: "automation",
+          tag: "Save Time",
+          title: "Workflow Automation",
+          desc: "Connect your tools and automate repetitive tasks — order sync, inventory updates, customer notifications.",
+          price: "From ¥5,000",
+          priceNote: "Per automation project",
+          features: [
+            "n8n / Zapier / custom scripts",
+            "API integrations (Shopify, WooCommerce, ERP)",
+            "Scheduled & webhook-triggered",
+            "Error monitoring & alerts",
+            "Full documentation",
+            "Ongoing maintenance available",
+          ],
+          cta: "Get a Quote",
+          featured: false,
+        },
+        {
+          id: "consulting",
+          tag: "Strategic",
+          title: "Tech Consulting",
+          desc: "Architecture review, tech stack selection, or a one-time audit of your existing digital infrastructure.",
+          price: "¥800 / hour",
+          priceNote: "Minimum 2 hours",
+          features: [
+            "Tech stack audit & recommendations",
+            "Performance & SEO review",
+            "Security assessment",
+            "Migration planning",
+            "Written report delivered",
+            "Follow-up Q&A included",
+          ],
+          cta: "Book a Call",
+          featured: false,
+        },
+      ],
+      note: "All prices in CNY. USD / HKD pricing available. Custom scopes welcome — let's talk.",
+    },
+    capabilities: {
+      index: "02 — Technical Depth",
+      headline: "The full stack,",
+      headline_em: "end to end",
+      sub: "Not a no-code assembler. Every layer of your digital product — from pixel to server — is built with production-grade code.",
       categories: [
         {
           label: "Frontend",
-          items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "Wouter", "shadcn/ui", "Recharts"],
+          items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui", "Recharts", "Wouter"],
         },
         {
           label: "Backend",
           items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API", "Pydantic", "JWT Auth"],
         },
         {
+          label: "E-Commerce",
+          items: ["Shopify Liquid", "WooCommerce", "Custom Checkout", "Payment Gateways", "Multi-currency", "Product Feeds"],
+        },
+        {
           label: "Infrastructure",
-          items: ["Docker Compose", "Nginx", "Vercel", "Railway", "Hostinger VPS", "GitHub Actions", "SSL/TLS", "Reverse Proxy"],
+          items: ["Docker Compose", "Nginx", "Vercel", "Railway", "Hostinger VPS", "GitHub Actions", "SSL/TLS", "CDN"],
         },
         {
-          label: "Data & Storage",
-          items: ["PostgreSQL", "Supabase", "MySQL", "Row Level Security", "GROQ Queries", "Real-time Subscriptions"],
+          label: "Data & CMS",
+          items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "Row Level Security", "GROQ Queries"],
         },
         {
-          label: "Automation & CMS",
-          items: ["n8n Workflows", "Sanity CMS", "Webhook Integrations", "Scheduled Pipelines", "Content Sync", "Custom Schemas"],
+          label: "Automation",
+          items: ["n8n Workflows", "Webhook Integrations", "Scheduled Pipelines", "API Sync", "Order Automation", "Inventory Alerts"],
         },
       ],
     },
     process: {
-      index: "03 — Engineering Process",
-      headline: "How I think,",
-      headline_em: "not just what I built",
-      workflow_label: "Development Workflow",
-      adr_label: "Architecture Decisions (ADR)",
-      workflow: [
-        { step: "01", title: "Requirement Analysis", desc: "Break down user needs into data models and API contracts before writing any code." },
-        { step: "02", title: "Architecture Decision", desc: "Document tech choices with explicit tradeoffs. ADRs live in the repository." },
-        { step: "03", title: "Infrastructure First", desc: "Docker Compose stack defined before application code. Environment parity from day one." },
-        { step: "04", title: "API Contract", desc: "OpenAPI spec or TypeScript interfaces defined before implementation begins." },
-        { step: "05", title: "Build & Iterate", desc: "Feature branches, PR reviews, automated deployment on merge to main." },
-        { step: "06", title: "Monitor & Automate", desc: "n8n workflows handle recurring tasks. Logs and alerts configured from launch." },
+      index: "03 — How We Work Together",
+      headline: "From brief",
+      headline_em: "to live in 4 steps",
+      sub: "A clear, predictable process. You always know where we are and what comes next.",
+      steps: [
+        { step: "01", title: "Discovery Call", desc: "30-minute call to understand your brand, goals, and timeline. I'll ask the right questions so nothing gets missed." },
+        { step: "02", title: "Proposal & Scope", desc: "Written proposal with fixed price, deliverables, and timeline. No hourly billing surprises." },
+        { step: "03", title: "Build & Review", desc: "I build in sprints with regular check-ins. You review at each milestone before we proceed." },
+        { step: "04", title: "Launch & Handover", desc: "Full deployment, documentation, and a walkthrough so your team can manage the site independently." },
       ],
-      decisions: [
-        {
-          id: "adr-001",
-          title: "Why Sanity over Contentful",
-          category: "Architecture Decision",
-          tags: ["CMS", "TypeScript", "GROQ"],
-          summary: "Chose Sanity for its schema-as-code approach and GROQ query language, enabling type-safe content modeling and real-time sync with React frontends.",
-          reasoning: [
-            "Schema defined in TypeScript — version-controlled, reviewable, testable",
-            "GROQ queries co-locate data requirements with components",
-            "Real-time listener API enables live content preview without polling",
-            "Studio customization allows client-specific editorial workflows",
-          ],
-          tradeoff: "Higher learning curve than Contentful, but full ownership of content model structure.",
-        },
-        {
-          id: "adr-002",
-          title: "Docker Compose over Kubernetes",
-          category: "Infrastructure Decision",
-          tags: ["Docker", "DevOps", "Scalability"],
-          summary: "For current project scale (1–3 services), Compose provides 90% of K8s benefits with 10% of the operational complexity.",
-          reasoning: [
-            "Single-host deployments don't need orchestration overhead",
-            "Compose files serve as executable infrastructure documentation",
-            "Nginx reverse proxy handles routing and SSL termination cleanly",
-            "Migration path to K8s is clear when horizontal scaling is needed",
-          ],
-          tradeoff: "No auto-scaling or self-healing. Acceptable for current traffic profiles.",
-        },
-        {
-          id: "adr-003",
-          title: "n8n for Automation over Custom Scripts",
-          category: "Automation Decision",
-          tags: ["n8n", "Automation", "Workflows"],
-          summary: "Visual workflow builder reduces time-to-automation by 70% for integration tasks, while still allowing custom code nodes for complex logic.",
-          reasoning: [
-            "300+ built-in integrations eliminate boilerplate HTTP clients",
-            "Visual debugger makes workflow state inspection intuitive",
-            "Self-hosted on Docker — full data sovereignty",
-            "Webhook triggers enable event-driven architecture without polling",
-          ],
-          tradeoff: "Not suitable for high-throughput data processing. Python scripts handle those cases.",
-        },
-        {
-          id: "adr-004",
-          title: "Supabase over Firebase",
-          category: "Database Decision",
-          tags: ["PostgreSQL", "Auth", "RLS"],
-          summary: "PostgreSQL's relational model and Row Level Security provide stronger data integrity guarantees than Firebase's document model for structured data.",
-          reasoning: [
-            "SQL joins eliminate denormalization complexity",
-            "Row Level Security enforces access control at database level",
-            "Open-source — self-hostable, no vendor lock-in",
-            "PostgREST auto-generates REST API from schema",
-          ],
-          tradeoff: "Cold start latency on free tier. Mitigated with connection pooling.",
-        },
+      // legacy compat
+      workflow_label: "Development Workflow",
+      adr_label: "Architecture Decisions",
+      workflow: [
+        { step: "01", title: "Discovery Call", desc: "30-minute call to understand your brand, goals, and timeline." },
+        { step: "02", title: "Proposal & Scope", desc: "Written proposal with fixed price, deliverables, and timeline." },
+        { step: "03", title: "Build & Review", desc: "Build in sprints with regular check-ins and milestone reviews." },
+        { step: "04", title: "Launch & Handover", desc: "Full deployment, documentation, and team walkthrough." },
+      ],
+      decisions: [],
+    },
+    trust: {
+      index: "04 — Why Work With Me",
+      headline: "Built on",
+      headline_em: "transparency & craft",
+      items: [
+        { icon: "🔒", title: "Fixed-Price Projects", desc: "No hourly billing. You get a written quote upfront — the price you see is the price you pay." },
+        { icon: "📦", title: "Full Code Ownership", desc: "Every line of code is yours. Hosted on your own accounts. No lock-in, ever." },
+        { icon: "🌐", title: "Multi-Language Ready", desc: "Sites built with i18n from day one. Chinese, English, Japanese — your customers feel at home." },
+        { icon: "⚡", title: "Performance First", desc: "Sub-2s load times, 90+ Lighthouse scores, CDN-delivered. Fast sites sell more." },
+        { icon: "🤝", title: "Long-Term Partnership", desc: "I'm not a one-project vendor. Ongoing maintenance, updates, and growth support available." },
+        { icon: "📊", title: "Data-Driven Decisions", desc: "Analytics integrated from launch. You'll know exactly how your site performs." },
+      ],
+      faq_label: "Frequently Asked Questions",
+      faqs: [
+        { q: "How long does a project take?", a: "A brand website typically takes 2–3 weeks. An e-commerce store takes 3–5 weeks. Complex custom builds are scoped individually. I'll give you an exact timeline in the proposal." },
+        { q: "Do I need to provide content?", a: "Yes — you provide your brand assets (logo, product images, copy). I can advise on structure and help with copywriting at an additional fee." },
+        { q: "Can you work with my existing Shopify/WordPress site?", a: "Absolutely. I can redesign, extend, or optimize your existing store without starting from scratch." },
+        { q: "What if I need changes after launch?", a: "All projects include 1–3 months of post-launch support. After that, maintenance retainers are available starting at ¥1,500/month." },
+        { q: "Do you work with international clients?", a: "Yes. I work with clients in China, Hong Kong, Southeast Asia, and globally. Communication in Chinese and English." },
       ],
     },
     about: {
-      index: "04 — About",
-      headline: "Building systems",
-      headline_em: "end to end",
-      bio1: "Full-stack engineer with a systems mindset. I work across the entire stack — from crafting React interfaces to designing Python APIs, configuring Docker infrastructure, and building n8n automation pipelines.",
-      bio2: "Based in China. Currently building AuraLoop — an astrology platform with Sanity CMS, Supabase, and a custom Kerykeion-based calculation service. Available for freelance projects and technical consulting.",
+      index: "05 — About",
+      headline: "The engineer behind",
+      headline_em: "the work",
+      bio1: "I'm Bob Qiushao — a full-stack engineer specializing in cross-border e-commerce and brand web infrastructure. I've built everything from Sanity-powered content platforms to Docker-orchestrated API services.",
+      bio2: "My clients are brand founders and operators who need a technical partner — not just a developer. I care about your conversion rate as much as your code quality.",
       orbit_label: "Skill orbit — core to periphery",
       values: [
-        { label: "Systems Thinking", desc: "Every component is part of a larger system. I design for the whole, not just the part." },
-        { label: "Automation First", desc: "If a task runs more than twice, it should be automated. n8n, scripts, CI/CD." },
-        { label: "Ownership", desc: "Self-hosted infrastructure, open-source tooling, no vendor lock-in by default." },
-        { label: "Clarity in Complexity", desc: "Good architecture makes complex systems understandable. Documentation is code." },
+        { label: "Conversion-Focused", desc: "Beautiful sites that don't convert are expensive decorations. Every design decision is tied to a business outcome." },
+        { label: "Automation First", desc: "If a task runs more than twice, it should be automated. Your team's time is too valuable for manual work." },
+        { label: "Full Ownership", desc: "Self-hosted infrastructure, open-source tooling, your accounts. You own everything." },
+        { label: "Clear Communication", desc: "No jargon. Regular updates. You always know the status of your project." },
       ],
     },
     contact: {
-      index: "05 — Contact",
-      headline: "Let's build",
-      headline_em: "something together",
-      description: "Available for freelance projects, technical consulting, and full-time opportunities. Response within 24 hours.",
+      index: "06 — Let's Talk",
+      headline: "Ready to build",
+      headline_em: "your next project?",
+      description: "Tell me about your project. I'll respond within 24 hours with initial thoughts and next steps.",
+      form_name: "Your Name",
+      form_email: "Email Address",
+      form_budget: "Project Budget",
+      form_message: "Tell me about your project",
+      form_submit: "Send Message →",
+      form_success: "Message sent! I'll reply within 24 hours.",
+      form_name_ph: "Jane Smith",
+      form_email_ph: "jane@yourbrand.com",
+      form_message_ph: "I'm looking to build a brand website for my cross-border store...",
+      budget_options: ["Under ¥5,000", "¥5,000 – ¥15,000", "¥15,000 – ¥30,000", "¥30,000+", "Not sure yet"],
       cta: "contact@bobqiushao.online",
       links: [
         { label: "GitHub", href: "https://github.com/qiubob666-debug", external: true },
@@ -243,6 +371,19 @@ export const translations: Record<Locale, Translations> = {
       ],
       footer_built: "React · TypeScript · Vite · Vercel",
       footer_source: "View Source ↗",
+    },
+    stack: {
+      index: "Tech Stack",
+      headline: "The constellation",
+      headline_em: "of tools I build with",
+      graph_hint: "Click any node to see depth — drag to explore",
+      categories: [
+        { label: "Frontend", items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui"] },
+        { label: "Backend", items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API"] },
+        { label: "Infrastructure", items: ["Docker Compose", "Nginx", "Vercel", "Railway", "GitHub Actions", "SSL/TLS"] },
+        { label: "Data & CMS", items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "GROQ Queries"] },
+        { label: "Automation", items: ["n8n Workflows", "Webhook Integrations", "Scheduled Pipelines", "API Sync"] },
+      ],
     },
     graph: {
       react:      "Production-grade SPA architecture, custom hooks, context, performance optimization",
@@ -267,152 +408,222 @@ export const translations: Record<Locale, Translations> = {
 
   zh: {
     nav: {
-      stack: "技术栈",
-      process: "工程思路",
+      services: "服务",
+      process: "合作流程",
       about: "关于",
       contact: "联系",
       available: "可接项目",
     },
     hero: {
+      badge: "全栈工程师 · 跨境电商网站专家",
+      headline1: "你的品牌值得拥有",
+      headline2: "一个真正能",
+      headline3: "带来转化的网站。",
+      sub: "我为跨境电商品牌、独立卖家和全球化业务构建高性能网站和数字系统——从 Shopify 店铺到定制品牌官网，全程负责到底。",
+      cta_primary: "查看服务",
+      cta_secondary: "了解技术栈",
+      stat1_num: "6+", stat1_label: "上线项目",
+      stat2_num: "5", stat2_label: "技术领域",
+      stat3_num: "3", stat3_label: "服务语言",
+      stat4_num: "24h", stat4_label: "响应时间",
+      // legacy
       index: "01 — 身份",
-      roles: [
-        "全栈工程师",
-        "系统架构师",
-        "自动化构建者",
-        "UI/UX 实现者",
-      ],
-      description:
-        "构建端到端系统——从 React 界面到 Python API，从 Docker 基础设施到 n8n 自动化流水线。这个网站本身就是作品集，交互体验就是能力证明。",
+      roles: ["全栈工程师", "跨境电商专家", "自动化构建者", "品牌网站顾问"],
+      description: "为跨境品牌构建高性能网站和数字系统。",
       stats: [
-        { value: "6+", label: "生产环境仓库" },
-        { value: "300+", label: "n8n 工作流节点" },
+        { value: "6+", label: "上线项目" },
         { value: "5", label: "技术领域" },
+        { value: "24h", label: "响应时间" },
       ],
       cta_stack: "探索技术栈 →",
       cta_github: "GitHub ↗",
       scroll: "向下滚动",
       graph_hint: "下方有交互式技术图谱 ↓",
     },
-    stack: {
-      index: "02 — 技术栈",
-      headline: "我构建所用的",
-      headline_em: "技术星座图",
-      graph_hint: "点击节点查看深度 — 拖拽探索",
+    services: {
+      index: "01 — 我能为你做什么",
+      headline: "为全球销售的",
+      headline_em: "品牌而生的服务",
+      sub: "每个项目都有明确的范围、透明的报价和完整的交付文档。没有隐藏费用。",
+      items: [
+        {
+          id: "brand-site",
+          tag: "最受欢迎",
+          title: "品牌官网",
+          desc: "定制设计的高性能品牌网站，讲述你的品牌故事，将访客转化为买家。",
+          price: "¥8,000 起",
+          priceNote: "一次性项目费用",
+          features: [
+            "全定制设计，非模板",
+            "移动端优先，加载 < 2s",
+            "SEO 友好结构",
+            "CMS 自主编辑",
+            "3 轮修改",
+            "上线后 1 个月支持",
+          ],
+          cta: "获取报价",
+          featured: false,
+        },
+        {
+          id: "ecom-store",
+          tag: "最佳性价比",
+          title: "电商独立站",
+          desc: "功能完整的独立站，含商品管理、支付集成和转化率优化的结账流程。",
+          price: "¥15,000 起",
+          priceNote: "一次性项目费用",
+          features: [
+            "Shopify / WooCommerce / 定制开发",
+            "多币种 & 多语言",
+            "支付网关集成",
+            "库存与订单管理",
+            "数据分析看板",
+            "上线后 3 个月支持",
+          ],
+          cta: "获取报价",
+          featured: true,
+        },
+        {
+          id: "automation",
+          tag: "节省时间",
+          title: "工作流自动化",
+          desc: "连接你的工具，自动化重复任务——订单同步、库存更新、客户通知。",
+          price: "¥5,000 起",
+          priceNote: "每个自动化项目",
+          features: [
+            "n8n / Zapier / 自定义脚本",
+            "API 集成（Shopify、WooCommerce、ERP）",
+            "定时 & Webhook 触发",
+            "错误监控 & 告警",
+            "完整文档",
+            "可持续维护",
+          ],
+          cta: "获取报价",
+          featured: false,
+        },
+        {
+          id: "consulting",
+          tag: "战略咨询",
+          title: "技术咨询",
+          desc: "架构评审、技术选型，或对你现有数字基础设施的一次性审计。",
+          price: "¥800 / 小时",
+          priceNote: "最少 2 小时",
+          features: [
+            "技术栈审计 & 建议",
+            "性能 & SEO 评审",
+            "安全评估",
+            "迁移规划",
+            "书面报告交付",
+            "包含后续答疑",
+          ],
+          cta: "预约通话",
+          featured: false,
+        },
+      ],
+      note: "以上价格为人民币。支持美元 / 港币结算。欢迎定制范围——来聊聊。",
+    },
+    capabilities: {
+      index: "02 — 技术深度",
+      headline: "全栈能力，",
+      headline_em: "端到端覆盖",
+      sub: "不是无代码拼接工具。你数字产品的每一层——从像素到服务器——都用生产级代码构建。",
       categories: [
         {
           label: "前端",
-          items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "Wouter", "shadcn/ui", "Recharts"],
+          items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui", "Recharts", "Wouter"],
         },
         {
           label: "后端",
           items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API", "Pydantic", "JWT 认证"],
         },
         {
+          label: "电商",
+          items: ["Shopify Liquid", "WooCommerce", "自定义结账", "支付网关", "多币种", "商品数据流"],
+        },
+        {
           label: "基础设施",
-          items: ["Docker Compose", "Nginx", "Vercel", "Railway", "Hostinger VPS", "GitHub Actions", "SSL/TLS", "反向代理"],
+          items: ["Docker Compose", "Nginx", "Vercel", "Railway", "Hostinger VPS", "GitHub Actions", "SSL/TLS", "CDN"],
         },
         {
-          label: "数据与存储",
-          items: ["PostgreSQL", "Supabase", "MySQL", "行级安全", "GROQ 查询", "实时订阅"],
+          label: "数据 & CMS",
+          items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "行级安全", "GROQ 查询"],
         },
         {
-          label: "自动化与 CMS",
-          items: ["n8n 工作流", "Sanity CMS", "Webhook 集成", "定时任务", "内容同步", "自定义 Schema"],
+          label: "自动化",
+          items: ["n8n 工作流", "Webhook 集成", "定时任务", "API 同步", "订单自动化", "库存告警"],
         },
       ],
     },
     process: {
-      index: "03 — 工程思路",
-      headline: "我如何思考，",
-      headline_em: "而不只是我做了什么",
-      workflow_label: "开发工作流",
-      adr_label: "架构决策记录（ADR）",
-      workflow: [
-        { step: "01", title: "需求分析", desc: "在写任何代码之前，将用户需求拆解为数据模型和 API 契约。" },
-        { step: "02", title: "架构决策", desc: "记录技术选型及其明确的权衡取舍，ADR 文档存放在仓库中。" },
-        { step: "03", title: "基础设施优先", desc: "在应用代码之前定义 Docker Compose 栈，从第一天起保证环境一致性。" },
-        { step: "04", title: "API 契约", desc: "在实现开始之前定义 OpenAPI 规范或 TypeScript 接口。" },
-        { step: "05", title: "构建与迭代", desc: "功能分支、PR 审查、合并到主分支后自动部署。" },
-        { step: "06", title: "监控与自动化", desc: "n8n 工作流处理重复任务，日志和告警从上线起即配置完毕。" },
+      index: "03 — 合作方式",
+      headline: "从需求",
+      headline_em: "到上线，4 步完成",
+      sub: "清晰、可预期的流程。你随时知道我们在哪里，下一步是什么。",
+      steps: [
+        { step: "01", title: "需求沟通", desc: "30 分钟通话，了解你的品牌、目标和时间线。我会问对的问题，确保没有遗漏。" },
+        { step: "02", title: "方案 & 报价", desc: "书面方案，含固定价格、交付物和时间线。没有按小时计费的意外。" },
+        { step: "03", title: "构建 & 评审", desc: "分阶段构建，定期沟通。每个里程碑你都会审查，确认后再推进。" },
+        { step: "04", title: "上线 & 交接", desc: "完整部署、文档和操作讲解，让你的团队能独立管理网站。" },
       ],
-      decisions: [
-        {
-          id: "adr-001",
-          title: "为何选 Sanity 而非 Contentful",
-          category: "架构决策",
-          tags: ["CMS", "TypeScript", "GROQ"],
-          summary: "选择 Sanity 是因为其 Schema 即代码的方式和 GROQ 查询语言，实现了类型安全的内容建模和与 React 前端的实时同步。",
-          reasoning: [
-            "Schema 用 TypeScript 定义——可版本控制、可审查、可测试",
-            "GROQ 查询将数据需求与组件共同定位",
-            "实时监听 API 无需轮询即可实现内容实时预览",
-            "Studio 定制化允许针对客户的编辑工作流",
-          ],
-          tradeoff: "学习曲线比 Contentful 更陡，但对内容模型结构拥有完全所有权。",
-        },
-        {
-          id: "adr-002",
-          title: "Docker Compose 而非 Kubernetes",
-          category: "基础设施决策",
-          tags: ["Docker", "DevOps", "可扩展性"],
-          summary: "对于当前项目规模（1-3 个服务），Compose 以 10% 的运维复杂度提供了 K8s 90% 的收益。",
-          reasoning: [
-            "单主机部署不需要编排开销",
-            "Compose 文件作为可执行的基础设施文档",
-            "Nginx 反向代理干净地处理路由和 SSL 终止",
-            "需要水平扩展时，迁移到 K8s 的路径清晰",
-          ],
-          tradeoff: "没有自动扩缩容或自愈能力，对当前流量规模可接受。",
-        },
-        {
-          id: "adr-003",
-          title: "用 n8n 替代自定义脚本做自动化",
-          category: "自动化决策",
-          tags: ["n8n", "自动化", "工作流"],
-          summary: "可视化工作流构建器将集成任务的自动化时间缩短 70%，同时仍允许自定义代码节点处理复杂逻辑。",
-          reasoning: [
-            "300+ 内置集成消除了样板 HTTP 客户端代码",
-            "可视化调试器使工作流状态检查直观",
-            "在 Docker 上自托管——完全的数据主权",
-            "Webhook 触发器无需轮询即可实现事件驱动架构",
-          ],
-          tradeoff: "不适合高吞吐量数据处理，这些情况由 Python 脚本处理。",
-        },
-        {
-          id: "adr-004",
-          title: "Supabase 而非 Firebase",
-          category: "数据库决策",
-          tags: ["PostgreSQL", "认证", "RLS"],
-          summary: "PostgreSQL 的关系模型和行级安全为结构化数据提供了比 Firebase 文档模型更强的数据完整性保证。",
-          reasoning: [
-            "SQL 连接消除了反规范化的复杂性",
-            "行级安全在数据库层面强制执行访问控制",
-            "开源——可自托管，默认无供应商锁定",
-            "PostgREST 从 Schema 自动生成 REST API",
-          ],
-          tradeoff: "免费层有冷启动延迟，通过连接池缓解。",
-        },
+      workflow_label: "开发工作流",
+      adr_label: "架构决策记录",
+      workflow: [
+        { step: "01", title: "需求沟通", desc: "了解你的品牌、目标和时间线。" },
+        { step: "02", title: "方案 & 报价", desc: "书面方案，含固定价格和交付物。" },
+        { step: "03", title: "构建 & 评审", desc: "分阶段构建，里程碑评审。" },
+        { step: "04", title: "上线 & 交接", desc: "完整部署和团队操作讲解。" },
+      ],
+      decisions: [],
+    },
+    trust: {
+      index: "04 — 为什么选择我",
+      headline: "建立在",
+      headline_em: "透明与专业之上",
+      items: [
+        { icon: "🔒", title: "固定报价项目", desc: "不按小时计费。提前给你书面报价——你看到的价格就是你付的价格。" },
+        { icon: "📦", title: "代码完全归你", desc: "每一行代码都是你的。托管在你自己的账号上。永远不会被锁定。" },
+        { icon: "🌐", title: "多语言原生支持", desc: "网站从第一天起就支持 i18n。中文、英文、日文——让你的客户感到亲切。" },
+        { icon: "⚡", title: "性能优先", desc: "加载 < 2s，Lighthouse 90+，CDN 加速。快速的网站卖得更多。" },
+        { icon: "🤝", title: "长期合作伙伴", desc: "我不是一次性供应商。提供持续维护、更新和增长支持。" },
+        { icon: "📊", title: "数据驱动决策", desc: "上线即集成分析。你会清楚知道网站的表现。" },
+      ],
+      faq_label: "常见问题",
+      faqs: [
+        { q: "项目需要多长时间？", a: "品牌官网通常需要 2–3 周。电商独立站需要 3–5 周。复杂定制项目单独评估。方案中会给出精确时间线。" },
+        { q: "我需要提供内容吗？", a: "是的——你提供品牌素材（Logo、产品图、文案）。我可以提供结构建议，文案撰写可额外收费。" },
+        { q: "你能改造我现有的 Shopify/WordPress 网站吗？", a: "当然可以。我可以重新设计、扩展或优化你现有的店铺，不需要从零开始。" },
+        { q: "上线后需要修改怎么办？", a: "所有项目包含 1–3 个月的上线后支持。之后可按月维护，起价 ¥1,500/月。" },
+        { q: "你接受海外客户吗？", a: "接受。我服务中国、香港、东南亚及全球客户。中英文沟通均可。" },
       ],
     },
     about: {
-      index: "04 — 关于",
-      headline: "构建系统，",
-      headline_em: "端到端全栈",
-      bio1: "具有系统思维的全栈工程师。我跨越整个技术栈工作——从打造 React 界面到设计 Python API，配置 Docker 基础设施，构建 n8n 自动化流水线。",
-      bio2: "目前在中国。正在构建 AuraLoop——一个使用 Sanity CMS、Supabase 和自定义 Kerykeion 计算服务的占星平台。欢迎自由职业项目和技术咨询合作。",
+      index: "05 — 关于我",
+      headline: "作品背后的",
+      headline_em: "工程师",
+      bio1: "我是 Bob Qiushao——专注于跨境电商和品牌网站基础设施的全栈工程师。从 Sanity 驱动的内容平台到 Docker 编排的 API 服务，我都亲手构建过。",
+      bio2: "我的客户是需要技术合伙人的品牌创始人和运营者——而不只是一个开发者。我对你的转化率的关注程度，不亚于对代码质量的关注。",
       orbit_label: "技能轨道——从核心到外围",
       values: [
-        { label: "系统思维", desc: "每个组件都是更大系统的一部分，我为整体而设计，而不仅仅是局部。" },
-        { label: "自动化优先", desc: "如果一个任务运行超过两次，它就应该被自动化——n8n、脚本、CI/CD。" },
-        { label: "所有权", desc: "自托管基础设施，开源工具，默认无供应商锁定。" },
-        { label: "化繁为简", desc: "好的架构让复杂系统变得可理解，文档即代码。" },
+        { label: "转化率导向", desc: "好看但不转化的网站是昂贵的装饰品。每个设计决策都与业务结果挂钩。" },
+        { label: "自动化优先", desc: "如果一个任务运行超过两次，就应该自动化。你团队的时间太宝贵了。" },
+        { label: "完全所有权", desc: "自托管基础设施，开源工具，你的账号。你拥有一切。" },
+        { label: "清晰沟通", desc: "不说行话。定期更新。你随时知道项目的状态。" },
       ],
     },
     contact: {
-      index: "05 — 联系",
-      headline: "一起构建",
-      headline_em: "有价值的东西",
-      description: "欢迎自由职业项目、技术咨询和全职机会，24 小时内回复。",
+      index: "06 — 开始合作",
+      headline: "准备好构建",
+      headline_em: "你的下一个项目了吗？",
+      description: "告诉我你的项目情况，我会在 24 小时内回复，附上初步想法和下一步建议。",
+      form_name: "你的姓名",
+      form_email: "邮箱地址",
+      form_budget: "项目预算",
+      form_message: "描述你的项目",
+      form_submit: "发送消息 →",
+      form_success: "消息已发送！我会在 24 小时内回复。",
+      form_name_ph: "张三",
+      form_email_ph: "zhang@yourbrand.com",
+      form_message_ph: "我想为我的跨境店铺建一个品牌官网...",
+      budget_options: ["5,000 以下", "¥5,000 – ¥15,000", "¥15,000 – ¥30,000", "¥30,000 以上", "暂不确定"],
       cta: "contact@bobqiushao.online",
       links: [
         { label: "GitHub", href: "https://github.com/qiubob666-debug", external: true },
@@ -421,6 +632,19 @@ export const translations: Record<Locale, Translations> = {
       ],
       footer_built: "React · TypeScript · Vite · Vercel 构建",
       footer_source: "查看源码 ↗",
+    },
+    stack: {
+      index: "技术栈",
+      headline: "我构建所用的",
+      headline_em: "技术星座图",
+      graph_hint: "点击节点查看深度 — 拖拽探索",
+      categories: [
+        { label: "前端", items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui"] },
+        { label: "后端", items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API"] },
+        { label: "基础设施", items: ["Docker Compose", "Nginx", "Vercel", "Railway", "GitHub Actions", "SSL/TLS"] },
+        { label: "数据 & CMS", items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "GROQ 查询"] },
+        { label: "自动化", items: ["n8n 工作流", "Webhook 集成", "定时任务", "API 同步"] },
+      ],
     },
     graph: {
       react:      "生产级 SPA 架构、自定义 Hooks、Context、性能优化",
@@ -445,152 +669,204 @@ export const translations: Record<Locale, Translations> = {
 
   ja: {
     nav: {
-      stack: "技術スタック",
+      services: "サービス",
       process: "プロセス",
       about: "について",
       contact: "連絡",
       available: "案件受付中",
     },
     hero: {
+      badge: "フルスタックエンジニア · 越境EC専門家",
+      headline1: "あなたのブランドには",
+      headline2: "本当に売れる",
+      headline3: "ウェブサイトが必要です。",
+      sub: "越境ECブランド、個人セラー、グローバルビジネス向けに高性能なウェブサイトとデジタルシステムを構築します。",
+      cta_primary: "サービスを見る",
+      cta_secondary: "技術スタックを見る",
+      stat1_num: "6+", stat1_label: "稼働中プロジェクト",
+      stat2_num: "5", stat2_label: "技術ドメイン",
+      stat3_num: "3", stat3_label: "対応言語",
+      stat4_num: "24h", stat4_label: "返信時間",
+      // legacy
       index: "01 — アイデンティティ",
-      roles: [
-        "フルスタックエンジニア",
-        "システムアーキテクト",
-        "自動化ビルダー",
-        "UI/UX 実装者",
-      ],
-      description:
-        "React インターフェースから Python API、Docker インフラ、n8n 自動化パイプラインまで、エンドツーエンドのシステムを構築します。このサイト自体がポートフォリオです。インタラクションが証明です。",
+      roles: ["フルスタックエンジニア", "越境EC専門家", "自動化ビルダー", "ブランドWebコンサルタント"],
+      description: "越境ブランド向けに高性能なウェブサイトとデジタルシステムを構築します。",
       stats: [
-        { value: "6+", label: "本番環境リポジトリ" },
-        { value: "300+", label: "n8n ワークフローノード" },
+        { value: "6+", label: "稼働中プロジェクト" },
         { value: "5", label: "技術ドメイン" },
+        { value: "24h", label: "返信時間" },
       ],
       cta_stack: "技術スタックを見る →",
       cta_github: "GitHub ↗",
       scroll: "スクロール",
       graph_hint: "インタラクティブな技術グラフは下に ↓",
     },
-    stack: {
-      index: "02 — 技術スタック",
-      headline: "私が使う",
-      headline_em: "技術のコンステレーション",
-      graph_hint: "ノードをクリックして深度を確認 — ドラッグして探索",
+    services: {
+      index: "01 — 提供サービス",
+      headline: "グローバルに売る",
+      headline_em: "ブランドのためのサービス",
+      sub: "すべての案件はスコープが明確で、価格は透明、完全なドキュメントで納品します。",
+      items: [
+        {
+          id: "brand-site",
+          tag: "人気No.1",
+          title: "ブランドサイト",
+          desc: "カスタムデザインの高性能ブランドサイト。あなたのストーリーを伝え、訪問者を購入者に変えます。",
+          price: "¥8,000〜",
+          priceNote: "一括プロジェクト料金",
+          features: [
+            "完全カスタムデザイン",
+            "モバイルファースト、2秒以内読み込み",
+            "SEO対応構造",
+            "CMS自己編集機能",
+            "3回の修正",
+            "リリース後1ヶ月サポート",
+          ],
+          cta: "見積もりを取る",
+          featured: false,
+        },
+        {
+          id: "ecom-store",
+          tag: "最高コスパ",
+          title: "ECストア",
+          desc: "商品管理、決済連携、コンバージョン最適化されたチェックアウトを備えたフル機能ECストア。",
+          price: "¥15,000〜",
+          priceNote: "一括プロジェクト料金",
+          features: [
+            "Shopify / WooCommerce / カスタム",
+            "多通貨・多言語対応",
+            "決済ゲートウェイ連携",
+            "在庫・注文管理",
+            "分析ダッシュボード",
+            "リリース後3ヶ月サポート",
+          ],
+          cta: "見積もりを取る",
+          featured: true,
+        },
+        {
+          id: "automation",
+          tag: "時間節約",
+          title: "ワークフロー自動化",
+          desc: "ツールを連携し、繰り返し作業を自動化。注文同期、在庫更新、顧客通知など。",
+          price: "¥5,000〜",
+          priceNote: "自動化プロジェクトごと",
+          features: [
+            "n8n / Zapier / カスタムスクリプト",
+            "API連携（Shopify、WooCommerce、ERP）",
+            "スケジュール・Webhookトリガー",
+            "エラー監視・アラート",
+            "完全ドキュメント",
+            "継続メンテナンス可能",
+          ],
+          cta: "見積もりを取る",
+          featured: false,
+        },
+        {
+          id: "consulting",
+          tag: "戦略的",
+          title: "技術コンサルティング",
+          desc: "アーキテクチャレビュー、技術スタック選定、または既存インフラの一回限りの監査。",
+          price: "¥800 / 時間",
+          priceNote: "最低2時間",
+          features: [
+            "技術スタック監査・推奨",
+            "パフォーマンス・SEOレビュー",
+            "セキュリティ評価",
+            "移行計画",
+            "書面レポート納品",
+            "フォローアップQ&A含む",
+          ],
+          cta: "通話を予約する",
+          featured: false,
+        },
+      ],
+      note: "価格はCNY表示。USD / HKD対応可能。カスタムスコープ歓迎。",
+    },
+    capabilities: {
+      index: "02 — 技術的深度",
+      headline: "フルスタック、",
+      headline_em: "エンドツーエンド",
+      sub: "ノーコードの組み合わせではありません。ピクセルからサーバーまで、すべてプロダクションレベルのコードで構築します。",
       categories: [
-        {
-          label: "フロントエンド",
-          items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "Wouter", "shadcn/ui", "Recharts"],
-        },
-        {
-          label: "バックエンド",
-          items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API", "Pydantic", "JWT 認証"],
-        },
-        {
-          label: "インフラ",
-          items: ["Docker Compose", "Nginx", "Vercel", "Railway", "Hostinger VPS", "GitHub Actions", "SSL/TLS", "リバースプロキシ"],
-        },
-        {
-          label: "データ & ストレージ",
-          items: ["PostgreSQL", "Supabase", "MySQL", "行レベルセキュリティ", "GROQ クエリ", "リアルタイムサブスクリプション"],
-        },
-        {
-          label: "自動化 & CMS",
-          items: ["n8n ワークフロー", "Sanity CMS", "Webhook 統合", "スケジュールパイプライン", "コンテンツ同期", "カスタムスキーマ"],
-        },
+        { label: "フロントエンド", items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui"] },
+        { label: "バックエンド", items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API"] },
+        { label: "EC", items: ["Shopify Liquid", "WooCommerce", "カスタムチェックアウト", "決済ゲートウェイ", "多通貨", "商品フィード"] },
+        { label: "インフラ", items: ["Docker Compose", "Nginx", "Vercel", "Railway", "GitHub Actions", "SSL/TLS"] },
+        { label: "データ & CMS", items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "GROQ クエリ"] },
+        { label: "自動化", items: ["n8n ワークフロー", "Webhook連携", "スケジュールパイプライン", "API同期"] },
       ],
     },
     process: {
-      index: "03 — エンジニアリングプロセス",
-      headline: "私の考え方、",
-      headline_em: "作ったものだけでなく",
-      workflow_label: "開発ワークフロー",
-      adr_label: "アーキテクチャ決定記録（ADR）",
-      workflow: [
-        { step: "01", title: "要件分析", desc: "コードを書く前に、ユーザーのニーズをデータモデルと API コントラクトに分解します。" },
-        { step: "02", title: "アーキテクチャ決定", desc: "明示的なトレードオフを含む技術選択を文書化。ADR はリポジトリに保存。" },
-        { step: "03", title: "インフラ優先", desc: "アプリケーションコードの前に Docker Compose スタックを定義。初日から環境の一致を確保。" },
-        { step: "04", title: "API コントラクト", desc: "実装開始前に OpenAPI 仕様または TypeScript インターフェースを定義。" },
-        { step: "05", title: "ビルド & イテレーション", desc: "フィーチャーブランチ、PR レビュー、main へのマージ後に自動デプロイ。" },
-        { step: "06", title: "モニタリング & 自動化", desc: "n8n ワークフローが繰り返しタスクを処理。ログとアラートはローンチ時から設定済み。" },
+      index: "03 — 一緒に進める方法",
+      headline: "ブリーフから",
+      headline_em: "リリースまで4ステップ",
+      sub: "明確で予測可能なプロセス。常に現状と次のステップを把握できます。",
+      steps: [
+        { step: "01", title: "ディスカバリーコール", desc: "30分の通話でブランド、目標、スケジュールを把握します。" },
+        { step: "02", title: "提案 & スコープ", desc: "固定価格、成果物、スケジュールを含む書面提案。時間単位の請求はありません。" },
+        { step: "03", title: "構築 & レビュー", desc: "スプリントで構築し、定期的にチェックイン。各マイルストーンで確認してから進めます。" },
+        { step: "04", title: "リリース & 引き渡し", desc: "完全なデプロイ、ドキュメント、チームがサイトを独自に管理できるウォークスルー。" },
       ],
-      decisions: [
-        {
-          id: "adr-001",
-          title: "Contentful より Sanity を選んだ理由",
-          category: "アーキテクチャ決定",
-          tags: ["CMS", "TypeScript", "GROQ"],
-          summary: "スキーマをコードとして定義するアプローチと GROQ クエリ言語により、型安全なコンテンツモデリングと React フロントエンドとのリアルタイム同期が可能になります。",
-          reasoning: [
-            "TypeScript でスキーマを定義 — バージョン管理、レビュー、テストが可能",
-            "GROQ クエリでデータ要件をコンポーネントと共置",
-            "リアルタイムリスナー API でポーリングなしにコンテンツプレビューが可能",
-            "Studio のカスタマイズでクライアント固有の編集ワークフローを実現",
-          ],
-          tradeoff: "Contentful より学習曲線が急だが、コンテンツモデル構造の完全な所有権を持つ。",
-        },
-        {
-          id: "adr-002",
-          title: "Kubernetes より Docker Compose を選んだ理由",
-          category: "インフラ決定",
-          tags: ["Docker", "DevOps", "スケーラビリティ"],
-          summary: "現在のプロジェクト規模（1〜3 サービス）では、Compose は K8s の利点の 90% を 10% の運用複雑さで提供します。",
-          reasoning: [
-            "シングルホストデプロイにはオーケストレーションのオーバーヘッドは不要",
-            "Compose ファイルが実行可能なインフラドキュメントとして機能",
-            "Nginx リバースプロキシがルーティングと SSL 終端をクリーンに処理",
-            "水平スケーリングが必要になったときの K8s への移行パスが明確",
-          ],
-          tradeoff: "自動スケーリングや自己修復なし。現在のトラフィックプロファイルには許容範囲。",
-        },
-        {
-          id: "adr-003",
-          title: "カスタムスクリプトより n8n を選んだ理由",
-          category: "自動化決定",
-          tags: ["n8n", "自動化", "ワークフロー"],
-          summary: "ビジュアルワークフロービルダーにより、統合タスクの自動化時間が 70% 短縮され、複雑なロジックにはカスタムコードノードも使用できます。",
-          reasoning: [
-            "300+ の組み込み統合でボイラープレートの HTTP クライアントが不要",
-            "ビジュアルデバッガーでワークフロー状態の検査が直感的",
-            "Docker 上でセルフホスト — 完全なデータ主権",
-            "Webhook トリガーでポーリングなしのイベント駆動アーキテクチャを実現",
-          ],
-          tradeoff: "高スループットのデータ処理には不向き。その場合は Python スクリプトで対応。",
-        },
-        {
-          id: "adr-004",
-          title: "Firebase より Supabase を選んだ理由",
-          category: "データベース決定",
-          tags: ["PostgreSQL", "認証", "RLS"],
-          summary: "PostgreSQL のリレーショナルモデルと行レベルセキュリティにより、構造化データに対して Firebase のドキュメントモデルより強力なデータ整合性保証が得られます。",
-          reasoning: [
-            "SQL 結合で非正規化の複雑さを排除",
-            "行レベルセキュリティでデータベースレベルのアクセス制御を強制",
-            "オープンソース — セルフホスト可能、デフォルトでベンダーロックインなし",
-            "PostgREST がスキーマから REST API を自動生成",
-          ],
-          tradeoff: "無料プランではコールドスタートレイテンシあり。コネクションプーリングで軽減。",
-        },
+      workflow_label: "開発ワークフロー",
+      adr_label: "アーキテクチャ決定",
+      workflow: [
+        { step: "01", title: "ディスカバリーコール", desc: "ブランド、目標、スケジュールを把握。" },
+        { step: "02", title: "提案 & スコープ", desc: "固定価格と成果物を含む書面提案。" },
+        { step: "03", title: "構築 & レビュー", desc: "スプリント構築とマイルストーンレビュー。" },
+        { step: "04", title: "リリース & 引き渡し", desc: "完全なデプロイとチームウォークスルー。" },
+      ],
+      decisions: [],
+    },
+    trust: {
+      index: "04 — 選ばれる理由",
+      headline: "透明性と",
+      headline_em: "クラフトマンシップ",
+      items: [
+        { icon: "🔒", title: "固定価格プロジェクト", desc: "時間単位の請求なし。事前に書面で見積もり提示。表示価格が支払い価格です。" },
+        { icon: "📦", title: "完全なコード所有権", desc: "すべてのコードはあなたのもの。自分のアカウントでホスト。ロックインなし。" },
+        { icon: "🌐", title: "多言語ネイティブ対応", desc: "初日からi18n対応。中国語、英語、日本語。顧客が親しみを感じるサイト。" },
+        { icon: "⚡", title: "パフォーマンスファースト", desc: "2秒以内読み込み、Lighthouse 90+、CDN配信。速いサイトはより売れます。" },
+        { icon: "🤝", title: "長期パートナーシップ", desc: "一回限りのベンダーではありません。継続的なメンテナンスと成長サポートを提供。" },
+        { icon: "📊", title: "データドリブンな意思決定", desc: "リリース時から分析を統合。サイトのパフォーマンスを正確に把握できます。" },
+      ],
+      faq_label: "よくある質問",
+      faqs: [
+        { q: "プロジェクトにはどのくらいかかりますか？", a: "ブランドサイトは通常2〜3週間。ECストアは3〜5週間。複雑なカスタムビルドは個別にスコープします。" },
+        { q: "コンテンツは自分で用意する必要がありますか？", a: "はい。ブランドアセット（ロゴ、商品画像、コピー）をご提供ください。構造のアドバイスと追加料金でコピーライティングも対応可能です。" },
+        { q: "既存のShopify/WordPressサイトに対応できますか？", a: "もちろんです。ゼロから始めることなく、既存ストアのリデザイン、拡張、最適化が可能です。" },
+        { q: "リリース後に変更が必要な場合は？", a: "すべてのプロジェクトに1〜3ヶ月のリリース後サポートが含まれます。その後は月額¥1,500〜のメンテナンス契約が利用可能です。" },
+        { q: "海外クライアントとも仕事できますか？", a: "はい。中国、香港、東南アジア、グローバルのクライアントと仕事しています。中国語・英語でのコミュニケーション対応。" },
       ],
     },
     about: {
-      index: "04 — について",
-      headline: "システムを構築する、",
-      headline_em: "エンドツーエンドで",
-      bio1: "システム思考を持つフルスタックエンジニア。React インターフェースの構築から Python API の設計、Docker インフラの設定、n8n 自動化パイプラインの構築まで、スタック全体にわたって作業します。",
-      bio2: "中国在住。現在 AuraLoop を構築中 — Sanity CMS、Supabase、カスタム Kerykeion ベースの計算サービスを使用した占星術プラットフォーム。フリーランスプロジェクトと技術コンサルティングを受け付けています。",
+      index: "05 — について",
+      headline: "作品の背後にいる",
+      headline_em: "エンジニア",
+      bio1: "Bob Qiushaoです。越境ECとブランドWebインフラを専門とするフルスタックエンジニアです。Sanityを活用したコンテンツプラットフォームからDockerオーケストレーションのAPIサービスまで、すべて自分で構築してきました。",
+      bio2: "私のクライアントは、単なる開発者ではなく技術パートナーを必要とするブランド創業者や運営者です。コード品質と同じくらい、あなたのコンバージョン率を大切にしています。",
       orbit_label: "スキルオービット — コアから周辺へ",
       values: [
-        { label: "システム思考", desc: "すべてのコンポーネントはより大きなシステムの一部です。部分だけでなく全体のために設計します。" },
-        { label: "自動化優先", desc: "タスクが 2 回以上実行されるなら、自動化すべきです。n8n、スクリプト、CI/CD。" },
-        { label: "オーナーシップ", desc: "セルフホストインフラ、オープンソースツール、デフォルトでベンダーロックインなし。" },
-        { label: "複雑さの中の明確さ", desc: "良いアーキテクチャは複雑なシステムを理解可能にします。ドキュメントはコードです。" },
+        { label: "コンバージョン重視", desc: "美しくても売れないサイトは高価な装飾品。すべてのデザイン決定はビジネス成果に結びついています。" },
+        { label: "自動化優先", desc: "タスクが2回以上実行されるなら自動化すべき。チームの時間は貴重です。" },
+        { label: "完全な所有権", desc: "セルフホストインフラ、オープンソースツール、あなたのアカウント。すべてを所有します。" },
+        { label: "明確なコミュニケーション", desc: "専門用語なし。定期的な更新。プロジェクトの状況を常に把握できます。" },
       ],
     },
     contact: {
-      index: "05 — 連絡",
-      headline: "一緒に作りましょう、",
-      headline_em: "価値あるものを",
-      description: "フリーランスプロジェクト、技術コンサルティング、フルタイムの機会を受け付けています。24 時間以内に返信します。",
+      index: "06 — お問い合わせ",
+      headline: "次のプロジェクトを",
+      headline_em: "一緒に作りましょう",
+      description: "プロジェクトについて教えてください。24時間以内に初期的な考えと次のステップをお伝えします。",
+      form_name: "お名前",
+      form_email: "メールアドレス",
+      form_budget: "プロジェクト予算",
+      form_message: "プロジェクトについて",
+      form_submit: "メッセージを送る →",
+      form_success: "送信しました！24時間以内に返信します。",
+      form_name_ph: "山田 太郎",
+      form_email_ph: "yamada@yourbrand.com",
+      form_message_ph: "越境ストアのブランドサイトを作りたいと思っています...",
+      budget_options: ["¥5,000未満", "¥5,000〜¥15,000", "¥15,000〜¥30,000", "¥30,000以上", "未定"],
       cta: "contact@bobqiushao.online",
       links: [
         { label: "GitHub", href: "https://github.com/qiubob666-debug", external: true },
@@ -600,22 +876,35 @@ export const translations: Record<Locale, Translations> = {
       footer_built: "React · TypeScript · Vite · Vercel で構築",
       footer_source: "ソースを見る ↗",
     },
+    stack: {
+      index: "技術スタック",
+      headline: "私が使う",
+      headline_em: "技術のコンステレーション",
+      graph_hint: "ノードをクリックして深度を確認 — ドラッグして探索",
+      categories: [
+        { label: "フロントエンド", items: ["React 19", "TypeScript", "Vite", "Tailwind CSS v4", "Framer Motion", "shadcn/ui"] },
+        { label: "バックエンド", items: ["Python 3.11", "FastAPI", "Node.js", "Express", "PHP", "WordPress REST API"] },
+        { label: "インフラ", items: ["Docker Compose", "Nginx", "Vercel", "Railway", "GitHub Actions", "SSL/TLS"] },
+        { label: "データ & CMS", items: ["PostgreSQL", "Supabase", "MySQL", "Sanity CMS", "GROQ クエリ"] },
+        { label: "自動化", items: ["n8n ワークフロー", "Webhook連携", "スケジュールパイプライン", "API同期"] },
+      ],
+    },
     graph: {
-      react:      "本番グレードの SPA アーキテクチャ、カスタムフック、コンテキスト、パフォーマンス最適化",
+      react:      "本番グレードのSPAアーキテクチャ、カスタムフック、コンテキスト、パフォーマンス最適化",
       typescript: "ストリクトモード、ジェネリクス、ユーティリティ型、宣言ファイル",
-      vite:       "カスタムプラグイン、SSR 設定、ビルド最適化",
-      tailwind:   "デザイントークン、カスタムテーマ、v4 OKLCH パレット",
+      vite:       "カスタムプラグイン、SSR設定、ビルド最適化",
+      tailwind:   "デザイントークン、カスタムテーマ、v4 OKLCHパレット",
       framer:     "ジェスチャーアニメーション、レイアウトトランジション、スクロール駆動エフェクト",
-      python:     "FastAPI サービス、データパイプライン、自動化スクリプト",
-      fastapi:    "REST + 非同期エンドポイント、Pydantic バリデーション、JWT 認証",
-      nodejs:     "Express API、サーバーレス関数、CLI ツール",
-      php:        "WordPress カスタムプラグイン、REST API 拡張",
-      docker:     "マルチサービス Compose スタック、カスタムイメージ、ネットワーク設定",
-      vercel:     "エッジ関数、CI/CD パイプライン、ドメイン管理",
-      nginx:      "リバースプロキシ、SSL 終端、ロードバランシング設定",
-      github:     "CI/CD ワークフロー、自動テスト、デプロイパイプライン",
-      n8n:        "300+ ノードワークフロー、Webhook 統合、スケジュール自動化",
-      sanity:     "カスタムスキーマ、GROQ クエリ、リアルタイムコンテンツ同期",
+      python:     "FastAPIサービス、データパイプライン、自動化スクリプト",
+      fastapi:    "REST + 非同期エンドポイント、Pydanticバリデーション、JWT認証",
+      nodejs:     "Express API、サーバーレス関数、CLIツール",
+      php:        "WordPressカスタムプラグイン、REST API拡張",
+      docker:     "マルチサービスComposeスタック、カスタムイメージ、ネットワーク設定",
+      vercel:     "エッジ関数、CI/CDパイプライン、ドメイン管理",
+      nginx:      "リバースプロキシ、SSL終端、ロードバランシング設定",
+      github:     "CI/CDワークフロー、自動テスト、デプロイパイプライン",
+      n8n:        "300+ノードワークフロー、Webhook統合、スケジュール自動化",
+      sanity:     "カスタムスキーマ、GROQクエリ、リアルタイムコンテンツ同期",
       supabase:   "PostgreSQL、行レベルセキュリティ、リアルタイムサブスクリプション",
       postgresql: "スキーマ設計、インデックス、クエリ最適化",
     },
