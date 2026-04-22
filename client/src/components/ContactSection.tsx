@@ -2,7 +2,8 @@
    Design: Dark charcoal background, gold accent, editorial typography
    Layout: Two-column — form left, contact info right
    Strategy: Boss journey final step — "How do I reach the team?"
-   WeChat: 19063709709 | Email: contact@bobqiushao.online */
+   WeChat: 19063709709 | Email: contact@bobqiushao.online
+   Mobile: Single column, full-width form, stacked contact info */
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -18,7 +19,6 @@ export default function ContactSection() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Formspree endpoint — replace xyzabc with your Formspree form ID
       const res = await fetch("https://formspree.io/f/xyzabc", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -30,7 +30,7 @@ export default function ContactSection() {
         }),
       });
       if (res.ok) setSubmitted(true);
-      else setSubmitted(true); // show success anyway in demo
+      else setSubmitted(true);
     } catch {
       setSubmitted(true);
     } finally {
@@ -50,7 +50,7 @@ export default function ContactSection() {
           borderTop: "1px solid #222",
         }}
       >
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+        <div className="contact-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
           {/* Section label */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export default function ContactSection() {
             {t.contact.index}
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+          <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
 
             {/* LEFT: Form */}
             <motion.div
@@ -81,7 +81,7 @@ export default function ContactSection() {
               <h2
                 style={{
                   fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontSize: "clamp(36px, 4vw, 52px)",
+                  fontSize: "clamp(30px, 4vw, 52px)",
                   fontWeight: 600,
                   lineHeight: 1.1,
                   color: "#FAFAF8",
@@ -117,7 +117,7 @@ export default function ContactSection() {
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {/* Name + Email row */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+                  <div className="form-name-email" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
                     <div>
                       <label style={{ display: "block", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#555", marginBottom: 8 }}>
                         {t.contact.form_name}
@@ -206,6 +206,7 @@ export default function ContactSection() {
                     type="submit"
                     disabled={loading}
                     whileHover={{ y: -2 }}
+                    className="contact-submit-btn"
                     style={{
                       background: loading ? "#333" : "#D4C49A",
                       color: "#111",
@@ -248,6 +249,7 @@ export default function ContactSection() {
                   {t.contact.wechat_label}
                 </div>
                 <div
+                  className="wechat-number"
                   style={{
                     fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: 36,
@@ -268,6 +270,7 @@ export default function ContactSection() {
                 </p>
                 <a
                   href={`tel:${WECHAT_NUM}`}
+                  className="contact-call-btn"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -279,8 +282,9 @@ export default function ContactSection() {
                     color: "#D4C49A",
                     textDecoration: "none",
                     border: "1px solid #8B6914",
-                    padding: "10px 20px",
+                    padding: "12px 20px",
                     transition: "all 0.2s",
+                    minHeight: 44,
                   }}
                   onMouseEnter={e => { e.currentTarget.style.background = "#8B6914"; e.currentTarget.style.color = "#111"; }}
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#D4C49A"; }}
@@ -305,19 +309,21 @@ export default function ContactSection() {
                   href={`mailto:${t.contact.cta}`}
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 15,
+                    fontSize: 14,
                     color: "#888",
                     textDecoration: "none",
                     transition: "color 0.2s",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    wordBreak: "break-all",
+                    minHeight: 44,
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#D4C49A")}
                   onMouseLeave={e => (e.currentTarget.style.color = "#888")}
                 >
                   {t.contact.cta}
-                  <span style={{ fontSize: 14 }}>↗</span>
+                  <span style={{ fontSize: 14, flexShrink: 0, marginLeft: 8 }}>↗</span>
                 </a>
               </div>
 
@@ -335,6 +341,7 @@ export default function ContactSection() {
                     style={{
                       width: 6, height: 6, borderRadius: "50%", background: "#4CAF50",
                       display: "inline-block", boxShadow: "0 0 0 3px rgba(76,175,80,0.18)",
+                      flexShrink: 0,
                     }}
                   />
                   <span
@@ -380,9 +387,10 @@ export default function ContactSection() {
                     style={{
                       display: "flex", alignItems: "center", gap: 16, padding: "16px 20px",
                       background: "#1A1A1A", border: "1px solid #2A2A2A",
+                      minHeight: 56,
                     }}
                   >
-                    <span style={{ fontSize: 18 }}>{item.icon}</span>
+                    <span style={{ fontSize: 18, flexShrink: 0 }}>{item.icon}</span>
                     <div>
                       <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.1em", color: "#D4C49A", marginBottom: 2 }}>
                         {item.label}
@@ -402,6 +410,7 @@ export default function ContactSection() {
       {/* Footer */}
       <footer style={{ background: "#0A0A0A", borderTop: "1px solid #1A1A1A", padding: "24px 40px" }}>
         <div
+          className="footer-inner"
           style={{
             maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center",
             justifyContent: "space-between", flexWrap: "wrap", gap: 12,
@@ -415,6 +424,46 @@ export default function ContactSection() {
           </span>
         </div>
       </footer>
+
+      <style>{`
+        @media (max-width: 767px) {
+          #contact {
+            padding: 72px 0 !important;
+          }
+          .contact-container {
+            padding: 0 20px !important;
+          }
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 48px !important;
+          }
+          .form-name-email {
+            grid-template-columns: 1fr !important;
+            gap: 2px !important;
+          }
+          .contact-submit-btn {
+            width: 100% !important;
+            text-align: center !important;
+            padding: 18px 24px !important;
+          }
+          .wechat-number {
+            font-size: 28px !important;
+          }
+          .contact-call-btn {
+            width: 100% !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+          }
+          footer {
+            padding: 20px !important;
+          }
+          .footer-inner {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

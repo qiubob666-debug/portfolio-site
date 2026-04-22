@@ -2,7 +2,8 @@
    Design: 6 cards in 3×2 grid, each card shows ONLY the value headline first
    Hover: card expands to show detail + data proof
    Key: User sees minimal info first, gets more when curious
-   NO tech terms. Pure business value language. */
+   NO tech terms. Pure business value language.
+   Mobile: 2-column grid, tap to expand (no hover dependency) */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +14,7 @@ const COPY: Record<Locale, {
   eyebrow: string;
   title: string;
   subtitle: string;
+  subtitleMobile: string;
   cards: {
     number: string;
     headline: string;
@@ -26,6 +28,7 @@ const COPY: Record<Locale, {
     eyebrow: "你能得到什么",
     title: "6 个结果，不是 6 个功能",
     subtitle: "悬停查看每个结果如何实现",
+    subtitleMobile: "点击查看每个结果如何实现",
     cards: [
       {
         number: "01",
@@ -81,6 +84,7 @@ const COPY: Record<Locale, {
     eyebrow: "WHAT YOU GET",
     title: "6 results, not 6 features",
     subtitle: "Hover to see how each result is achieved",
+    subtitleMobile: "Tap to see how each result is achieved",
     cards: [
       {
         number: "01",
@@ -136,6 +140,7 @@ const COPY: Record<Locale, {
     eyebrow: "あなたが得るもの",
     title: "6つの結果、6つの機能ではない",
     subtitle: "ホバーして各結果の実現方法を確認",
+    subtitleMobile: "タップして各結果の実現方法を確認",
     cards: [
       {
         number: "01",
@@ -193,26 +198,33 @@ export default function CapabilitiesSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+
+  const handleCardInteraction = (i: number) => {
+    // On mobile: toggle expand; on desktop: handled by hover
+    setExpandedIdx(expandedIdx === i ? null : i);
+  };
 
   return (
     <section id="capabilities" style={{ background: "#F5F2EC", padding: "120px 0" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+      <div className="cap-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
             {c.eyebrow}
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitle}</p>
+          <p className="cap-subtitle-desktop" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitle}</p>
+          <p className="cap-subtitle-mobile" style={{ display: "none", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitleMobile}</p>
         </motion.div>
 
-        {/* 3×2 card grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+        {/* 3×2 card grid (desktop) / 2×3 grid (mobile) */}
+        <div className="cap-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
           {c.cards.map((card, i) => {
-            const isHovered = hoveredIdx === i;
+            const isActive = hoveredIdx === i || expandedIdx === i;
             return (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -221,10 +233,12 @@ export default function CapabilitiesSection() {
                 transition={{ duration: 0.45, delay: i * 0.07 }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => handleCardInteraction(i)}
+                className="cap-card"
                 style={{
-                  background: isHovered ? "#1A1A1A" : "#FFFFFF",
+                  background: isActive ? "#1A1A1A" : "#FFFFFF",
                   padding: "40px 36px",
-                  cursor: "default",
+                  cursor: "pointer",
                   transition: "background 0.3s",
                   minHeight: 260,
                   display: "flex",
@@ -235,23 +249,23 @@ export default function CapabilitiesSection() {
                 }}
               >
                 {/* Number */}
-                <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 56, fontWeight: 700, lineHeight: 1, color: isHovered ? "rgba(255,255,255,0.06)" : "#F0EDE5", position: "absolute", top: 20, right: 24, transition: "color 0.3s" }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 56, fontWeight: 700, lineHeight: 1, color: isActive ? "rgba(255,255,255,0.06)" : "#F0EDE5", position: "absolute", top: 20, right: 24, transition: "color 0.3s" }}>
                   {card.number}
                 </div>
 
                 {/* Default view: headline + subline */}
                 <div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2vw, 26px)", fontWeight: 600, color: isHovered ? "#FAFAF8" : "#1A1A1A", margin: "0 0 10px", lineHeight: 1.25, transition: "color 0.3s" }}>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(18px, 2vw, 26px)", fontWeight: 600, color: isActive ? "#FAFAF8" : "#1A1A1A", margin: "0 0 10px", lineHeight: 1.25, transition: "color 0.3s" }}>
                     {card.headline}
                   </h3>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: isHovered ? "rgba(255,255,255,0.4)" : "#999", margin: 0, transition: "color 0.3s" }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: isActive ? "rgba(255,255,255,0.4)" : "#999", margin: 0, transition: "color 0.3s" }}>
                     {card.subline}
                   </p>
                 </div>
 
-                {/* Hover detail: progressive disclosure */}
+                {/* Expanded detail: progressive disclosure */}
                 <AnimatePresence>
-                  {isHovered && (
+                  {isActive && (
                     <motion.div
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -276,10 +290,11 @@ export default function CapabilitiesSection() {
                   )}
                 </AnimatePresence>
 
-                {/* Hover indicator arrow */}
-                {!isHovered && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ marginTop: 24, fontFamily: "'DM Mono', monospace", fontSize: 9, color: "#C8B87A", letterSpacing: "0.1em" }}>
-                    hover →
+                {/* Expand indicator */}
+                {!isActive && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="cap-hint" style={{ marginTop: 24, fontFamily: "'DM Mono', monospace", fontSize: 9, color: "#C8B87A", letterSpacing: "0.1em" }}>
+                    <span className="cap-hint-desktop">hover →</span>
+                    <span className="cap-hint-mobile" style={{ display: "none" }}>tap →</span>
                   </motion.div>
                 )}
               </motion.div>
@@ -287,6 +302,36 @@ export default function CapabilitiesSection() {
           })}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 767px) {
+          #capabilities {
+            padding: 72px 0 !important;
+          }
+          .cap-container {
+            padding: 0 20px !important;
+          }
+          .cap-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .cap-card {
+            padding: 24px 20px !important;
+            min-height: 180px !important;
+          }
+          .cap-subtitle-desktop {
+            display: none !important;
+          }
+          .cap-subtitle-mobile {
+            display: block !important;
+          }
+          .cap-hint-desktop {
+            display: none !important;
+          }
+          .cap-hint-mobile {
+            display: inline !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

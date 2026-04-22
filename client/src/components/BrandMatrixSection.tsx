@@ -232,7 +232,7 @@ export default function BrandMatrixSection() {
         borderTop: "1px solid #1A1A1A",
       }}
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+      <div className="bm-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
 
         {/* Section label */}
         <motion.div
@@ -617,11 +617,18 @@ export default function BrandMatrixSection() {
         @media (max-width: 900px) {
           .matrix-benefits-grid { grid-template-columns: 1fr 1fr !important; }
         }
-        @media (max-width: 600px) {
-          .matrix-benefits-grid { grid-template-columns: 1fr !important; }
-          .matrix-flow-row { flex-direction: column !important; }
+        @media (max-width: 767px) {
+          #brand-matrix { padding: 72px 0 !important; }
+          .bm-container { padding: 0 20px !important; }
+          .matrix-benefits-grid { grid-template-columns: 1fr 1fr !important; }
+          .matrix-flow-row { flex-direction: column !important; gap: 2px !important; }
           .matrix-flow-row > div { width: 100% !important; }
+          .matrix-flow-row > div > button { padding: 20px 16px !important; }
           .detail-grid { grid-template-columns: 1fr !important; }
+          .matrix-benefits-grid > div { padding: 24px 20px !important; }
+        }
+        @media (max-width: 480px) {
+          .matrix-benefits-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

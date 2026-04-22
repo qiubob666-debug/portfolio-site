@@ -228,7 +228,7 @@ export default function ProcessSection() {
 
   return (
     <section id="process" style={{ background: "#FAFAF8", padding: "120px 0" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+      <div className="process-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
@@ -242,7 +242,7 @@ export default function ProcessSection() {
         </motion.div>
 
         {/* Split layout: step list + detail panel */}
-        <div style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 2, minHeight: 480 }}>
+        <div className="process-split" style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 2, minHeight: 480 }}>
 
           {/* Left: step list */}
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -401,7 +401,7 @@ export default function ProcessSection() {
 
         {/* Guarantee bar */}
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ marginTop: 2, background: "#1A1A1A", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          className="process-guarantee" style={{ marginTop: 2, background: "#1A1A1A", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}
         >
           <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#D4C49A" }}>
             {c.guarantee}
@@ -413,6 +413,21 @@ export default function ProcessSection() {
           </motion.a>
         </motion.div>
       </div>
+      <style>{`
+        @media (max-width: 767px) {
+          #process { padding: 72px 0 !important; }
+          .process-container { padding: 0 20px !important; }
+          .process-split {
+            grid-template-columns: 1fr !important;
+            min-height: unset !important;
+          }
+          .process-guarantee {
+            padding: 20px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

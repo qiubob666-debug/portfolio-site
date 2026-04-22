@@ -2,7 +2,8 @@
    Design: 3 pricing cards, center card highlighted (gold border)
    Key fix: Each card = 1 business outcome promise, NOT a feature list
    Structure: Outcome headline → Price → What you get (results) → Brand matrix callout
-   Hover: card lifts slightly */
+   Hover: card lifts slightly
+   Mobile: Single column stack, full-width cards */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -249,21 +250,21 @@ export default function ServicesSection() {
 
   return (
     <section id="services" style={{ background: "#FAFAF8", padding: "120px 0" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+      <div className="services-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
             {c.eyebrow}
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#999" }}>{c.subtitle}</p>
         </motion.div>
 
         {/* Pricing cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, marginBottom: 48 }}>
+        <div className="services-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, marginBottom: 48 }}>
           {c.plans.map((plan, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, y: 24 }}
@@ -308,8 +309,8 @@ export default function ServicesSection() {
               <div style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 12,
-                color: plan.highlight ? "rgba(255,255,255,0.45)" : "#888",
-                lineHeight: 1.65,
+                color: plan.highlight ? "rgba(255,255,255,0.55)" : "#666",
+                lineHeight: 1.6,
                 marginBottom: 28,
                 paddingBottom: 28,
                 borderBottom: plan.highlight ? "1px solid rgba(255,255,255,0.08)" : "1px solid #E8E4DC",
@@ -341,7 +342,7 @@ export default function ServicesSection() {
               <div style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 9,
-                color: plan.highlight ? "#8B6914" : "#8B6914",
+                color: "#8B6914",
                 letterSpacing: "0.1em",
                 marginBottom: 28,
               }}>
@@ -410,16 +411,16 @@ export default function ServicesSection() {
               textAlign: "left",
             }}
           >
-            <div>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", color: "#8B6914", marginBottom: 6 }}>
                 {locale === "zh" ? "进阶策略" : locale === "ja" ? "上級戦略" : "ADVANCED STRATEGY"}
               </div>
-              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 20, fontWeight: 600, color: "#FAFAF8" }}>
+              <div className="matrix-title" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 20, fontWeight: 600, color: "#FAFAF8" }}>
                 {c.matrixTitle}
               </div>
             </div>
             <motion.span animate={{ rotate: expandedMatrix ? 45 : 0 }} transition={{ duration: 0.2 }}
-              style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, color: "#8B6914", flexShrink: 0 }}
+              style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, color: "#8B6914", flexShrink: 0, marginLeft: 16 }}
             >
               +
             </motion.span>
@@ -434,7 +435,7 @@ export default function ServicesSection() {
                 transition={{ duration: 0.35 }}
                 style={{ overflow: "hidden", background: "#111" }}
               >
-                <div style={{ padding: "36px 36px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+                <div className="matrix-expanded" style={{ padding: "36px 36px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
                   <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, margin: 0 }}>
                     {c.matrixDesc}
                   </p>
@@ -453,11 +454,44 @@ export default function ServicesSection() {
         </motion.div>
 
         {/* Compare note */}
-        <div style={{ marginTop: 24, textAlign: "center" }}>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999" }}>{c.compareLabel} </span>
-          <a href="#contact" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#8B6914", textDecoration: "underline" }}>{c.compareNote}</a>
+        <div style={{ marginTop: 32, textAlign: "center" }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999" }}>
+            {c.compareLabel}{" "}
+          </span>
+          <a href="#contact" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#8B6914", textDecoration: "none" }}>
+            {c.compareNote}
+          </a>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .services-container {
+            padding: 0 20px !important;
+          }
+          #services {
+            padding: 72px 0 !important;
+          }
+          .services-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .services-grid > div {
+            padding: 28px 24px 24px !important;
+          }
+          .matrix-expanded {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+            padding: 24px 20px !important;
+          }
+          button[style*="padding: 24px 36px"] {
+            padding: 20px 20px !important;
+          }
+          .matrix-title {
+            font-size: 16px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

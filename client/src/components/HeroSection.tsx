@@ -2,7 +2,8 @@
    Design: Warm ivory bg, asymmetric layout, gold accent
    Strategy: Open with urgency — competitor is already live, you're not
    Key message: Every day without a store = lost orders. I fix that in 7 days.
-   NO tech terms. Boss language only: money, time, competition. */
+   NO tech terms. Boss language only: money, time, competition.
+   Mobile: Single column, stacked layout, touch-friendly */
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -164,8 +165,8 @@ export default function HeroSection() {
     >
       <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.8, pointerEvents: "none" }} />
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px", width: "100%", position: "relative", zIndex: 1 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
+      <div className="hero-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px", width: "100%", position: "relative", zIndex: 1 }}>
+        <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
 
           {/* LEFT: Headline + CTA */}
           <div>
@@ -183,7 +184,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.1 }}
               style={{
                 fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(36px, 5vw, 66px)", fontWeight: 600,
+                fontSize: "clamp(32px, 5vw, 66px)", fontWeight: 600,
                 lineHeight: 1.07, color: "#1A1A1A", margin: "0 0 28px",
               }}
             >
@@ -200,9 +201,11 @@ export default function HeroSection() {
 
             <motion.div
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.45 }}
+              className="hero-cta-row"
               style={{ display: "flex", gap: 14, flexWrap: "wrap" }}
             >
               <motion.a href="#roi" whileHover={{ y: -2 }}
+                className="hero-cta-primary"
                 style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "#FAFAF8", background: "#1A1A1A", padding: "14px 28px", textDecoration: "none", transition: "background 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.background = "#8B6914")}
                 onMouseLeave={e => (e.currentTarget.style.background = "#1A1A1A")}
@@ -210,6 +213,7 @@ export default function HeroSection() {
                 {c.cta1} →
               </motion.a>
               <motion.a href="#services" whileHover={{ y: -2 }}
+                className="hero-cta-secondary"
                 style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "#1A1A1A", background: "transparent", padding: "14px 28px", border: "1px solid #D4C49A", textDecoration: "none", transition: "border-color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "#8B6914")}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = "#D4C49A")}
@@ -241,7 +245,7 @@ export default function HeroSection() {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 2 }}>
+            <div className="hero-stats-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 2 }}>
               {c.stats.map((s, i) => (
                 <div key={i} style={{ padding: "24px 16px", background: "#FFFFFF", border: "1px solid #E8E4DC", textAlign: "center" }}>
                   <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 28, fontWeight: 700, color: "#1A1A1A", lineHeight: 1, marginBottom: 6 }}>{s.value}</div>
@@ -252,6 +256,49 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
+
+      <style>{`
+        .green-pulse {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: oklch(0.62 0.18 145);
+          display: inline-block;
+          animation: gp 2.5s infinite;
+        }
+        @keyframes gp {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.55; transform: scale(0.8); }
+        }
+
+        @media (max-width: 767px) {
+          .hero-container {
+            padding: 0 20px !important;
+          }
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 40px !important;
+          }
+          .hero-cta-row {
+            flex-direction: column !important;
+          }
+          .hero-cta-primary,
+          .hero-cta-secondary {
+            display: block !important;
+            text-align: center !important;
+            padding: 16px 20px !important;
+            font-size: 12px !important;
+          }
+          .hero-stats-grid {
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 2px !important;
+          }
+          .hero-stats-grid > div {
+            padding: 16px 8px !important;
+          }
+          .hero-stats-grid > div > div:first-child {
+            font-size: 22px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

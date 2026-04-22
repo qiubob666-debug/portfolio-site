@@ -1,6 +1,7 @@
 /* Navbar — Considered Authority design system
    Fixed top, warm ivory backdrop on scroll, Cormorant logo
-   Gold availability dot, DM Mono nav links, inline lang switcher */
+   Gold availability dot, DM Mono nav links, inline lang switcher
+   Mobile: Hamburger menu with full-width dropdown */
 
 import { useState, useEffect } from "react";
 import { useI18n } from "@/contexts/I18nContext";
@@ -30,6 +31,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("header")) setOpen(false);
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [open]);
+
   return (
     <header
       style={{
@@ -45,6 +57,7 @@ export default function Navbar() {
       }}
     >
       <div
+        className="navbar-inner"
         style={{
           maxWidth: 1200,
           margin: "0 auto",
@@ -136,72 +149,21 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile toggle */}
-        <button
-          className="mobile-toggle"
-          onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", padding: "0.5rem", cursor: "pointer" }}
-          aria-label="Toggle menu"
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                style={{
-                  display: "block",
-                  width: "22px",
-                  height: "1px",
-                  background: "var(--charcoal)",
-                  transition: "all 0.25s ease",
-                  transform:
-                    open && i === 0 ? "rotate(45deg) translate(4px, 4px)" :
-                    open && i === 2 ? "rotate(-45deg) translate(4px, -4px)" :
-                    open && i === 1 ? "scaleX(0)" : "none",
-                }}
-              />
-            ))}
-          </div>
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div
-          style={{
-            background: "var(--ivory)",
-            borderTop: "1px solid var(--rule)",
-            padding: "1rem 3rem 2rem",
-          }}
-        >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block",
-                padding: "0.875rem 0",
-                borderBottom: "1px solid var(--rule)",
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "1rem",
-                color: "var(--charcoal)",
-                textDecoration: "none",
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.5rem" }}>
+        {/* Mobile right: lang + toggle */}
+        <div className="mobile-right" style={{ display: "none", alignItems: "center", gap: "0.5rem" }}>
+          {/* Mobile language switcher */}
+          <div style={{ display: "flex", gap: "0.15rem" }}>
             {LANGS.map((l) => (
               <button
                 key={l.code}
-                onClick={() => { setLang(l.code); setOpen(false); }}
+                onClick={() => setLang(l.code)}
                 style={{
-                  padding: "0.375rem 0.75rem",
+                  padding: "0.2rem 0.4rem",
                   fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.06em",
                   border: "1px solid",
-                  borderColor: lang === l.code ? "var(--gold)" : "var(--rule)",
+                  borderColor: lang === l.code ? "var(--gold)" : "transparent",
                   color: lang === l.code ? "var(--gold)" : "var(--charcoal-mid)",
                   background: "transparent",
                   cursor: "pointer",
@@ -212,6 +174,73 @@ export default function Navbar() {
               </button>
             ))}
           </div>
+
+          {/* Hamburger toggle */}
+          <button
+            className="mobile-toggle"
+            onClick={() => setOpen(!open)}
+            style={{ background: "none", border: "none", padding: "0.5rem", cursor: "pointer" }}
+            aria-label="Toggle menu"
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  style={{
+                    display: "block",
+                    width: "22px",
+                    height: "1px",
+                    background: "var(--charcoal)",
+                    transition: "all 0.25s ease",
+                    transform:
+                      open && i === 0 ? "rotate(45deg) translate(4px, 4px)" :
+                      open && i === 2 ? "rotate(-45deg) translate(4px, -4px)" :
+                      open && i === 1 ? "scaleX(0)" : "none",
+                  }}
+                />
+              ))}
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu dropdown */}
+      {open && (
+        <div
+          className="mobile-menu"
+          style={{
+            background: "var(--ivory)",
+            borderTop: "1px solid var(--rule)",
+            padding: "0.5rem 1.25rem 1.5rem",
+          }}
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "1rem 0",
+                borderBottom: "1px solid var(--rule)",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "1rem",
+                color: "var(--charcoal)",
+                textDecoration: "none",
+                minHeight: 48,
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+          {/* Available indicator in mobile menu */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "1rem 0", borderBottom: "1px solid var(--rule)" }}>
+            <span className="green-pulse" />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: "oklch(0.45 0.14 145)", textTransform: "uppercase" }}>
+              {t.nav.available}
+            </span>
+          </div>
         </div>
       )}
 
@@ -221,16 +250,20 @@ export default function Navbar() {
           background: oklch(0.62 0.18 145);
           display: inline-block;
           animation: gp 2.5s infinite;
+          flex-shrink: 0;
         }
         @keyframes gp {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.55; transform: scale(0.8); }
         }
         .desktop-nav { display: flex; }
-        .mobile-toggle { display: none; }
+        .mobile-right { display: none !important; }
         @media (max-width: 767px) {
+          .navbar-inner {
+            padding: 0 1.25rem !important;
+          }
           .desktop-nav { display: none !important; }
-          .mobile-toggle { display: block !important; }
+          .mobile-right { display: flex !important; }
         }
       `}</style>
     </header>
