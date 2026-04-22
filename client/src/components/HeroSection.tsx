@@ -52,9 +52,9 @@ const COPY: Record<Locale, {
 }> = {
   en: {
     available: "Available for new projects",
-    headline1: "Boss! Your competitors already have",
-    headline2: "multiple brand stores live.",
-    headline3: "Yours can launch in 7 days.",
+    headline1: "Your competitors",
+    headline2: "already have brand stores.",
+    headline3: "Yours: 7 days.",
     sub: "Every day you delay, Amazon takes 58% of your revenue. Our team builds brand stores that generate orders from day one — 0% commission, 7-day delivery, no extra hiring needed.",
     cta1: "Calculate your annual loss",
     cta2: "View packages",
@@ -67,9 +67,9 @@ const COPY: Record<Locale, {
   },
   zh: {
     available: "现在接受新项目",
-    headline1: "老板！你的竞争对手已经",
-    headline2: "上线了多个品牌独立站，",
-    headline3: "而你的 7 天就能开张。",
+    headline1: "你的竞争对手",
+    headline2: "已经有品牌独立站了。",
+    headline3: "你的：7 天上线。",
     sub: "每多拖一天，就多一天把利润拱手送给亚马逊。我们团队帮跨境电商老板 7 天搭建从第一天就能收款的品牌独立站——0% 平台佣金，不等机构 3 个月，不用另外组建团队。",
     cta1: "算一算你每年亏多少",
     cta2: "查看套餐",
@@ -82,9 +82,9 @@ const COPY: Record<Locale, {
   },
   ja: {
     available: "新規プロジェクト受付中",
-    headline1: "社長！競合他社はすでに",
-    headline2: "複数のブランドサイトをローンチ済みです。",
-    headline3: "あなたのサイトは7日で開店できます。",
+    headline1: "競合他社は",
+    headline2: "すでにブランドサイトを持っています。",
+    headline3: "あなたのサイト：7日で開店。",
     sub: "1日遅らせるごとに、Amazonに売上の58%を渡し続けます。初日から受注できるブランドサイトを0%手数料・7日納品・チーム不要で構築します。",
     cta1: "年間損失を計算する",
     cta2: "プランを見る",
