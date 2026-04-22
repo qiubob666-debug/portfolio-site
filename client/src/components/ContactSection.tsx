@@ -293,40 +293,6 @@ export default function ContactSection() {
                 </a>
               </div>
 
-              {/* Email */}
-              <div
-                style={{
-                  padding: "24px 28px",
-                  background: "#1A1A1A",
-                  border: "1px solid #2A2A2A",
-                  marginBottom: 2,
-                }}
-              >
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#555", marginBottom: 10 }}>
-                  {locale === 'zh' ? '邮件' : locale === 'ja' ? 'メール' : 'Email'}
-                </div>
-                <a
-                  href={`mailto:${t.contact.cta}`}
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 14,
-                    color: "#888",
-                    textDecoration: "none",
-                    transition: "color 0.2s",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    wordBreak: "break-all",
-                    minHeight: 44,
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "#D4C49A")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#888")}
-                >
-                  {t.contact.cta}
-                  <span style={{ fontSize: 14, flexShrink: 0, marginLeft: 8 }}>↗</span>
-                </a>
-              </div>
-
               {/* Response time */}
               <div
                 style={{
@@ -355,10 +321,10 @@ export default function ContactSection() {
                 </div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, lineHeight: 1.7, color: "#777", margin: 0 }}>
                   {locale === 'zh'
-                    ? '微信 24 小时内响应。邮件 1 个工作日内回复。团队驻扎中国，服务全球客户。'
+                    ? '微信 24 小时内响应。团队驻扎中国，服务全球客户。'
                     : locale === 'ja'
-                    ? 'WeChat 24時間以内に返信。メール1営業日以内。中国拠点、グローバル対応。'
-                    : 'WeChat response within 24h. Email within 1 business day. China-based, globally serving.'}
+                    ? 'WeChat 24時間以内に返信。中国拠点、グローバル対応。'
+                    : 'WeChat response within 24 hours. China-based, globally serving.'}
                 </p>
               </div>
 
