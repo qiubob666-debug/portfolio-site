@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case Study 6 — TERRA Solar-Powered Watches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f4ef;--bg-white:#ffffff;--bg-earth:#ede8df;--bg-dark:#2c2418;
+  --fg:#2c2418;--fg-muted:#7a6e5e;--fg-faint:rgba(44,36,24,.3);
+  --accent:#8b6914;--accent-hover:#735510;--accent-light:#f0e8d4;
+  --green:#3d6b4f;--green-light:#e4efe7;
+  --border:#ddd6c8;
+  --font-body:'Space Grotesk',sans-serif;--font-heading:'Lora',Georgia,serif;
+  --fw-light:300;--fw-reg:400;--fw-med:500;--fw-semi:600;
+  --text-xxl:clamp(34px,5vw,58px);--text-xl:clamp(26px,3.5vw,44px);
+  --text-lg:clamp(20px,2vw,30px);--text-md:15px;--text-sm:13px;
+  --text-xs:11px;--text-xxs:10px;
+  --ease:.3s ease;--ease-slow:.5s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-weight:var(--fw-light);color:var(--fg);background:var(--bg);line-height:1.45;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%;height:auto}button{cursor:pointer;font-family:inherit}
+
+.ann{background:var(--green);color:#fff;text-align:center;padding:10px 20px;font-size:var(--text-xxs);letter-spacing:.1em;text-transform:uppercase;font-weight:var(--fw-med)}
+
+.hdr{position:sticky;top:0;z-index:100;background:rgba(247,244,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+.hdr.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.05)}
+.hdr-in{max-width:1440px;margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:var(--font-heading);font-size:24px;font-weight:var(--fw-med);letter-spacing:.1em;text-transform:uppercase}
+.hdr-nav{display:flex;gap:28px}
+.nav-item{position:relative}
+.nav-item>a{font-size:var(--text-sm);font-weight:var(--fw-med);color:var(--fg-muted);transition:color .2s;padding:22px 0;display:inline-block}
+.nav-item>a:hover{color:var(--fg)}
+.hdr-acts{display:flex;gap:18px;align-items:center}
+.hdr-acts svg{width:20px;height:20px;stroke:var(--fg-muted);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .2s}
+.hdr-acts svg:hover{stroke:var(--fg)}
+
+.mega{position:absolute;top:100%;left:-80px;width:640px;background:var(--bg-white);border:1px solid var(--border);box-shadow:0 12px 40px rgba(0,0,0,.08);padding:36px 40px;display:grid;grid-template-columns:180px 180px 1fr;gap:32px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:all .25s ease;z-index:200}
+.nav-item:hover .mega{opacity:1;visibility:visible;transform:translateY(0)}
+.mega-col-h{font-size:var(--text-xxs);letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:var(--fw-semi);margin-bottom:14px}
+.mega-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.mega-links a{font-size:var(--text-sm);color:var(--fg-muted);transition:color .2s}
+.mega-links a:hover{color:var(--fg)}
+.mega-feat{position:relative;overflow:hidden}
+.mega-feat img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.mega-feat:hover img{transform:scale(1.04)}
+
+.burger{display:none;width:24px;height:24px;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+.burger span{display:block;width:100%;height:1.5px;background:var(--fg);transition:all .3s}
+.mob-menu{display:none;position:fixed;inset:0;top:64px;background:var(--bg);z-index:99;overflow-y:auto;padding:24px;transform:translateX(-100%);transition:transform .3s ease}
+.mob-menu.open{transform:translateX(0)}
+.mob-menu a{display:block;font-size:16px;padding:14px 0;border-bottom:1px solid var(--border);font-weight:var(--fw-med)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.85em 2.4em;font-size:var(--text-xs);font-weight:var(--fw-reg);letter-spacing:.14em;text-transform:uppercase;border:none;border-radius:0;transition:all var(--ease);font-family:var(--font-body)}
+.btn--accent{background:var(--accent);color:#fff}.btn--accent:hover{background:var(--accent-hover)}
+.btn--green{background:var(--green);color:#fff}.btn--green:hover{background:#2d5a3e}
+.btn--outline{background:transparent;color:var(--fg);border:1px solid var(--fg)}.btn--outline:hover{background:var(--fg);color:var(--bg)}
+.btn--white{background:#fff;color:var(--fg)}.btn--white:hover{background:var(--bg-earth)}
+
+.sec-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.sec-hd{text-align:center;margin-bottom:48px}
+.sec-badge{font-size:var(--text-xxs);letter-spacing:.25em;text-transform:uppercase;color:var(--green);font-weight:var(--fw-semi);margin-bottom:8px}
+.sec-h{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1}
+.sec-h em{font-style:italic}
+.sec-sub{font-size:var(--text-sm);color:var(--fg-muted);max-width:520px;margin:12px auto 0;line-height:1.7}
+
+/* Hero - diagonal clip */
+.hero{position:relative;min-height:100vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+.hero-media{overflow:hidden;position:relative}
+.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,var(--bg) 60%)}
+.hero-ct{display:flex;flex-direction:column;justify-content:center;padding:80px 64px;background:var(--bg)}
+.hero-badge{font-size:var(--text-xxs);letter-spacing:.3em;text-transform:uppercase;color:var(--green);font-weight:var(--fw-semi);margin-bottom:16px}
+.hero-h{font-family:var(--font-heading);font-size:var(--text-xxl);font-weight:var(--fw-reg);line-height:1.05;margin-bottom:16px}
+.hero-h em{font-style:italic}
+.hero-sub{font-size:var(--text-md);color:var(--fg-muted);margin-bottom:32px;max-width:440px;line-height:1.7}
+.hero-btns{display:flex;gap:12px}
+.hero-certs{display:flex;gap:16px;margin-top:32px;align-items:center}
+.hero-cert{display:flex;align-items:center;gap:6px;font-size:var(--text-xxs);color:var(--fg-muted);letter-spacing:.04em}
+.hero-cert svg{width:16px;height:16px;stroke:var(--green);stroke-width:2;fill:none}
+
+/* Solar Tech */
+.solar{padding:80px 0;background:var(--bg-white)}
+.solar-inner{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.solar-text h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.solar-text h2 em{font-style:italic}
+.solar-text p{font-size:var(--text-md);line-height:1.8;color:var(--fg-muted);margin-bottom:28px}
+.solar-steps{display:flex;flex-direction:column;gap:20px}
+.solar-step{display:flex;gap:16px;align-items:flex-start}
+.solar-step-num{width:36px;height:36px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:16px;font-weight:var(--fw-med);color:var(--accent);flex-shrink:0}
+.solar-step-ct h4{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:2px}
+.solar-step-ct p{font-size:var(--text-xs);color:var(--fg-muted);line-height:1.6}
+.solar-media{overflow:hidden}
+.solar-media img{width:100%;aspect-ratio:4/3;object-fit:cover}
+
+/* Products */
+.products{padding:80px 0;background:var(--bg)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.p-card{background:var(--bg-white);overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s;border:1px solid var(--border)}
+.p-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.06);transform:translateY(-4px);border-color:transparent}
+.p-media{position:relative;overflow:hidden;background:var(--bg-earth)}
+.p-media img{width:100%;aspect-ratio:1/1;object-fit:contain;padding:20px;transition:transform var(--ease-slow)}
+.p-card:hover .p-media img{transform:scale(1.06)}
+.p-badge{position:absolute;top:12px;left:12px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-semi);padding:4px 10px;background:var(--green);color:#fff;border-radius:2px}
+.p-solar-tag{position:absolute;bottom:12px;left:12px;font-size:8px;letter-spacing:.08em;text-transform:uppercase;font-weight:var(--fw-semi);padding:4px 10px;background:var(--accent-light);color:var(--accent);border-radius:2px;display:flex;align-items:center;gap:4px}
+.p-solar-tag svg{width:10px;height:10px;stroke:var(--accent);stroke-width:2;fill:none}
+.p-wish{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;border:none;cursor:pointer}
+.p-wish svg{width:14px;height:14px;stroke:var(--fg);stroke-width:1.5;fill:none}
+.p-card:hover .p-wish{opacity:1}
+.p-wish.active svg{fill:var(--accent);stroke:var(--accent)}
+.p-quick{position:absolute;bottom:0;left:0;right:0;background:var(--fg);color:var(--bg);text-align:center;padding:12px;font-size:var(--text-xxs);letter-spacing:.14em;text-transform:uppercase;font-weight:var(--fw-med);transform:translateY(100%);transition:transform .3s ease;border:none;width:100%;cursor:pointer}
+.p-card:hover .p-quick{transform:translateY(0)}
+.p-body{padding:16px 16px 20px;text-align:center}
+.p-name{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:4px}
+.p-mat{font-size:var(--text-xs);color:var(--fg-muted);margin-bottom:8px}
+.p-price{font-size:15px;font-weight:var(--fw-med)}
+.p-swatches{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.p-swatch{width:14px;height:14px;border-radius:50%;border:1px solid var(--border);cursor:pointer;transition:box-shadow .2s}
+.p-swatch:hover,.p-swatch.active{box-shadow:0 0 0 2px var(--accent)}
+
+/* B Corp */
+.bcorp{padding:80px 0;background:var(--green-light)}
+.bcorp-inner{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.bcorp-text h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.bcorp-text h2 em{font-style:italic}
+.bcorp-text p{font-size:var(--text-md);line-height:1.8;color:var(--fg-muted);margin-bottom:28px}
+.bcorp-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:24px}
+.bcorp-stat{padding:20px;background:var(--bg-white);border:1px solid var(--border);text-align:center}
+.bcorp-num{font-family:var(--font-heading);font-size:28px;color:var(--green);margin-bottom:4px}
+.bcorp-label{font-size:var(--text-xs);color:var(--fg-muted)}
+.bcorp-media{overflow:hidden}
+.bcorp-media img{width:100%;aspect-ratio:4/3;object-fit:cover}
+
+/* Materials */
+.materials{padding:80px 0;background:var(--bg-white)}
+.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.mat-card{text-align:center;padding:32px 20px;border:1px solid var(--border);transition:border-color var(--ease)}
+.mat-card:hover{border-color:var(--accent)}
+.mat-icon{width:48px;height:48px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.mat-icon svg{width:22px;height:22px;stroke:var(--accent);stroke-width:1.5;fill:none}
+.mat-title{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:6px}
+.mat-desc{font-size:var(--text-xs);color:var(--fg-muted);line-height:1.6}
+
+/* Feature */
+.feature{padding:0}
+.feat-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:480px}
+.feat-media{overflow:hidden}
+.feat-media img{width:100%;height:100%;object-fit:cover}
+.feat-ct{background:var(--bg-earth);display:flex;flex-direction:column;justify-content:center;padding:64px}
+.feat-ct h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.feat-ct h2 em{font-style:italic}
+.feat-ct p{font-size:var(--text-md);line-height:1.8;color:var(--fg-muted);margin-bottom:28px;max-width:380px}
+
+/* Reviews */
+.reviews{padding:80px 0;background:var(--bg)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.rev-card{padding:32px;border:1px solid var(--border);background:var(--bg-white)}
+.rev-stars{color:var(--accent);font-size:14px;letter-spacing:2px;margin-bottom:12px}
+.rev-text{font-size:var(--text-sm);color:var(--fg-muted);line-height:1.7;margin-bottom:16px;font-style:italic}
+.rev-author{font-size:var(--text-xs);font-weight:var(--fw-med)}
+.rev-loc{font-size:var(--text-xxs);color:var(--fg-faint);margin-top:2px}
+
+/* Instagram */
+.insta{padding:80px 0;background:var(--bg-white)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:40px}
+.insta-card{position:relative;overflow:hidden;cursor:pointer}
+.insta-card img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .4s}
+.insta-card:hover img{transform:scale(1.08)}
+.insta-ov{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.insta-card:hover .insta-ov{opacity:1}
+.insta-ov svg{width:24px;height:24px;stroke:#fff;stroke-width:1.5;fill:none}
+
+/* Newsletter */
+.nl{padding:80px 0;background:var(--bg-dark);color:#fff}
+.nl-in{max-width:480px;margin:0 auto;text-align:center;padding:0 24px}
+.nl h2{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:var(--fw-reg);margin-bottom:10px}
+.nl p{font-size:var(--text-sm);color:rgba(255,255,255,.4);margin-bottom:24px;line-height:1.6}
+.nl-form{display:flex}
+.nl-form input{flex:1;padding:14px 18px;background:transparent;border:1px solid rgba(255,255,255,.15);border-right:none;color:#fff;font-size:var(--text-sm);font-family:var(--font-body);outline:none}
+.nl-form input::placeholder{color:rgba(255,255,255,.25)}
+.nl-form button{padding:14px 24px;background:var(--green);color:#fff;border:none;font-size:var(--text-xxs);letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-med);font-family:var(--font-body);transition:background .2s}
+.nl-form button:hover{background:#2d5a3e}
+
+/* Footer */
+.ft{background:var(--bg-dark);color:rgba(255,255,255,.4);padding:64px 0 28px;border-top:1px solid rgba(255,255,255,.06)}
+.ft-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:24px}
+.ft-brand{font-family:var(--font-heading);font-size:20px;color:#fff;font-weight:var(--fw-med);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.ft-desc{font-size:var(--text-sm);line-height:1.7;margin-bottom:20px}
+.ft-socs{display:flex;gap:8px}
+.ft-soc{width:32px;height:32px;border:1px solid rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);transition:all .2s}
+.ft-soc:hover{border-color:var(--green);color:var(--green)}
+.ft-col-h{font-size:var(--text-xxs);letter-spacing:.15em;text-transform:uppercase;color:#fff;font-weight:var(--fw-med);margin-bottom:16px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-links a{font-size:var(--text-sm);transition:color .2s}
+.ft-links a:hover{color:var(--green)}
+.ft-bot{display:flex;justify-content:space-between;font-size:var(--text-xs)}
+.ft-legal{display:flex;gap:16px}
+.ft-legal a{transition:color .2s}
+.ft-legal a:hover{color:#fff}
+
+.btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:var(--green);color:#fff;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:50}
+.btt.show{opacity:1;visibility:visible}
+.btt:hover{background:#2d5a3e}
+.btt svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr}
+  .hero-media::after{display:none}
+  .prod-grid,.mat-grid{grid-template-columns:repeat(2,1fr)}
+  .rev-grid{grid-template-columns:1fr}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .mega{display:none!important}
+}
+@media(max-width:768px){
+  .hdr-in{padding:0 20px}
+  .hdr-nav{display:none}
+  .burger{display:flex}
+  .mob-menu{display:block}
+  .sec-in{padding:0 20px}
+  .hero-ct{padding:48px 24px}
+  .solar-inner,.bcorp-inner{grid-template-columns:1fr;padding:0 20px}
+  .feat-inner{grid-template-columns:1fr}
+  .feat-ct{padding:40px 24px}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="ann">Certified B Corp &mdash; Solar Powered &mdash; Carbon Neutral Shipping</div>
+
+<header class="hdr" id="hdr">
+<div class="hdr-in">
+  <a href="#" class="hdr-logo">Terra</a>
+  <nav class="hdr-nav">
+    <div class="nav-item">
+      <a href="#">Solar Watches</a>
+      <div class="mega">
+        <div><p class="mega-col-h">Collections</p><ul class="mega-links"><li><a href="#">Solar Classic</a></li><li><a href="#">Solar Chrono</a></li><li><a href="#">Solar Mini</a></li><li><a href="#">Solar Field</a></li></ul></div>
+        <div><p class="mega-col-h">By Strap</p><ul class="mega-links"><li><a href="#">Vegan Leather</a></li><li><a href="#">Recycled Mesh</a></li><li><a href="#">Ocean Plastic</a></li></ul></div>
+        <div class="mega-feat"><img src="assets/dw/1743671361_189416.jpg" alt="Solar Watches"></div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="#">Accessories</a></div>
+    <div class="nav-item"><a href="#">Our Impact</a></div>
+    <div class="nav-item"><a href="#">About</a></div>
+  </nav>
+  <div class="hdr-acts">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div>
+</header>
+
+<nav class="mob-menu" id="mobMenu">
+  <a href="#">Solar Watches</a><a href="#">Accessories</a><a href="#">Our Impact</a><a href="#">About</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-media"><img src="assets/dw/1743672423_181907.jpg" alt="Hero"></div>
+  <div class="hero-ct">
+    <p class="hero-badge">Solar Powered</p>
+    <h1 class="hero-h">Time That<br><em>Gives Back</em></h1>
+    <p class="hero-sub">The world's first B Corp certified watch brand. Solar-powered movements, recycled materials, and a commitment to leaving the planet better than we found it.</p>
+    <div class="hero-btns"><a href="#" class="btn btn--green">Shop Solar</a><a href="#" class="btn btn--outline">Our Mission</a></div>
+    <div class="hero-certs">
+      <span class="hero-cert"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>B Corp</span>
+      <span class="hero-cert"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Solar Powered</span>
+      <span class="hero-cert"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Carbon Neutral</span>
+    </div>
+  </div>
+</section>
+
+<section class="solar">
+<div class="solar-inner">
+  <div class="solar-text">
+    <p class="sec-badge">Solar Technology</p>
+    <h2>Powered by <em>Light</em></h2>
+    <p>Our solar cells convert any light — sunlight, office lighting, even a candle — into energy that powers your watch. No battery changes. No waste. Just time.</p>
+    <div class="solar-steps">
+      <div class="solar-step"><span class="solar-step-num">1</span><div class="solar-step-ct"><h4>Light Absorption</h4><p>Invisible solar cells beneath the dial capture photons from any light source.</p></div></div>
+      <div class="solar-step"><span class="solar-step-num">2</span><div class="solar-step-ct"><h4>Energy Conversion</h4><p>Photons are converted to electrical energy and stored in a rechargeable cell.</p></div></div>
+      <div class="solar-step"><span class="solar-step-num">3</span><div class="solar-step-ct"><h4>6-Month Reserve</h4><p>A full charge provides up to 6 months of power, even in complete darkness.</p></div></div>
+    </div>
+  </div>
+  <div class="solar-media"><img src="assets/dw/1743671385_112215.jpg" alt="Solar Technology"></div>
+</div>
+</section>
+
+<section class="products">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Our Collection</p><h2 class="sec-h">Solar <em>Watches</em></h2></div>
+  <div class="prod-grid">
+    <div class="p-card"><div class="p-media"><img src="assets/dw/classic--collection-grey.png" alt="Watch"><span class="p-badge">Best Seller</span><span class="p-solar-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Solar</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick View</button></div><div class="p-body"><p class="p-name">Solar Classic 40mm</p><p class="p-mat">Recycled Steel / Vegan Leather</p><p class="p-price">$295</p><div class="p-swatches"><span class="p-swatch active" style="background:#2c2418"></span><span class="p-swatch" style="background:#c0c0c0"></span><span class="p-swatch" style="background:#5a7d5e"></span></div></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/dw/petite-collection-grey.png" alt="Watch"><span class="p-solar-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Solar</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick View</button></div><div class="p-body"><p class="p-name">Solar Mini 36mm</p><p class="p-mat">Recycled Steel / Mesh</p><p class="p-price">$275</p><div class="p-swatches"><span class="p-swatch active" style="background:#c0c0c0"></span><span class="p-swatch" style="background:#d4a574"></span></div></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/dw/retro-aw24.png" alt="Watch"><span class="p-badge">New</span><span class="p-solar-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Solar</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick View</button></div><div class="p-body"><p class="p-name">Solar Chrono 42mm</p><p class="p-mat">Recycled Steel / Ocean Plastic</p><p class="p-price">$345</p><div class="p-swatches"><span class="p-swatch active" style="background:#1a3a5c"></span><span class="p-swatch" style="background:#2c2418"></span></div></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/dw/quadro-collection-grey.png" alt="Watch"><span class="p-solar-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Solar</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick View</button></div><div class="p-body"><p class="p-name">Solar Field 38mm</p><p class="p-mat">Recycled Steel / Vegan Leather</p><p class="p-price">$265</p><div class="p-swatches"><span class="p-swatch active" style="background:#5a7d5e"></span><span class="p-swatch" style="background:#c0c0c0"></span><span class="p-swatch" style="background:#2c2418"></span></div></div></div>
+  </div>
+</div>
+</section>
+
+<section class="bcorp">
+<div class="bcorp-inner">
+  <div class="bcorp-text">
+    <p class="sec-badge">Certified B Corp</p>
+    <h2>Business as a<br><em>Force for Good</em></h2>
+    <p>We meet the highest standards of verified social and environmental performance, public transparency, and legal accountability to balance profit and purpose.</p>
+    <a href="#" class="btn btn--green">Read Our Impact Report</a>
+    <div class="bcorp-stats">
+      <div class="bcorp-stat"><p class="bcorp-num">92.4</p><p class="bcorp-label">B Corp Score</p></div>
+      <div class="bcorp-stat"><p class="bcorp-num">100%</p><p class="bcorp-label">Carbon Neutral</p></div>
+      <div class="bcorp-stat"><p class="bcorp-num">0</p><p class="bcorp-label">Battery Waste</p></div>
+      <div class="bcorp-stat"><p class="bcorp-num">1%</p><p class="bcorp-label">For the Planet</p></div>
+    </div>
+  </div>
+  <div class="bcorp-media"><img src="assets/dw/1743672377_191083.jpg" alt="B Corp"></div>
+</div>
+</section>
+
+<section class="materials">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Materials</p><h2 class="sec-h">Responsibly <em>Sourced</em></h2></div>
+  <div class="mat-grid">
+    <div class="mat-card"><div class="mat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><p class="mat-title">Solar Cells</p><p class="mat-desc">Japanese-made solar cells hidden beneath the dial, converting any light into power.</p></div>
+    <div class="mat-card"><div class="mat-icon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div><p class="mat-title">Recycled Steel</p><p class="mat-desc">316L stainless steel cases made from 80% recycled content, reducing mining impact.</p></div>
+    <div class="mat-card"><div class="mat-icon"><svg viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/></svg></div><p class="mat-title">Vegan Leather</p><p class="mat-desc">Italian-made from apple waste, offering the look and feel of leather without the impact.</p></div>
+    <div class="mat-card"><div class="mat-icon"><svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/></svg></div><p class="mat-title">Ocean Plastic</p><p class="mat-desc">Straps woven from intercepted ocean-bound plastic, giving waste a second life.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="feature">
+<div class="feat-inner">
+  <div class="feat-media"><img src="assets/dw/1743671378_128938.jpg" alt="Gift Set"></div>
+  <div class="feat-ct">
+    <p class="sec-badge">Gift Sets</p>
+    <h2>The Conscious<br><em>Gift</em></h2>
+    <p>Give the gift of sustainable style. Our curated gift sets come in FSC-certified, plastic-free packaging and include a tree planted in the recipient's name.</p>
+    <a href="#" class="btn btn--accent">Shop Gift Sets</a>
+  </div>
+</div>
+</section>
+
+<section class="reviews">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Reviews</p><h2 class="sec-h">What Our <em>Community</em> Says</h2></div>
+  <div class="rev-grid">
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"Never changing a battery again is amazing. The Solar Classic is beautifully minimal and I love knowing it's made from recycled materials."</p><p class="rev-author">Thomas B.</p><p class="rev-loc">Montreal, Canada</p></div>
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"The ocean plastic strap is incredible — you'd never know it was made from waste. The whole package feels premium and purposeful."</p><p class="rev-author">Léa M.</p><p class="rev-loc">Paris, France</p></div>
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"Bought the Solar Chrono as a gift. The B Corp certification and tree planting made it extra special. Beautiful watch, beautiful mission."</p><p class="rev-author">David K.</p><p class="rev-loc">Toronto, Canada</p></div>
+  </div>
+</div>
+</section>
+
+<section class="insta">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">@terra.watches</p><h2 class="sec-h">Time for <em>Change</em></h2></div>
+  <div class="insta-grid">
+    <div class="insta-card"><img src="assets/dw/1743066349_193969.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066353_134388.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066361_155155.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066979_153485.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066998_140504.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066981_120515.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+  </div>
+</div>
+</section>
+
+<section class="nl">
+<div class="nl-in">
+  <h2>Join the Movement</h2>
+  <p>Be the first to know about new solar collections, impact updates, and exclusive offers.</p>
+  <div class="nl-form"><input type="email" placeholder="Your email address"><button>Subscribe</button></div>
+</div>
+</section>
+
+<footer class="ft">
+<div class="ft-in">
+  <div class="ft-grid">
+    <div><p class="ft-brand">Terra</p><p class="ft-desc">Solar-powered watches for a better tomorrow. Certified B Corp. Carbon neutral. Zero battery waste.</p><div class="ft-socs"><a href="#" class="ft-soc">IG</a><a href="#" class="ft-soc">FB</a><a href="#" class="ft-soc">TT</a><a href="#" class="ft-soc">YT</a></div></div>
+    <div><p class="ft-col-h">Shop</p><ul class="ft-links"><li><a href="#">Solar Watches</a></li><li><a href="#">Straps</a></li><li><a href="#">Gift Sets</a></li><li><a href="#">Gift Cards</a></li></ul></div>
+    <div><p class="ft-col-h">Support</p><ul class="ft-links"><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Warranty</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><p class="ft-col-h">Impact</p><ul class="ft-links"><li><a href="#">Our Mission</a></li><li><a href="#">B Corp Report</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Materials</a></li><li><a href="#">Press</a></li></ul></div>
+  </div>
+  <div class="ft-bot"><p>&copy; 2025 Terra. For learning purposes only.</p><div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div></div>
+</div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Back to top"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+const h=document.getElementById('hdr');
+window.addEventListener('scroll',()=>h.classList.toggle('scrolled',window.scrollY>10));
+const burger=document.getElementById('burger'),mobMenu=document.getElementById('mobMenu');
+burger.addEventListener('click',()=>{mobMenu.classList.toggle('open');const s=burger.querySelectorAll('span');if(mobMenu.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(4px,4px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(4px,-4px)';}else{s[0].style.transform='';s[1].style.opacity='';s[2].style.transform='';}});
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>600));
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.querySelectorAll('.p-wish').forEach(b=>{b.addEventListener('click',e=>{e.stopPropagation();b.classList.toggle('active');});});
+document.querySelectorAll('.p-swatches').forEach(g=>{g.querySelectorAll('.p-swatch').forEach(s=>{s.addEventListener('click',()=>{g.querySelectorAll('.p-swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');});});});
+</script>
+</body>
+</html>

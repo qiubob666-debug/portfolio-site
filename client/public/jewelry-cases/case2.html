@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case Study 2 — ÉLAN Timepieces & Jewelry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --color-fg:#000000;--color-bg:#ffffff;--color-bg-alt:#f5f5f5;
+  --color-card-bg:#f4f4f4;--color-btn-bg:#00081c;--color-btn-fg:#ffffff;
+  --color-border:#f4f4f4;--color-muted:#666;
+  --gradient-card:radial-gradient(rgba(0,8,28,1),rgba(58,64,47,1) 100%);
+  --font-body:'Jost',sans-serif;--font-heading:'Playfair Display',Georgia,serif;
+  --fw-light:300;--fw-reg:400;--fw-med:500;--fw-semi:600;
+  --ls-body:0.01em;--ls-btn:0.16em;--ls-badge:0.15em;
+  --text-xxl:clamp(36px,5vw,64px);--text-xl:clamp(28px,3.5vw,44px);
+  --text-lg:clamp(22px,2vw,32px);--text-md:16px;--text-sm:13px;
+  --text-xs:11px;--text-xxs:10px;
+  --ease:.3s ease;--ease-slow:.5s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-weight:var(--fw-light);color:var(--color-fg);background:var(--color-bg);line-height:1.3;-webkit-font-smoothing:antialiased;letter-spacing:var(--ls-body)}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%;height:auto}button{cursor:pointer;font-family:inherit}
+
+.ann{background:var(--color-btn-bg);color:var(--color-btn-fg);text-align:center;padding:10px 20px;font-size:var(--text-xxs);letter-spacing:.1em;text-transform:uppercase;font-weight:var(--fw-med)}
+
+.hdr{position:sticky;top:0;z-index:100;background:var(--color-bg);border-bottom:1px solid var(--color-border);transition:box-shadow .3s}
+.hdr.scrolled{box-shadow:0 1px 16px rgba(0,0,0,.05)}
+.hdr-in{max-width:1440px;margin:0 auto;padding:0 48px;height:60px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.hdr-logo{font-family:var(--font-heading);font-size:24px;font-weight:var(--fw-med);letter-spacing:.08em;text-align:center}
+.hdr-nav{display:flex;gap:28px;justify-content:center}
+.nav-item{position:relative}
+.nav-item>a{font-size:var(--text-sm);font-weight:var(--fw-med);letter-spacing:var(--ls-body);text-transform:uppercase;position:relative;padding:20px 0;display:inline-block}
+.nav-item>a::after{content:'';position:absolute;bottom:16px;left:50%;width:0;height:1px;background:var(--color-fg);transition:width .3s,left .3s}
+.nav-item>a:hover::after{width:100%;left:0}
+.hdr-acts{display:flex;gap:18px;justify-content:flex-end;align-items:center}
+.hdr-acts svg{width:20px;height:20px;stroke:var(--color-fg);stroke-width:1.5;fill:none;cursor:pointer;transition:opacity .2s}
+.hdr-acts svg:hover{opacity:.5}
+
+.mega{position:absolute;top:100%;left:-200px;width:800px;background:var(--color-bg);border-top:1px solid var(--color-border);box-shadow:0 12px 40px rgba(0,0,0,.08);padding:40px 48px;display:grid;grid-template-columns:180px 180px 180px 1fr;gap:32px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:all .25s ease;z-index:200}
+.nav-item:hover .mega{opacity:1;visibility:visible;transform:translateY(0)}
+.mega-col-h{font-size:var(--text-xxs);letter-spacing:.2em;text-transform:uppercase;color:var(--color-muted);font-weight:var(--fw-semi);margin-bottom:14px}
+.mega-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.mega-links a{font-size:var(--text-sm);color:var(--color-muted);transition:color .2s;font-weight:var(--fw-reg)}
+.mega-links a:hover{color:var(--color-fg)}
+.mega-feat{position:relative;overflow:hidden}
+.mega-feat img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.mega-feat:hover img{transform:scale(1.04)}
+.mega-feat-ov{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent)}
+.mega-feat-label{font-family:var(--font-heading);font-size:16px;color:#fff}
+
+.burger{display:none;width:24px;height:24px;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+.burger span{display:block;width:100%;height:1.5px;background:var(--color-fg);transition:all .3s}
+.mob-menu{display:none;position:fixed;inset:0;top:60px;background:var(--color-bg);z-index:99;overflow-y:auto;padding:24px;transform:translateX(-100%);transition:transform .3s ease}
+.mob-menu.open{transform:translateX(0)}
+.mob-menu a{display:block;font-size:16px;padding:14px 0;border-bottom:1px solid var(--color-border);font-weight:var(--fw-med);text-transform:uppercase;letter-spacing:.04em}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.9em 2.6em;font-size:var(--text-xs);font-weight:var(--fw-light);letter-spacing:var(--ls-btn);text-transform:uppercase;border:none;border-radius:0;transition:all var(--ease);font-family:var(--font-body)}
+.btn--w{background:#fff;color:#000}.btn--w:hover{background:var(--color-card-bg)}
+.btn--ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}.btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.btn--dark{background:var(--color-btn-bg);color:var(--color-btn-fg)}.btn--dark:hover{background:#1a2340}
+.btn--outline{background:transparent;color:var(--color-fg);border:1px solid var(--color-fg)}.btn--outline:hover{background:var(--color-fg);color:var(--color-bg)}
+
+.hero{position:relative;height:100vh;min-height:700px;overflow:hidden;background:#000}
+.hero-img{position:absolute;inset:0}
+.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.85}
+.hero-ct{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff}
+.hero-badge{font-size:var(--text-xxs);letter-spacing:.3em;text-transform:uppercase;font-weight:var(--fw-med);color:rgba(255,255,255,.5);margin-bottom:20px}
+.hero-h{font-family:var(--font-heading);font-size:var(--text-xxl);font-weight:var(--fw-reg);line-height:1.05;margin-bottom:16px}
+.hero-h em{font-style:italic}
+.hero-sub{font-size:var(--text-md);font-weight:var(--fw-light);color:rgba(255,255,255,.55);margin-bottom:36px;max-width:440px;line-height:1.6}
+.hero-btns{display:flex;gap:12px}
+
+.sec-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.sec-hd{text-align:center;margin-bottom:48px}
+.sec-badge{font-size:var(--text-xxs);letter-spacing:.2em;text-transform:uppercase;color:var(--color-muted);font-weight:var(--fw-med);margin-bottom:8px}
+.sec-h{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1}
+.sec-h em{font-style:italic}
+
+.collections{padding:80px 0;background:var(--color-bg)}
+.col-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.col-card{position:relative;overflow:hidden;cursor:pointer;background:var(--color-card-bg)}
+.col-card-img{aspect-ratio:3/4;overflow:hidden}
+.col-card-img img{width:100%;height:100%;object-fit:cover;transition:transform var(--ease-slow)}
+.col-card:hover .col-card-img img{transform:scale(1.05)}
+.col-card-body{padding:20px 16px;text-align:center}
+.col-card-name{font-family:var(--font-heading);font-size:20px;font-weight:var(--fw-reg);margin-bottom:4px}
+.col-card-desc{font-size:var(--text-sm);color:var(--color-muted)}
+
+.feature-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:560px}
+.feature-media{overflow:hidden}
+.feature-media img{width:100%;height:100%;object-fit:cover}
+.feature-ct{background:var(--gradient-card);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:80px 64px}
+.feature-ct .sec-badge{color:rgba(255,255,255,.4)}
+.feature-ct h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.feature-ct h2 em{font-style:italic}
+.feature-ct p{font-size:15px;line-height:1.7;color:rgba(255,255,255,.5);margin-bottom:32px;max-width:380px}
+
+.watches{padding:80px 0;background:var(--color-bg-alt)}
+.watch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.w-card{background:var(--color-bg);overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.w-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.07);transform:translateY(-3px)}
+.w-card-media{position:relative;overflow:hidden;background:var(--color-card-bg)}
+.w-card-media img{width:100%;aspect-ratio:1/1;object-fit:contain;padding:24px;transition:transform var(--ease-slow)}
+.w-card:hover .w-card-media img{transform:scale(1.06)}
+.w-badge{position:absolute;top:12px;left:12px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-semi);padding:4px 10px;background:var(--color-fg);color:var(--color-bg)}
+.w-wish{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.w-wish svg{width:14px;height:14px;stroke:#000;stroke-width:1.5;fill:none}
+.w-card:hover .w-wish{opacity:1}
+.w-wish.active svg{fill:#c0392b;stroke:#c0392b}
+.w-quick{position:absolute;bottom:0;left:0;right:0;background:var(--color-btn-bg);color:#fff;text-align:center;padding:12px;font-size:var(--text-xxs);letter-spacing:.14em;text-transform:uppercase;font-weight:var(--fw-med);transform:translateY(100%);transition:transform .3s ease;border:none;width:100%;cursor:pointer}
+.w-card:hover .w-quick{transform:translateY(0)}
+.w-card-body{padding:16px 16px 20px;text-align:center}
+.w-name{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:4px}
+.w-variant{font-size:var(--text-xs);color:var(--color-muted);margin-bottom:8px}
+.w-price{font-size:15px;font-weight:var(--fw-med)}
+.w-swatches{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.w-swatch{width:14px;height:14px;border-radius:50%;border:1px solid var(--color-border);cursor:pointer;transition:box-shadow .2s}
+.w-swatch:hover,.w-swatch.active{box-shadow:0 0 0 2px var(--color-fg)}
+
+.jewelry{padding:80px 0;background:var(--color-bg)}
+.j-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.j-card{background:var(--color-bg);overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.j-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.07);transform:translateY(-3px)}
+.j-card-media{position:relative;overflow:hidden}
+.j-card-media img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform var(--ease-slow)}
+.j-card:hover .j-card-media img{transform:scale(1.04)}
+.j-badge{position:absolute;top:12px;left:12px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-semi);padding:4px 10px;background:var(--color-fg);color:var(--color-bg)}
+.j-quick{position:absolute;bottom:0;left:0;right:0;background:var(--color-btn-bg);color:#fff;text-align:center;padding:12px;font-size:var(--text-xxs);letter-spacing:.14em;text-transform:uppercase;font-weight:var(--fw-med);transform:translateY(100%);transition:transform .3s ease;border:none;width:100%;cursor:pointer}
+.j-card:hover .j-quick{transform:translateY(0)}
+.j-card-body{padding:16px 16px 20px;text-align:center}
+.j-name{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:4px}
+.j-mat{font-size:var(--text-xs);color:var(--color-muted);margin-bottom:8px}
+.j-price{font-size:15px;font-weight:var(--fw-med)}
+
+.lifestyle{padding:80px 0;background:var(--color-bg)}
+.life-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:280px 280px;gap:4px}
+.life-card{position:relative;overflow:hidden;cursor:pointer}
+.life-card img{width:100%;height:100%;object-fit:cover;transition:transform var(--ease-slow)}
+.life-card:hover img{transform:scale(1.04)}
+.life-card:first-child{grid-row:1/3}
+.life-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 40%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+.life-label{font-family:var(--font-heading);font-size:18px;color:#fff}
+.life-cta{font-size:var(--text-xxs);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px}
+
+.giving{padding:80px 0;background:var(--color-bg-alt)}
+.giving-inner{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.giving-text h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.giving-text h2 em{font-style:italic}
+.giving-text p{font-size:15px;line-height:1.8;color:var(--color-muted);margin-bottom:28px}
+.giving-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.giving-num{font-family:var(--font-heading);font-size:32px;font-weight:var(--fw-reg);margin-bottom:4px;text-align:center}
+.giving-label{font-size:var(--text-xs);color:var(--color-muted);letter-spacing:.06em;text-align:center}
+.giving-img{overflow:hidden}
+.giving-img img{width:100%;aspect-ratio:4/3;object-fit:cover}
+
+.insta{padding:80px 0;background:var(--color-bg)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:40px}
+.insta-card{position:relative;overflow:hidden;cursor:pointer}
+.insta-card img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .4s}
+.insta-card:hover img{transform:scale(1.08)}
+.insta-ov{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.insta-card:hover .insta-ov{opacity:1}
+.insta-ov svg{width:24px;height:24px;stroke:#fff;stroke-width:1.5;fill:none}
+
+.nl{padding:80px 0;background:var(--color-fg);color:#fff}
+.nl-in{max-width:480px;margin:0 auto;text-align:center;padding:0 24px}
+.nl h2{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:var(--fw-reg);margin-bottom:10px}
+.nl p{font-size:var(--text-sm);color:rgba(255,255,255,.4);margin-bottom:24px;line-height:1.6}
+.nl-form{display:flex}
+.nl-form input{flex:1;padding:14px 18px;background:transparent;border:1px solid rgba(255,255,255,.15);border-right:none;color:#fff;font-size:var(--text-sm);font-family:var(--font-body);outline:none}
+.nl-form input::placeholder{color:rgba(255,255,255,.25)}
+.nl-form button{padding:14px 24px;background:#fff;color:#000;border:none;font-size:var(--text-xxs);letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-med);font-family:var(--font-body);transition:background .2s}
+.nl-form button:hover{background:var(--color-card-bg)}
+
+.ft{background:var(--color-fg);color:rgba(255,255,255,.4);padding:64px 0 28px;border-top:1px solid rgba(255,255,255,.06)}
+.ft-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:24px}
+.ft-brand{font-family:var(--font-heading);font-size:20px;color:#fff;font-weight:var(--fw-med);letter-spacing:.08em;margin-bottom:12px}
+.ft-desc{font-size:var(--text-sm);line-height:1.7;margin-bottom:20px}
+.ft-socs{display:flex;gap:8px}
+.ft-soc{width:32px;height:32px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);transition:all .2s}
+.ft-soc:hover{border-color:#fff;color:#fff}
+.ft-col-h{font-size:var(--text-xxs);letter-spacing:var(--ls-badge);text-transform:uppercase;color:#fff;font-weight:var(--fw-med);margin-bottom:16px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-links a{font-size:var(--text-sm);transition:color .2s}
+.ft-links a:hover{color:#fff}
+.ft-bot{display:flex;justify-content:space-between;font-size:var(--text-xs)}
+.ft-legal{display:flex;gap:16px}
+.ft-legal a{transition:color .2s}
+.ft-legal a:hover{color:#fff}
+
+.btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:var(--color-fg);color:var(--color-bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:50}
+.btt.show{opacity:1;visibility:visible}
+.btt:hover{background:#333}
+.btt svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+
+@media(max-width:1024px){
+  .col-grid{grid-template-columns:repeat(2,1fr)}
+  .watch-grid,.j-grid{grid-template-columns:repeat(3,1fr)}
+  .life-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .life-card:first-child{grid-row:auto}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .mega{display:none!important}
+}
+@media(max-width:768px){
+  .hdr-in{padding:0 20px}
+  .hdr-nav{display:none}
+  .burger{display:flex}
+  .mob-menu{display:block}
+  .sec-in{padding:0 20px}
+  .watch-grid,.j-grid{grid-template-columns:repeat(2,1fr)}
+  .feature-inner{grid-template-columns:1fr}
+  .feature-ct{padding:48px 24px}
+  .giving-inner{grid-template-columns:1fr;padding:0 20px}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="ann">Free Engraving on All Orders &mdash; Limited Time</div>
+
+<header class="hdr" id="hdr">
+<div class="hdr-in">
+  <nav class="hdr-nav">
+    <div class="nav-item">
+      <a href="#">Watches</a>
+      <div class="mega">
+        <div><p class="mega-col-h">By Collection</p><ul class="mega-links"><li><a href="#">Classic</a></li><li><a href="#">Petite</a></li><li><a href="#">Retro</a></li><li><a href="#">Quadro</a></li><li><a href="#">Chrono</a></li></ul></div>
+        <div><p class="mega-col-h">By Size</p><ul class="mega-links"><li><a href="#">28mm</a></li><li><a href="#">32mm</a></li><li><a href="#">36mm</a></li><li><a href="#">40mm</a></li></ul></div>
+        <div><p class="mega-col-h">By Metal</p><ul class="mega-links"><li><a href="#">Rose Gold</a></li><li><a href="#">Silver</a></li><li><a href="#">Gold</a></li><li><a href="#">Black</a></li></ul></div>
+        <div class="mega-feat"><img src="assets/dw/DW_PC4_Web_Home_Page_Hero_2500x1100_Female.jpg" alt="Watches"><div class="mega-feat-ov"><p class="mega-feat-label">Shop All Watches</p></div></div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#">Jewelry</a>
+      <div class="mega">
+        <div><p class="mega-col-h">By Category</p><ul class="mega-links"><li><a href="#">Rings</a></li><li><a href="#">Necklaces</a></li><li><a href="#">Bracelets</a></li><li><a href="#">Earrings</a></li></ul></div>
+        <div><p class="mega-col-h">By Metal</p><ul class="mega-links"><li><a href="#">Rose Gold</a></li><li><a href="#">Silver</a></li><li><a href="#">Gold</a></li></ul></div>
+        <div><p class="mega-col-h">Collections</p><ul class="mega-links"><li><a href="#">Bound</a></li><li><a href="#">Crystalline</a></li><li><a href="#">Elan</a></li></ul></div>
+        <div class="mega-feat"><img src="assets/dw/DW001_bracelets_429470e8-76f8-4079-9962-8f754619f043.jpg" alt="Jewelry"><div class="mega-feat-ov"><p class="mega-feat-label">Shop All Jewelry</p></div></div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="#">Accessories</a></div>
+    <div class="nav-item"><a href="#">Gifts</a></div>
+  </nav>
+  <a href="#" class="hdr-logo">ÉLAN</a>
+  <div class="hdr-acts">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div>
+</header>
+
+<nav class="mob-menu" id="mobMenu">
+  <a href="#">Watches</a><a href="#">Jewelry</a><a href="#">Accessories</a>
+  <a href="#">Gifts</a><a href="#">Our Story</a><a href="#">Giving Back</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-img"><img src="assets/dw/1743671361_189416.jpg" alt="Hero"></div>
+  <div class="hero-ct">
+    <p class="hero-badge">Spring / Summer 2025</p>
+    <h1 class="hero-h">The New <em>Retro</em><br>Collection</h1>
+    <p class="hero-sub">Timeless design meets modern craftsmanship. Discover watches and jewelry that define your moment.</p>
+    <div class="hero-btns"><a href="#" class="btn btn--w">Shop Watches</a><a href="#" class="btn btn--ghost">Explore Jewelry</a></div>
+  </div>
+</section>
+
+<section class="collections">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Our Collections</p><h2 class="sec-h">Designed for <em>Every Occasion</em></h2></div>
+  <div class="col-grid">
+    <div class="col-card"><div class="col-card-img"><img src="assets/dw/1743671389_141710.jpg" alt="Classic"></div><div class="col-card-body"><p class="col-card-name">Classic</p><p class="col-card-desc">Refined elegance for every day</p></div></div>
+    <div class="col-card"><div class="col-card-img"><img src="assets/dw/1743671385_112215.jpg" alt="Petite"></div><div class="col-card-body"><p class="col-card-name">Petite</p><p class="col-card-desc">Delicate proportions, bold statement</p></div></div>
+    <div class="col-card"><div class="col-card-img"><img src="assets/dw/1743672423_181907.jpg" alt="Retro"></div><div class="col-card-body"><p class="col-card-name">Retro</p><p class="col-card-desc">Vintage-inspired, modern soul</p></div></div>
+  </div>
+</div>
+</section>
+
+<section class="feature">
+<div class="feature-inner">
+  <div class="feature-media"><img src="assets/dw/1743671378_128938.jpg" alt="Feature"></div>
+  <div class="feature-ct">
+    <p class="sec-badge">Exclusive</p>
+    <h2>The Quadro<br><em>Ceramic</em></h2>
+    <p>A new chapter in watchmaking. The Quadro Ceramic combines architectural lines with the warmth of ceramic — a material that stays cool to the touch and warm to the eye.</p>
+    <a href="#" class="btn btn--w">Discover Now</a>
+  </div>
+</div>
+</section>
+
+<section class="watches">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Best Sellers</p><h2 class="sec-h">Most <em>Loved</em></h2></div>
+  <div class="watch-grid">
+    <div class="w-card"><div class="w-card-media"><img src="assets/dw/classic--collection-grey.png" alt="Watch"><span class="w-badge">Best Seller</span><button class="w-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="w-quick">Quick View</button></div><div class="w-card-body"><p class="w-name">Classic Sheffield</p><p class="w-variant">36mm / Rose Gold</p><p class="w-price">$229</p><div class="w-swatches"><span class="w-swatch active" style="background:#d4a574"></span><span class="w-swatch" style="background:#c0c0c0"></span><span class="w-swatch" style="background:#000"></span></div></div></div>
+    <div class="w-card"><div class="w-card-media"><img src="assets/dw/petite-collection-grey.png" alt="Watch"><button class="w-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="w-quick">Quick View</button></div><div class="w-card-body"><p class="w-name">Petite Melrose</p><p class="w-variant">28mm / Silver</p><p class="w-price">$199</p><div class="w-swatches"><span class="w-swatch active" style="background:#c0c0c0"></span><span class="w-swatch" style="background:#d4a574"></span></div></div></div>
+    <div class="w-card"><div class="w-card-media"><img src="assets/dw/retro-aw24.png" alt="Watch"><span class="w-badge">New</span><button class="w-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="w-quick">Quick View</button></div><div class="w-card-body"><p class="w-name">Retro Vintage</p><p class="w-variant">32mm / Gold</p><p class="w-price">$259</p><div class="w-swatches"><span class="w-swatch active" style="background:#d4a574"></span><span class="w-swatch" style="background:#c0c0c0"></span></div></div></div>
+    <div class="w-card"><div class="w-card-media"><img src="assets/dw/quadro-collection-grey.png" alt="Watch"><button class="w-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="w-quick">Quick View</button></div><div class="w-card-body"><p class="w-name">Quadro Pressed</p><p class="w-variant">26x36mm / Rose Gold</p><p class="w-price">$239</p><div class="w-swatches"><span class="w-swatch active" style="background:#d4a574"></span><span class="w-swatch" style="background:#c0c0c0"></span><span class="w-swatch" style="background:#000"></span></div></div></div>
+  </div>
+</div>
+</section>
+
+<section class="jewelry">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Jewelry</p><h2 class="sec-h">The <em>Jewelry</em> Edit</h2></div>
+  <div class="j-grid">
+    <div class="j-card"><div class="j-card-media"><img src="assets/dw/earrings-1000x800_1a321b57-fe11-4f97-8ace-267561d70a83.jpg" alt="Earrings"><span class="j-badge">New</span><button class="j-quick">Quick View</button></div><div class="j-card-body"><p class="j-name">Bound Earrings</p><p class="j-mat">Rose Gold</p><p class="j-price">$79</p></div></div>
+    <div class="j-card"><div class="j-card-media"><img src="assets/dw/necklaces-mob-1000x1000_3974a0fb-d631-4016-9857-cc0a6c1b10c0.jpg" alt="Necklace"><button class="j-quick">Quick View</button></div><div class="j-card-body"><p class="j-name">Elan Necklace</p><p class="j-mat">Silver</p><p class="j-price">$89</p></div></div>
+    <div class="j-card"><div class="j-card-media"><img src="assets/dw/rings-1000x1000_d1bc70b8-8dfc-4dba-bf0e-453c4c4c70fa.jpg" alt="Ring"><button class="j-quick">Quick View</button></div><div class="j-card-body"><p class="j-name">Crystalline Ring</p><p class="j-mat">Gold</p><p class="j-price">$69</p></div></div>
+    <div class="j-card"><div class="j-card-media"><img src="assets/dw/DW001_bracelets_429470e8-76f8-4079-9962-8f754619f043.jpg" alt="Bracelet"><span class="j-badge">Best Seller</span><button class="j-quick">Quick View</button></div><div class="j-card-body"><p class="j-name">Classic Bracelet</p><p class="j-mat">Rose Gold</p><p class="j-price">$59</p></div></div>
+  </div>
+</div>
+</section>
+
+<section class="lifestyle">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Lifestyle</p><h2 class="sec-h">Wear the <em>Moment</em></h2></div>
+  <div class="life-grid">
+    <div class="life-card"><img src="assets/dw/1743066349_193969.jpg" alt="Lifestyle"><div class="life-ov"><p class="life-label">Date Night Edit</p><p class="life-cta">Shop the Look →</p></div></div>
+    <div class="life-card"><img src="assets/dw/1743066353_134388.jpg" alt="Lifestyle"><div class="life-ov"><p class="life-label">Office Ready</p><p class="life-cta">Shop the Look →</p></div></div>
+    <div class="life-card"><img src="assets/dw/1743066361_155155.jpg" alt="Lifestyle"><div class="life-ov"><p class="life-label">Weekend Casual</p><p class="life-cta">Shop the Look →</p></div></div>
+    <div class="life-card"><img src="assets/dw/1743066998_140504.jpg" alt="Lifestyle"><div class="life-ov"><p class="life-label">Gift Sets</p><p class="life-cta">Shop the Look →</p></div></div>
+    <div class="life-card"><img src="assets/dw/1743066979_153485.jpg" alt="Lifestyle"><div class="life-ov"><p class="life-label">Bridal</p><p class="life-cta">Shop the Look →</p></div></div>
+  </div>
+</div>
+</section>
+
+<section class="giving">
+<div class="giving-inner">
+  <div class="giving-text">
+    <p class="sec-badge">Our Promise</p>
+    <h2>Giving Back<br><em>With Purpose</em></h2>
+    <p>Every purchase contributes to one of three global causes. Choose the cause closest to your heart — clean water, education, or rainforest preservation.</p>
+    <a href="#" class="btn btn--dark">Learn More</a>
+    <div class="giving-stats">
+      <div><p class="giving-num">2.4M</p><p class="giving-label">Donations Made</p></div>
+      <div><p class="giving-num">38</p><p class="giving-label">Countries Reached</p></div>
+      <div><p class="giving-num">3</p><p class="giving-label">Global Causes</p></div>
+    </div>
+  </div>
+  <div class="giving-img"><img src="assets/dw/1743672377_191083.jpg" alt="Giving"></div>
+</div>
+</section>
+
+<section class="insta">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">@elan.official</p><h2 class="sec-h">As Seen <em>On You</em></h2></div>
+  <div class="insta-grid">
+    <div class="insta-card"><img src="assets/dw/1743066981_120515.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066989_115523.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743672379_125969.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743672434_127633.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1742979258_123820.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/Crystalline_efd65cf4-9864-4930-ad5b-cce07b95bb8e.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+  </div>
+</div>
+</section>
+
+<section class="nl">
+<div class="nl-in">
+  <h2>Stay in the Loop</h2>
+  <p>Sign up for exclusive access to new collections, special offers, and styling inspiration.</p>
+  <div class="nl-form"><input type="email" placeholder="Your email address"><button>Join</button></div>
+</div>
+</section>
+
+<footer class="ft">
+<div class="ft-in">
+  <div class="ft-grid">
+    <div><p class="ft-brand">ÉLAN</p><p class="ft-desc">Timepieces and jewelry designed with intention. Every detail, considered. Every moment, elevated.</p><div class="ft-socs"><a href="#" class="ft-soc">IG</a><a href="#" class="ft-soc">FB</a><a href="#" class="ft-soc">TT</a><a href="#" class="ft-soc">PT</a></div></div>
+    <div><p class="ft-col-h">Shop</p><ul class="ft-links"><li><a href="#">Watches</a></li><li><a href="#">Jewelry</a></li><li><a href="#">Accessories</a></li><li><a href="#">Gift Sets</a></li><li><a href="#">Engraving</a></li></ul></div>
+    <div><p class="ft-col-h">Support</p><ul class="ft-links"><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Warranty</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><p class="ft-col-h">Company</p><ul class="ft-links"><li><a href="#">Our Story</a></li><li><a href="#">Giving Back</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Press</a></li><li><a href="#">Careers</a></li></ul></div>
+  </div>
+  <div class="ft-bot"><p>&copy; 2025 &Eacute;LAN. For learning purposes only.</p><div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div></div>
+</div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Back to top"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+const h=document.getElementById('hdr');
+window.addEventListener('scroll',()=>h.classList.toggle('scrolled',window.scrollY>10));
+const burger=document.getElementById('burger'),mobMenu=document.getElementById('mobMenu');
+burger.addEventListener('click',()=>{mobMenu.classList.toggle('open');const s=burger.querySelectorAll('span');if(mobMenu.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(4px,4px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(4px,-4px)';}else{s[0].style.transform='';s[1].style.opacity='';s[2].style.transform='';}});
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>600));
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.querySelectorAll('.w-wish').forEach(b=>{b.addEventListener('click',e=>{e.stopPropagation();b.classList.toggle('active');});});
+document.querySelectorAll('.w-swatches').forEach(g=>{g.querySelectorAll('.w-swatch').forEach(s=>{s.addEventListener('click',()=>{g.querySelectorAll('.w-swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active');});});});
+</script>
+</body>
+</html>

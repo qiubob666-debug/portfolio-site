@@ -19,6 +19,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const NAV_LINKS = [
+    { label: lang === 'zh' ? '珠宝案例' : 'Jewelry Cases', href: '/jewelry-cases' },
     { label: (t.nav as any).services ?? "Services", href: "#services" },
     { label: t.nav.process, href: "#process" },
     { label: t.nav.about, href: "#about" },
