@@ -11,7 +11,7 @@ import JewelryCases from "./pages/JewelryCases";
 function Router() {
   return (
     <Switch>
-      <Route path={\"\"} component={Home} />
+      <Route path="/" component={Home} />
       <Route path={\"/jewelry-cases\"} component={JewelryCases} />
       <Route path={\"/404\"} component={NotFound} />
       <Route component={NotFound} />
