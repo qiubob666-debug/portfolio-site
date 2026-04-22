@@ -1,8 +1,8 @@
-/* ServicesSection — Boss Result Framing v2
-   Design: Warm white bg, 3-tier cards + brand matrix strategy callout
-   Strategy: "What do I GET?" not "What can you DO?"
-   Key message: Each tier = a business outcome, not a tech deliverable
-   Brand matrix: special callout for 铺货转品牌 operators */
+/* ServicesSection v3 — Value-first, no tech jargon
+   Design: 3 pricing cards, center card highlighted (gold border)
+   Key fix: Each card = 1 business outcome promise, NOT a feature list
+   Structure: Outcome headline → Price → What you get (results) → Brand matrix callout
+   Hover: card lifts slightly */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,337 +13,239 @@ const COPY: Record<Locale, {
   eyebrow: string;
   title: string;
   subtitle: string;
-  recommended: string;
-  showMore: string;
-  showLess: string;
-  ctaLabel: string;
-  tiers: {
-    tag: string;
-    name: string;
-    price: string;
-    timeline: string;
-    outcome: string;
-    tagline: string;
-    results: string[];
-    includes: string[];
-    highlight: boolean;
-  }[];
   matrixTitle: string;
-  matrixBadge: string;
   matrixDesc: string;
   matrixPoints: string[];
-  matrixCta: string;
-  note: string;
+  plans: {
+    tag: string;
+    name: string;
+    promise: string;
+    price: string;
+    priceNote: string;
+    timeline: string;
+    results: string[];
+    cta: string;
+    highlight: boolean;
+  }[];
+  compareLabel: string;
+  compareNote: string;
 }> = {
   zh: {
-    eyebrow: "服务套餐",
-    title: "你能得到什么结果？",
-    subtitle: "每个方案都以你的业务结果为核心，而不是技术功能列表。",
-    recommended: "最受欢迎",
-    showMore: "查看全部包含内容",
-    showLess: "收起",
-    ctaLabel: "获取报价",
-    tiers: [
+    eyebrow: "服务方案",
+    title: "选一个，7 天后你的品牌就在线了",
+    subtitle: "三个方案，对应三种业务阶段。",
+    matrixTitle: "品牌矩阵建站策略（所有方案均可加购）",
+    matrixDesc: "不是建一个网站，而是建一个品牌堡垒。每个产品、每个使用场景、每个目标人群都有独立落地页，形成完整的 SEO 矩阵。让 Google 和 AI 持续给你带来免费流量。",
+    matrixPoints: [
+      "长尾词 + 短尾词全覆盖",
+      "场景化产品展示页",
+      "AI 引用优化（GEO）",
+      "品牌内容矩阵",
+    ],
+    plans: [
       {
-        tag: "适合：刚起步的品牌",
+        tag: "入门",
         name: "品牌展示站",
+        promise: "7 天内，你有一个让客户信任你的专业官网",
         price: "¥3,800",
+        priceNote: "一次性，含首年域名",
         timeline: "7 天交付",
-        outcome: "你得到的结果",
-        tagline: "7天后，你有一个能让客户信任你的专业品牌网站",
         results: [
-          "客户搜索你的品牌，第一眼就觉得专业",
-          "有地方放你的产品故事、联系方式、品牌价值观",
-          "比同行的 Shopify 模板站看起来贵 30%",
-          "Google 能收录你，SEO 基础打好",
+          "客户第一眼就觉得你是正规品牌",
+          "Google 能找到你（基础 SEO）",
+          "手机和电脑都好看",
+          "你自己能改内容，不用找开发",
+          "上线后 7 天免费修改",
         ],
-        includes: [
-          "5 页专业品牌网站",
-          "移动端完美适配",
-          "联系表单（询盘直达你的邮箱）",
-          "Google Analytics 数据追踪",
-          "基础 SEO 设置（标题/描述/结构）",
-          "Vercel 部署（0 服务器费用）",
-          "自定义域名绑定",
-          "1 轮修改",
-        ],
+        cta: "我要这个",
         highlight: false,
       },
       {
-        tag: "适合：准备开始收款的品牌",
-        name: "电商独立站",
+        tag: "推荐",
+        name: "跨境电商站",
+        promise: "21 天内，你有一个能收全球订单、自动运营的独立站",
         price: "¥8,800",
+        priceNote: "一次性，含首年域名+服务器",
         timeline: "21 天交付",
-        outcome: "你得到的结果",
-        tagline: "21天后，你有一个能全球收款、自动处理订单的独立站",
         results: [
-          "不再给亚马逊交 15% 佣金，利润全归你",
-          "支持 Stripe/PayPal/支付宝，全球买家都能付款",
-          "订单自动确认、库存自动更新，不用人盯着",
-          "多语言自动切换，欧美/日本客户无障碍购买",
+          "全球客户能用自己的货币付款",
+          "订单自动确认、发货通知自动发送",
+          "节假日促销自动触发，不需要人盯",
+          "比 Shopify 每年省 ¥5,000–20,000",
+          "你拥有所有代码和数据",
+          "附带操作培训 + 操作手册",
         ],
-        includes: [
-          "完整电商购物系统",
-          "商品目录 + 规格变体（颜色/尺码等）",
-          "全球支付网关（Stripe/PayPal/支付宝）",
-          "自动订单确认邮件",
-          "库存追踪 + 低库存提醒",
-          "折扣码 + 节假日促销触发器",
-          "用户评论系统",
-          "SEO + 网站地图",
-          "数据分析面板",
-          "2 轮修改",
-        ],
+        cta: "这个最适合我",
         highlight: true,
       },
       {
-        tag: "适合：想让独立站自己运转的品牌",
-        name: "全自动化方案",
+        tag: "全套",
+        name: "品牌增长系统",
+        promise: "30 天内，你有一个能自动获客、自动运营、持续增长的品牌体系",
         price: "¥18,000",
+        priceNote: "一次性，含3个月维护",
         timeline: "30 天交付",
-        outcome: "你得到的结果",
-        tagline: "30天后，你的独立站基本不需要人工干预就能运转",
         results: [
-          "社媒内容定时自动发布，省掉 1 个运营岗",
-          "订单追踪、库存预警、节假日促销全自动",
-          "内容后台你的团队 3 分钟学会操作",
-          "AI 引用你的品牌，搜索引擎长期带来免费流量",
+          "品牌矩阵建站（多产品线全覆盖）",
+          "社媒内容自动发布到各平台",
+          "AI 内容生成 + 定时发布",
+          "完整数据分析面板",
+          "季度 SEO 报告 + 关键词追踪",
+          "3 个月专属维护支持",
         ],
-        includes: [
-          "包含电商独立站全部功能",
-          "n8n 自动化工作流（定时任务/触发器）",
-          "社媒自动发布（Instagram/TikTok/Facebook）",
-          "订单追踪 + 库存预警自动化",
-          "节假日营销自动触发",
-          "无头 CMS 内容管理后台（团队可自行更新）",
-          "高级数据库面板（用户数据/评论/流量）",
-          "上线后 30 天技术支持",
-          "团队操作培训",
-          "文档交接",
-        ],
+        cta: "我要全套",
         highlight: false,
       },
     ],
-    matrixBadge: "特别方案",
-    matrixTitle: "从铺货到品牌：矩阵建站战略",
-    matrixDesc: "如果你过去做的是铺货模式，现在想转型做品牌、提高客单价——这个方案专门为你设计。",
-    matrixPoints: [
-      "以「场景化产品矩阵」方式建站，一个品牌下多个产品线，每个都有独立落地页",
-      "覆盖长尾词 + 短尾词，让 Google 和 AI 搜索引擎都能找到你的每个产品",
-      "品牌堡垒策略：用内容体系建立护城河，让竞争对手难以复制",
-      "从「卖商品」升级到「卖品牌」，客单价提升 30–50%，平台依赖降低",
-    ],
-    matrixCta: "了解矩阵建站方案",
-    note: "所有方案均为固定报价，无隐藏费用。付款后开始，按时交付，不满意全额退款。",
+    compareLabel: "不确定选哪个？",
+    compareNote: "发消息告诉我你的情况，我帮你选最适合的方案。",
   },
   en: {
-    eyebrow: "SERVICES",
-    title: "What results do you get?",
-    subtitle: "Every package is defined by your business outcome, not a list of tech features.",
-    recommended: "Most Popular",
-    showMore: "See everything included",
-    showLess: "Show less",
-    ctaLabel: "Get a quote",
-    tiers: [
+    eyebrow: "PACKAGES",
+    title: "Pick one — your brand is live in 7 days",
+    subtitle: "Three packages for three business stages.",
+    matrixTitle: "Brand Matrix Strategy (add-on for all packages)",
+    matrixDesc: "Not just one website — a brand fortress. Every product, every use case, every target audience gets its own landing page, forming a complete SEO matrix. Google and AI continuously bring you free traffic.",
+    matrixPoints: [
+      "Long-tail + short-tail keyword coverage",
+      "Scene-based product landing pages",
+      "AI citation optimization (GEO)",
+      "Brand content matrix",
+    ],
+    plans: [
       {
-        tag: "For: brands just getting started",
-        name: "Brand Presence",
+        tag: "Starter",
+        name: "Brand Showcase Site",
+        promise: "In 7 days, you have a professional website that makes customers trust you",
         price: "¥3,800",
+        priceNote: "One-time, includes first-year domain",
         timeline: "7-day delivery",
-        outcome: "What you get",
-        tagline: "In 7 days, you have a professional brand site that makes customers trust you",
         results: [
-          "Customers Google you and immediately see a credible brand",
-          "A home for your product story, contact info, and brand values",
-          "Looks 30% more premium than a generic Shopify template",
-          "Google can index you — SEO foundation is set",
+          "Customers see you as a legitimate brand at first glance",
+          "Google can find you (basic SEO)",
+          "Looks great on mobile and desktop",
+          "You can edit content yourself — no developer needed",
+          "7-day free revision period after launch",
         ],
-        includes: [
-          "5-page professional brand website",
-          "Mobile-perfect responsive design",
-          "Contact form (inquiries go straight to your inbox)",
-          "Google Analytics tracking",
-          "Basic SEO (titles, meta, structure)",
-          "Vercel deployment (zero server cost)",
-          "Custom domain connection",
-          "1 round of revisions",
-        ],
+        cta: "I want this",
         highlight: false,
       },
       {
-        tag: "For: brands ready to start collecting payments",
-        name: "E-Commerce Store",
+        tag: "Recommended",
+        name: "Cross-border E-commerce Store",
+        promise: "In 21 days, you have an independent store that takes global orders and runs itself",
         price: "¥8,800",
+        priceNote: "One-time, includes first-year domain + server",
         timeline: "21-day delivery",
-        outcome: "What you get",
-        tagline: "In 21 days, you have a store that takes global payments and processes orders automatically",
         results: [
-          "Stop paying Amazon 15% — keep 100% of your profit",
-          "Stripe/PayPal/Alipay — buyers worldwide can pay you",
-          "Orders auto-confirmed, inventory auto-updated — no manual work",
-          "Multi-language auto-switch — US, EU, Japan buyers buy without friction",
+          "Global customers pay in their own currency",
+          "Orders auto-confirmed, shipping notifications auto-sent",
+          "Holiday promotions auto-trigger — no manual work",
+          "Save ¥5,000–20,000/year vs Shopify",
+          "You own all the code and data",
+          "Includes operations training + manual",
         ],
-        includes: [
-          "Full e-commerce shopping system",
-          "Product catalog + variants (color, size, etc.)",
-          "Global payment gateways (Stripe/PayPal/Alipay)",
-          "Automated order confirmation emails",
-          "Inventory tracking + low-stock alerts",
-          "Discount codes + holiday promotion triggers",
-          "Customer review system",
-          "SEO + sitemap",
-          "Analytics dashboard",
-          "2 rounds of revisions",
-        ],
+        cta: "This is the one for me",
         highlight: true,
       },
       {
-        tag: "For: brands that want their store to run itself",
-        name: "Full Automation",
+        tag: "Full System",
+        name: "Brand Growth System",
+        promise: "In 30 days, you have a brand system that auto-acquires customers, auto-operates, and keeps growing",
         price: "¥18,000",
+        priceNote: "One-time, includes 3 months maintenance",
         timeline: "30-day delivery",
-        outcome: "What you get",
-        tagline: "In 30 days, your store runs with minimal human intervention",
         results: [
-          "Social content auto-publishes on schedule — saves 1 full-time ops hire",
-          "Order tracking, inventory alerts, holiday promos — all automated",
-          "Content dashboard your team learns in 3 minutes",
-          "AI cites your brand, search engines bring free traffic long-term",
+          "Brand matrix store (full multi-product coverage)",
+          "Social content auto-published to all platforms",
+          "AI content generation + scheduled publishing",
+          "Full analytics dashboard",
+          "Quarterly SEO report + keyword tracking",
+          "3 months dedicated maintenance support",
         ],
-        includes: [
-          "Everything in E-Commerce Store",
-          "n8n automation workflows (scheduled tasks / triggers)",
-          "Social media auto-publishing (Instagram/TikTok/Facebook)",
-          "Order tracking + inventory alert automation",
-          "Holiday marketing auto-triggers",
-          "Headless CMS (team can update content themselves)",
-          "Advanced database panel (users, reviews, traffic)",
-          "30-day post-launch technical support",
-          "Team training session",
-          "Documentation handover",
-        ],
+        cta: "I want the full system",
         highlight: false,
       },
     ],
-    matrixBadge: "Special Strategy",
-    matrixTitle: "From dropshipping to brand: the matrix store strategy",
-    matrixDesc: "If you've been running a dropshipping model and want to shift to brand-building and higher AOV — this strategy is designed for you.",
-    matrixPoints: [
-      "Build with a 'scene-based product matrix' — one brand, multiple product lines, each with its own landing page",
-      "Cover long-tail + short-tail keywords so Google and AI search engines find every product you sell",
-      "Brand fortress strategy: build a content moat that competitors can't easily replicate",
-      "Upgrade from 'selling products' to 'selling a brand' — AOV up 30–50%, platform dependency down",
-    ],
-    matrixCta: "Learn about matrix store strategy",
-    note: "All packages are fixed-price. No hidden fees. Work starts on payment. Delivered on time. Full refund if not satisfied.",
+    compareLabel: "Not sure which to pick?",
+    compareNote: "Send me a message about your situation and I'll recommend the right package.",
   },
   ja: {
-    eyebrow: "サービス",
-    title: "どんな結果が得られますか？",
-    subtitle: "すべてのプランはビジネス成果を中心に設計されています。技術機能リストではありません。",
-    recommended: "最も人気",
-    showMore: "含まれるすべての内容を見る",
-    showLess: "閉じる",
-    ctaLabel: "見積もりを取る",
-    tiers: [
+    eyebrow: "プラン",
+    title: "1つ選べば、7日後にブランドが公開される",
+    subtitle: "3つのビジネスステージに対応した3つのプラン。",
+    matrixTitle: "ブランドマトリックス戦略（全プランに追加可能）",
+    matrixDesc: "1つのウェブサイトではなく、ブランド要塞を構築。すべての商品、ユースケース、ターゲット層に独自のランディングページを設置し、完全なSEOマトリックスを形成。GoogleとAIが継続的に無料トラフィックをもたらす。",
+    matrixPoints: [
+      "ロングテール + ショートテールキーワード全網羅",
+      "シーンベースの商品ランディングページ",
+      "AI引用最適化（GEO）",
+      "ブランドコンテンツマトリックス",
+    ],
+    plans: [
       {
-        tag: "対象：ブランドを始めたばかりの方",
-        name: "ブランドサイト",
+        tag: "スターター",
+        name: "ブランド展示サイト",
+        promise: "7日以内に、顧客があなたを信頼するプロのウェブサイトが完成",
         price: "¥3,800",
+        priceNote: "一回払い、初年度ドメイン込み",
         timeline: "7日納品",
-        outcome: "得られる結果",
-        tagline: "7日後、顧客に信頼されるプロのブランドサイトが完成",
         results: [
-          "顧客がGoogle検索して、すぐにプロのブランドと認識",
-          "商品ストーリー、連絡先、ブランド価値観の発信拠点",
-          "一般的なShopifyテンプレートより30%高級感が出る",
-          "Googleにインデックスされ、SEOの基盤が整う",
+          "顧客が一目で正規ブランドと認識",
+          "Googleがあなたを見つけられる（基本SEO）",
+          "スマートフォンとパソコンで美しく表示",
+          "開発者不要でコンテンツを自分で編集",
+          "ローンチ後7日間の無料修正",
         ],
-        includes: [
-          "5ページのプロブランドサイト",
-          "モバイル完全対応デザイン",
-          "お問い合わせフォーム",
-          "Google Analyticsトラッキング",
-          "基本SEO設定",
-          "Vercelデプロイ（サーバー費用ゼロ）",
-          "カスタムドメイン接続",
-          "1回の修正",
-        ],
+        cta: "これにする",
         highlight: false,
       },
       {
-        tag: "対象：決済を始める準備ができたブランド",
-        name: "ECストア",
+        tag: "おすすめ",
+        name: "越境ECストア",
+        promise: "21日以内に、世界中の注文を受け取り自動運営できる独立サイトが完成",
         price: "¥8,800",
+        priceNote: "一回払い、初年度ドメイン+サーバー込み",
         timeline: "21日納品",
-        outcome: "得られる結果",
-        tagline: "21日後、グローバル決済と自動注文処理ができるストアが完成",
         results: [
-          "Amazonの15%手数料不要 — 利益は全部あなたのもの",
-          "Stripe/PayPal/Alipay — 世界中のバイヤーが支払い可能",
-          "注文自動確認、在庫自動更新 — 手動作業不要",
-          "多言語自動切替 — 米国、EU、日本のバイヤーがスムーズに購入",
+          "世界中のバイヤーが自国通貨で決済",
+          "注文自動確認、発送通知自動送信",
+          "季節プロモーション自動トリガー",
+          "Shopifyより年間¥5,000〜20,000節約",
+          "コードとデータを完全所有",
+          "操作トレーニング + マニュアル付き",
         ],
-        includes: [
-          "完全なECショッピングシステム",
-          "商品カタログ＋バリアント（色、サイズなど）",
-          "グローバル決済ゲートウェイ（Stripe/PayPal/Alipay）",
-          "自動注文確認メール",
-          "在庫追跡＋在庫切れアラート",
-          "割引コード＋季節プロモーショントリガー",
-          "顧客レビューシステム",
-          "SEO＋サイトマップ",
-          "分析ダッシュボード",
-          "2回の修正",
-        ],
+        cta: "これが一番合っている",
         highlight: true,
       },
       {
-        tag: "対象：ストアを自動運営したいブランド",
-        name: "フル自動化",
+        tag: "フルシステム",
+        name: "ブランド成長システム",
+        promise: "30日以内に、自動集客・自動運営・継続成長するブランド体系が完成",
         price: "¥18,000",
+        priceNote: "一回払い、3ヶ月メンテナンス込み",
         timeline: "30日納品",
-        outcome: "得られる結果",
-        tagline: "30日後、最小限の人手でストアが自動運営される",
         results: [
-          "SNSコンテンツが自動スケジュール投稿 — 運用担当1名分を削減",
-          "注文追跡、在庫アラート、季節プロモーションがすべて自動化",
-          "コンテンツダッシュボードをチームが3分で習得",
-          "AIがブランドを引用、検索エンジンが長期的に無料流入をもたらす",
+          "ブランドマトリックス建設（複数商品ライン全網羅）",
+          "SNSコンテンツを全プラットフォームに自動投稿",
+          "AIコンテンツ生成 + 定時投稿",
+          "完全分析ダッシュボード",
+          "四半期SEOレポート + キーワード追跡",
+          "3ヶ月専属メンテナンスサポート",
         ],
-        includes: [
-          "ECストアのすべての機能を含む",
-          "n8n自動化ワークフロー（スケジュールタスク/トリガー）",
-          "SNS自動投稿（Instagram/TikTok/Facebook）",
-          "注文追跡＋在庫アラート自動化",
-          "季節マーケティング自動トリガー",
-          "ヘッドレスCMS（チームが自分でコンテンツ更新可能）",
-          "高度なデータベースパネル（ユーザー、レビュー、トラフィック）",
-          "ローンチ後30日技術サポート",
-          "チームトレーニング",
-          "ドキュメント引き渡し",
-        ],
+        cta: "フルシステムにする",
         highlight: false,
       },
     ],
-    matrixBadge: "特別戦略",
-    matrixTitle: "ドロップシッピングからブランドへ：マトリックスストア戦略",
-    matrixDesc: "ドロップシッピングモデルからブランド構築・高AOVへの転換を目指す方向けに設計された戦略です。",
-    matrixPoints: [
-      "「シーン別商品マトリックス」で構築 — 1ブランド、複数商品ライン、各々に独立ランディングページ",
-      "ロングテール＋ショートテールキーワードをカバー — GoogleとAI検索エンジンが全商品を発見",
-      "ブランド要塞戦略：競合が簡単に模倣できないコンテンツの堀を構築",
-      "「商品を売る」から「ブランドを売る」へ — AOV30〜50%向上、プラットフォーム依存度低下",
-    ],
-    matrixCta: "マトリックスストア戦略を詳しく見る",
-    note: "すべてのプランは固定料金です。隠れた費用はありません。支払い後に作業開始、期日通り納品、不満足の場合は全額返金。",
+    compareLabel: "どれを選ぶか迷っていますか？",
+    compareNote: "状況を教えてください。最適なプランをお勧めします。",
   },
 };
 
 export default function ServicesSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [expandedMatrix, setExpandedMatrix] = useState(false);
 
   return (
     <section id="services" style={{ background: "#FAFAF8", padding: "120px 0" }}>
@@ -354,148 +256,207 @@ export default function ServicesSection() {
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
             {c.eyebrow}
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 16px", lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#777", maxWidth: 480, lineHeight: 1.7 }}>
-            {c.subtitle}
-          </p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#999" }}>{c.subtitle}</p>
         </motion.div>
 
-        {/* Tier cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, marginBottom: 80 }}>
-          {c.tiers.map((tier, i) => (
+        {/* Pricing cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, marginBottom: 48 }}>
+          {c.plans.map((plan, i) => (
             <motion.div key={i}
-              initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55, delay: i * 0.1 }}
-              style={{ background: tier.highlight ? "#1A1A1A" : "#FFFFFF", border: tier.highlight ? "1px solid #8B6914" : "1px solid #E8E4DC", padding: "48px 36px", position: "relative", display: "flex", flexDirection: "column" }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              whileHover={{ y: -4 }}
+              style={{
+                background: plan.highlight ? "#1A1A1A" : "#FFFFFF",
+                border: plan.highlight ? "2px solid #8B6914" : "2px solid transparent",
+                padding: "40px 36px 36px",
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
+              }}
             >
-              {tier.highlight && (
-                <div style={{ position: "absolute", top: -1, left: "50%", transform: "translateX(-50%)", background: "#8B6914", padding: "4px 16px", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FAFAF8", whiteSpace: "nowrap" }}>
-                  {c.recommended}
-                </div>
-              )}
-
               {/* Tag */}
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.1em", color: tier.highlight ? "rgba(255,255,255,0.3)" : "#AAA", marginBottom: 16, marginTop: tier.highlight ? 12 : 0 }}>
-                {tier.tag}
+              <div style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 8,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: plan.highlight ? "#8B6914" : "#BBB",
+                marginBottom: 16,
+              }}>
+                {plan.tag}
               </div>
 
-              {/* Name */}
-              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 600, color: tier.highlight ? "#FAFAF8" : "#1A1A1A", marginBottom: 16, lineHeight: 1.2 }}>
-                {tier.name}
+              {/* Plan name */}
+              <div style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: 22,
+                fontWeight: 600,
+                color: plan.highlight ? "#FAFAF8" : "#1A1A1A",
+                marginBottom: 12,
+                lineHeight: 1.2,
+              }}>
+                {plan.name}
               </div>
 
-              {/* Price + timeline */}
-              <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 24 }}>
-                <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 48, fontWeight: 700, lineHeight: 1, color: tier.highlight ? "#D4C49A" : "#1A1A1A" }}>
-                  {tier.price}
+              {/* Promise — the key value statement */}
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 12,
+                color: plan.highlight ? "rgba(255,255,255,0.45)" : "#888",
+                lineHeight: 1.65,
+                marginBottom: 28,
+                paddingBottom: 28,
+                borderBottom: plan.highlight ? "1px solid rgba(255,255,255,0.08)" : "1px solid #E8E4DC",
+              }}>
+                {plan.promise}
+              </div>
+
+              {/* Price */}
+              <div style={{ marginBottom: 8 }}>
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: 44,
+                  fontWeight: 700,
+                  color: plan.highlight ? "#D4C49A" : "#1A1A1A",
+                  lineHeight: 1,
+                }}>
+                  {plan.price}
                 </span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.1em", color: tier.highlight ? "rgba(255,255,255,0.35)" : "#AAA" }}>
-                  {tier.timeline}
-                </span>
+              </div>
+              <div style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 8,
+                color: plan.highlight ? "rgba(255,255,255,0.25)" : "#BBB",
+                letterSpacing: "0.1em",
+                marginBottom: 4,
+              }}>
+                {plan.priceNote}
+              </div>
+              <div style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 9,
+                color: plan.highlight ? "#8B6914" : "#8B6914",
+                letterSpacing: "0.1em",
+                marginBottom: 28,
+              }}>
+                {plan.timeline}
               </div>
 
-              {/* Divider */}
-              <div style={{ height: 1, background: tier.highlight ? "rgba(255,255,255,0.08)" : "#E8E4DC", marginBottom: 24 }} />
-
-              {/* Outcome label */}
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#8B6914", marginBottom: 12 }}>
-                {tier.outcome}
-              </div>
-
-              {/* Tagline */}
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: tier.highlight ? "rgba(255,255,255,0.65)" : "#555", lineHeight: 1.65, marginBottom: 20, fontStyle: "italic" }}>
-                {tier.tagline}
-              </p>
-
-              {/* Results */}
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", flex: 1 }}>
-                {tier.results.map((r, j) => (
-                  <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: tier.highlight ? "rgba(255,255,255,0.75)" : "#444", marginBottom: 10, lineHeight: 1.5 }}>
-                    <span style={{ color: "#8B6914", flexShrink: 0, marginTop: 1, fontSize: 14 }}>✓</span>
-                    {r}
-                  </li>
+              {/* Results list */}
+              <div style={{ flex: 1, marginBottom: 32 }}>
+                {plan.results.map((r, ri) => (
+                  <div key={ri} style={{ display: "flex", gap: 10, marginBottom: 10, alignItems: "flex-start" }}>
+                    <span style={{ color: "#8B6914", fontSize: 12, flexShrink: 0, marginTop: 1 }}>✓</span>
+                    <span style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 12,
+                      color: plan.highlight ? "rgba(255,255,255,0.6)" : "#555",
+                      lineHeight: 1.5,
+                    }}>
+                      {r}
+                    </span>
+                  </div>
                 ))}
-              </ul>
-
-              {/* Expandable includes */}
-              <button onClick={() => setExpanded(expanded === i ? null : i)}
-                style={{ background: "none", border: "none", padding: "0 0 16px", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: tier.highlight ? "rgba(255,255,255,0.35)" : "#AAA", cursor: "pointer", textAlign: "left", display: "flex", alignItems: "center", gap: 6 }}
-              >
-                <span>{expanded === i ? c.showLess : c.showMore}</span>
-                <motion.span animate={{ rotate: expanded === i ? 180 : 0 }} transition={{ duration: 0.25 }} style={{ display: "inline-block" }}>v</motion.span>
-              </button>
-
-              <AnimatePresence>
-                {expanded === i && (
-                  <motion.ul initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}
-                    style={{ listStyle: "none", padding: 0, margin: "0 0 24px", overflow: "hidden" }}
-                  >
-                    {tier.includes.map((f, j) => (
-                      <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: tier.highlight ? "rgba(255,255,255,0.45)" : "#888", marginBottom: 8, lineHeight: 1.5 }}>
-                        <span style={{ color: "#8B6914", flexShrink: 0, marginTop: 1 }}>+</span>
-                        {f}
-                      </li>
-                    ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
+              </div>
 
               {/* CTA */}
-              <motion.a href="#contact" whileHover={{ y: -2 }}
-                style={{ display: "block", textAlign: "center", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", padding: "14px 24px", textDecoration: "none", background: tier.highlight ? "#8B6914" : "transparent", color: tier.highlight ? "#FAFAF8" : "#1A1A1A", border: tier.highlight ? "1px solid #8B6914" : "1px solid #D4C49A", transition: "all 0.2s", marginTop: "auto" }}
-                onMouseEnter={e => { if (!tier.highlight) { e.currentTarget.style.background = "#1A1A1A"; e.currentTarget.style.color = "#FAFAF8"; e.currentTarget.style.borderColor = "#1A1A1A"; } }}
-                onMouseLeave={e => { if (!tier.highlight) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A1A"; e.currentTarget.style.borderColor = "#D4C49A"; } }}
+              <motion.a href="#contact" whileHover={{ x: 2 }}
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 10,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  padding: "14px 24px",
+                  background: plan.highlight ? "#8B6914" : "transparent",
+                  border: plan.highlight ? "none" : "1px solid #1A1A1A",
+                  color: plan.highlight ? "#FAFAF8" : "#1A1A1A",
+                  textDecoration: "none",
+                  display: "block",
+                  textAlign: "center",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={e => {
+                  if (!plan.highlight) { e.currentTarget.style.background = "#1A1A1A"; e.currentTarget.style.color = "#FAFAF8"; }
+                }}
+                onMouseLeave={e => {
+                  if (!plan.highlight) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A1A"; }
+                }}
               >
-                {c.ctaLabel} →
+                {plan.cta} →
               </motion.a>
             </motion.div>
           ))}
         </div>
 
-        {/* Brand Matrix Strategy callout */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          style={{ background: "#1A1A1A", padding: "56px 64px", position: "relative", overflow: "hidden" }}
-        >
-          {/* Background accent */}
-          <div style={{ position: "absolute", top: 0, right: 0, width: 300, height: 300, background: "radial-gradient(circle, rgba(139,105,20,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start", position: "relative" }}>
+        {/* Brand Matrix callout — expandable */}
+        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <button
+            onClick={() => setExpandedMatrix(!expandedMatrix)}
+            style={{
+              width: "100%",
+              background: "#1A1A1A",
+              border: "none",
+              padding: "24px 36px",
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              textAlign: "left",
+            }}
+          >
             <div>
-              <div style={{ display: "inline-block", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#8B6914", border: "1px solid rgba(139,105,20,0.4)", padding: "4px 12px", marginBottom: 24 }}>
-                {c.matrixBadge}
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", color: "#8B6914", marginBottom: 6 }}>
+                {locale === "zh" ? "进阶策略" : locale === "ja" ? "上級戦略" : "ADVANCED STRATEGY"}
               </div>
-              <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 3vw, 40px)", fontWeight: 600, color: "#FAFAF8", margin: "0 0 20px", lineHeight: 1.2 }}>
+              <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 20, fontWeight: 600, color: "#FAFAF8" }}>
                 {c.matrixTitle}
-              </h3>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: 1.75, marginBottom: 32 }}>
-                {c.matrixDesc}
-              </p>
-              <motion.a href="#contact" whileHover={{ y: -2 }}
-                style={{ display: "inline-block", fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", padding: "14px 28px", textDecoration: "none", background: "transparent", color: "#D4C49A", border: "1px solid rgba(139,105,20,0.5)", transition: "all 0.2s" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#8B6914"; e.currentTarget.style.borderColor = "#8B6914"; e.currentTarget.style.color = "#FAFAF8"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(139,105,20,0.5)"; e.currentTarget.style.color = "#D4C49A"; }}
-              >
-                {c.matrixCta} →
-              </motion.a>
+              </div>
             </div>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {c.matrixPoints.map((pt, i) => (
-                <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 24, paddingBottom: 24, borderBottom: i < c.matrixPoints.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#8B6914", flexShrink: 0, marginTop: 2 }}>0{i + 1}</span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.65 }}>{pt}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <motion.span animate={{ rotate: expandedMatrix ? 45 : 0 }} transition={{ duration: 0.2 }}
+              style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, color: "#8B6914", flexShrink: 0 }}
+            >
+              +
+            </motion.span>
+          </button>
+
+          <AnimatePresence>
+            {expandedMatrix && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                style={{ overflow: "hidden", background: "#111" }}
+              >
+                <div style={{ padding: "36px 36px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, margin: 0 }}>
+                    {c.matrixDesc}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {c.matrixPoints.map((pt, i) => (
+                      <div key={i} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        <span style={{ color: "#8B6914", fontSize: 12 }}>→</span>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.55)" }}>{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
-        {/* Note */}
-        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#AAA", textAlign: "center", marginTop: 32, letterSpacing: "0.05em", lineHeight: 1.7 }}
-        >
-          {c.note}
-        </motion.p>
+        {/* Compare note */}
+        <div style={{ marginTop: 24, textAlign: "center" }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999" }}>{c.compareLabel} </span>
+          <a href="#contact" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#8B6914", textDecoration: "underline" }}>{c.compareNote}</a>
+        </div>
       </div>
     </section>
   );

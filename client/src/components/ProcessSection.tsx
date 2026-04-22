@@ -1,10 +1,11 @@
-/* ProcessSection — "You Do vs I Do" v2
-   Design: Split layout, dark left (what you do = minimal), light right (what I do = extensive)
-   Strategy: Boss sees how little they need to do, how much I handle
-   Key message: "Your job: answer 3 questions. My job: everything else."
-   NO tech terms. Time-based framing throughout. */
+/* ProcessSection v3 — Hover-reveal interaction
+   Design: Left = step list (minimal), Right = detail panel (appears on hover)
+   User sees: step name + milestone tag → hover → see "you do" + "I do" detail
+   Key: First impression is clean timeline, detail appears on demand
+   Mobile: tap to reveal */
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 import type { Locale } from "@/i18n/translations";
 
@@ -12,159 +13,208 @@ const COPY: Record<Locale, {
   eyebrow: string;
   title: string;
   subtitle: string;
+  defaultHint: string;
   youLabel: string;
   meLabel: string;
-  youSummary: string;
-  meSummary: string;
   steps: {
+    id: number;
     day: string;
+    title: string;
+    milestone?: string;
     youDo: string;
     iDo: string;
-    milestone?: string;
+    outcomes: string[];
   }[];
   guarantee: string;
-  guaranteeNote: string;
   ctaLabel: string;
 }> = {
   zh: {
     eyebrow: "合作方式",
     title: "你只需要做 3 件事",
-    subtitle: "其余的全部我来。",
+    subtitle: "点击每个步骤，查看你需要做什么，以及我来做什么",
+    defaultHint: "← 点击左侧步骤查看详情",
     youLabel: "你需要做的",
     meLabel: "我来做的",
-    youSummary: "你的总投入时间：约 3–5 小时",
-    meSummary: "我的工作时间：7–30 天",
     steps: [
       {
+        id: 0,
         day: "第 1 天",
-        youDo: "告诉我你的品牌名、目标客户、产品类型，发给我你的 Logo 或参考图",
-        iDo: "整理需求，制定网站架构，准备设计方案，搭建开发环境",
+        title: "快速确认需求",
         milestone: "需求确认",
+        youDo: "提出你的想法：品牌名、目标客户、产品类型、参考网站（有的话）。发给我你的 Logo 或参考图。大概 30 分钟的沟通。",
+        iDo: "专业需求确认路径：整理品牌定位、竞品分析、目标用户画像、网站架构规划、技术方案选型。给你一份完整的项目计划书。",
+        outcomes: ["需求文档", "网站架构图", "项目时间表"],
       },
       {
+        id: 1,
         day: "第 2–5 天",
-        youDo: "看我发给你的设计稿，告诉我「这里改一下」或「可以」",
-        iDo: "完成品牌视觉设计，搭建所有页面，写 SEO 内容，配置支付和域名",
+        title: "设计与开发",
+        youDo: "看我发给你的设计稿，告诉我「这里改一下」或「可以」。你不需要懂设计，只需要告诉我你喜不喜欢。",
+        iDo: "完成品牌视觉系统（颜色、字体、Logo 应用）、所有页面设计稿、前端开发、SEO 内容写作、支付网关配置、域名部署。",
+        outcomes: ["设计稿确认", "开发进度更新", "演示链接"],
       },
       {
+        id: 2,
         day: "第 6 天",
-        youDo: "在你的手机和电脑上点一遍，告诉我有没有问题",
-        iDo: "根据你的反馈修改，做性能优化，准备上线",
+        title: "验收与调整",
+        youDo: "在你的手机和电脑上点一遍。告诉我哪里不对，或者「没问题」。",
+        iDo: "根据你的反馈修改。性能优化（加载速度测试）。跨浏览器兼容性检查。移动端适配确认。",
+        outcomes: ["修改完成", "性能报告", "上线前检查清单"],
       },
       {
+        id: 3,
         day: "第 7 天",
-        youDo: "确认上线",
-        iDo: "正式部署，绑定你的域名，提交 Google 收录，发给你操作手册",
+        title: "品牌站正式上线",
         milestone: "品牌站上线",
+        youDo: "确认上线。",
+        iDo: "正式部署到生产环境。绑定你的域名，全球可访问。提交 Google 收录（通常 1–3 天内被索引）。发给你操作手册和后台登录信息。",
+        outcomes: ["域名绑定完成", "Google 收录提交", "全球可访问", "操作手册交付"],
       },
       {
-        day: "第 8–21 天\n（电商方案）",
-        youDo: "上传你的产品图片和描述，设置你的价格",
-        iDo: "配置购物车、支付网关、订单系统、自动化流程、多语言、数据面板",
+        id: 4,
+        day: "第 8–21 天",
+        title: "电商系统上线",
         milestone: "电商站上线",
+        youDo: "上传你的产品图片和描述。设置你的价格和库存。",
+        iDo: "配置购物车和结账流程。接入 Stripe/PayPal 支付网关。多币种自动转换。订单管理系统。自动化营销流程（弃购提醒、节假日促销）。数据分析面板。",
+        outcomes: ["支付系统上线", "多货币支持", "订单自动化", "数据面板"],
       },
       {
+        id: 5,
         day: "上线后",
-        youDo: "正常做生意，有问题随时联系我",
-        iDo: "月度维护，技术支持，SEO 持续优化，有问题 24 小时内响应",
+        title: "持续维护与增长",
+        youDo: "正常做生意。有问题随时发消息。",
+        iDo: "月度技术维护。SEO 持续优化（关键词排名追踪）。小改动免费处理。有问题 24 小时内响应。每季度给你一份网站数据报告。",
+        outcomes: ["24h 响应", "月度维护", "SEO 追踪", "季度报告"],
       },
     ],
-    guarantee: "固定报价，按时交付，不满意全额退款",
-    guaranteeNote: "付款后开始工作。每个阶段完成后给你看进度。不满意可以随时提出修改，超出约定范围的大改动会提前告知。",
+    guarantee: "固定报价 · 按时交付 · 不满意全额退款",
     ctaLabel: "开始合作",
   },
   en: {
     eyebrow: "HOW WE WORK",
     title: "You only need to do 3 things",
-    subtitle: "I handle everything else.",
+    subtitle: "Click each step to see what you do — and what I do",
+    defaultHint: "← Click a step on the left to see details",
     youLabel: "What you do",
     meLabel: "What I do",
-    youSummary: "Your total time investment: ~3–5 hours",
-    meSummary: "My working time: 7–30 days",
     steps: [
       {
+        id: 0,
         day: "Day 1",
-        youDo: "Tell me your brand name, target customers, and product type. Send me your logo or reference images.",
-        iDo: "Organize requirements, plan site architecture, prepare design concepts, set up development environment",
+        title: "Rapid requirements",
         milestone: "Requirements confirmed",
+        youDo: "Share your idea: brand name, target customers, product type, reference sites (if any). Send me your logo or reference images. About 30 minutes of conversation.",
+        iDo: "Professional requirements process: brand positioning, competitive analysis, target user profiles, site architecture planning, tech stack selection. I give you a complete project plan.",
+        outcomes: ["Requirements doc", "Site architecture", "Project timeline"],
       },
       {
+        id: 1,
         day: "Days 2–5",
-        youDo: "Review the design mockup I send you. Tell me 'change this' or 'looks good.'",
-        iDo: "Complete brand visual design, build all pages, write SEO content, configure payments and domain",
+        title: "Design & development",
+        youDo: "Review the design mockup I send you. Tell me 'change this' or 'looks good.' You don't need to know design — just tell me if you like it.",
+        iDo: "Complete brand visual system (colors, fonts, logo application), all page designs, frontend development, SEO content writing, payment gateway configuration, domain deployment.",
+        outcomes: ["Design approved", "Dev progress updates", "Demo link"],
       },
       {
+        id: 2,
         day: "Day 6",
-        youDo: "Click through the site on your phone and computer. Tell me if anything looks off.",
-        iDo: "Apply your feedback, performance optimization, prepare for launch",
+        title: "Review & revisions",
+        youDo: "Click through the site on your phone and computer. Tell me what's off — or 'looks good.'",
+        iDo: "Apply your feedback. Performance optimization (load speed testing). Cross-browser compatibility check. Mobile responsiveness confirmation.",
+        outcomes: ["Revisions done", "Performance report", "Pre-launch checklist"],
       },
       {
+        id: 3,
         day: "Day 7",
-        youDo: "Confirm launch",
-        iDo: "Deploy to production, connect your domain, submit to Google indexing, send you the operations manual",
+        title: "Brand site goes live",
         milestone: "Brand site live",
+        youDo: "Confirm launch.",
+        iDo: "Deploy to production. Connect your domain — globally accessible. Submit to Google indexing (typically indexed in 1–3 days). Send you the operations manual and dashboard login.",
+        outcomes: ["Domain connected", "Google indexing submitted", "Globally accessible", "Manual delivered"],
       },
       {
-        day: "Days 8–21\n(E-commerce)",
-        youDo: "Upload your product photos and descriptions. Set your prices.",
-        iDo: "Configure shopping cart, payment gateways, order system, automation workflows, multi-language, analytics dashboard",
-        milestone: "E-commerce store live",
+        id: 4,
+        day: "Days 8–21",
+        title: "E-commerce system live",
+        milestone: "E-commerce live",
+        youDo: "Upload your product photos and descriptions. Set your prices and inventory.",
+        iDo: "Configure shopping cart and checkout. Integrate Stripe/PayPal payment gateways. Multi-currency auto-conversion. Order management system. Automated marketing flows (abandoned cart, holiday promotions). Analytics dashboard.",
+        outcomes: ["Payment system live", "Multi-currency", "Order automation", "Analytics dashboard"],
       },
       {
+        id: 5,
         day: "After launch",
-        youDo: "Run your business normally. Contact me when something comes up.",
-        iDo: "Monthly maintenance, technical support, ongoing SEO optimization, 24-hour response time",
+        title: "Ongoing maintenance",
+        youDo: "Run your business. Message me when something comes up.",
+        iDo: "Monthly technical maintenance. Ongoing SEO optimization (keyword ranking tracking). Minor changes handled for free. 24-hour response time. Quarterly site analytics report.",
+        outcomes: ["24h response", "Monthly maintenance", "SEO tracking", "Quarterly report"],
       },
     ],
-    guarantee: "Fixed price. On-time delivery. Full refund if not satisfied.",
-    guaranteeNote: "Work starts on payment. I show you progress after each phase. Revisions are welcome — major scope changes will be discussed in advance.",
+    guarantee: "Fixed price · On-time delivery · Full refund if not satisfied",
     ctaLabel: "Start working together",
   },
   ja: {
     eyebrow: "協業方法",
     title: "あなたがすることは3つだけ",
-    subtitle: "残りはすべて私が担当します。",
+    subtitle: "各ステップをクリックして、あなたと私がすることを確認",
+    defaultHint: "← 左のステップをクリックして詳細を確認",
     youLabel: "あなたがすること",
     meLabel: "私がすること",
-    youSummary: "あなたの総投資時間：約3〜5時間",
-    meSummary: "私の作業時間：7〜30日",
     steps: [
       {
+        id: 0,
         day: "1日目",
-        youDo: "ブランド名、ターゲット顧客、商品タイプを教えてください。ロゴや参考画像を送ってください。",
-        iDo: "要件整理、サイト構造計画、デザインコンセプト準備、開発環境構築",
+        title: "迅速な要件確認",
         milestone: "要件確認",
+        youDo: "アイデアを共有：ブランド名、ターゲット顧客、商品タイプ、参考サイト（あれば）。ロゴや参考画像を送ってください。約30分の会話。",
+        iDo: "プロの要件確認プロセス：ブランドポジショニング、競合分析、ターゲットユーザープロファイル、サイト構造計画、技術スタック選定。完全なプロジェクト計画書を提供。",
+        outcomes: ["要件書", "サイト構造", "プロジェクトスケジュール"],
       },
       {
+        id: 1,
         day: "2〜5日目",
-        youDo: "送ったデザインモックアップを確認。「ここを変えて」または「いいね」と教えてください。",
-        iDo: "ブランドビジュアルデザイン完成、全ページ構築、SEOコンテンツ執筆、決済とドメイン設定",
+        title: "デザイン＆開発",
+        youDo: "送ったデザインモックアップを確認。「ここを変えて」または「いいね」と教えてください。デザインを知る必要はありません。",
+        iDo: "ブランドビジュアルシステム（色、フォント、ロゴ適用）、全ページデザイン、フロントエンド開発、SEOコンテンツ執筆、決済ゲートウェイ設定、ドメインデプロイ。",
+        outcomes: ["デザイン承認", "開発進捗更新", "デモリンク"],
       },
       {
+        id: 2,
         day: "6日目",
+        title: "確認＆修正",
         youDo: "スマートフォンとパソコンでサイトをクリックして確認。問題があれば教えてください。",
-        iDo: "フィードバック反映、パフォーマンス最適化、ローンチ準備",
+        iDo: "フィードバック反映。パフォーマンス最適化（読み込み速度テスト）。クロスブラウザ互換性チェック。モバイル対応確認。",
+        outcomes: ["修正完了", "パフォーマンスレポート", "ローンチ前チェックリスト"],
       },
       {
+        id: 3,
         day: "7日目",
-        youDo: "ローンチ確認",
-        iDo: "本番デプロイ、ドメイン接続、Googleインデックス申請、操作マニュアル送付",
+        title: "ブランドサイト公開",
         milestone: "ブランドサイト公開",
+        youDo: "ローンチを確認。",
+        iDo: "本番環境にデプロイ。ドメイン接続—世界中からアクセス可能。Googleインデックス申請（通常1〜3日以内にインデックス）。操作マニュアルとダッシュボードログイン情報を送付。",
+        outcomes: ["ドメイン接続完了", "Googleインデックス申請", "世界中からアクセス可能", "マニュアル納品"],
       },
       {
-        day: "8〜21日目\n（EC）",
-        youDo: "商品写真と説明をアップロード。価格を設定。",
-        iDo: "ショッピングカート、決済ゲートウェイ、注文システム、自動化ワークフロー、多言語、分析ダッシュボード設定",
-        milestone: "ECストア公開",
+        id: 4,
+        day: "8〜21日目",
+        title: "ECシステム公開",
+        milestone: "EC公開",
+        youDo: "商品写真と説明をアップロード。価格と在庫を設定。",
+        iDo: "ショッピングカートとチェックアウト設定。Stripe/PayPal決済ゲートウェイ統合。多通貨自動変換。注文管理システム。自動化マーケティングフロー（カート放棄、季節プロモーション）。分析ダッシュボード。",
+        outcomes: ["決済システム公開", "多通貨対応", "注文自動化", "分析ダッシュボード"],
       },
       {
+        id: 5,
         day: "ローンチ後",
-        youDo: "通常通りビジネスを運営。何かあればいつでも連絡。",
-        iDo: "月次メンテナンス、技術サポート、継続的SEO最適化、24時間以内の返信",
+        title: "継続メンテナンス",
+        youDo: "通常通りビジネスを運営。何かあればメッセージ。",
+        iDo: "月次技術メンテナンス。継続的SEO最適化（キーワードランキング追跡）。軽微な変更は無料対応。24時間以内の返信。四半期ごとのサイト分析レポート。",
+        outcomes: ["24h返信", "月次メンテナンス", "SEO追跡", "四半期レポート"],
       },
     ],
-    guarantee: "固定料金。期日通り納品。不満足の場合は全額返金。",
-    guaranteeNote: "支払い後に作業開始。各フェーズ完了後に進捗をお見せします。修正は歓迎。大きなスコープ変更は事前に相談します。",
+    guarantee: "固定料金 · 期日通り納品 · 不満足の場合は全額返金",
     ctaLabel: "協業を始める",
   },
 };
@@ -172,6 +222,9 @@ const COPY: Record<Locale, {
 export default function ProcessSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+
+  const active = activeStep !== null ? c.steps[activeStep] : null;
 
   return (
     <section id="process" style={{ background: "#FAFAF8", padding: "120px 0" }}>
@@ -185,87 +238,145 @@ export default function ProcessSection() {
           <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
-          <p style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 400, fontStyle: "italic", color: "#8B6914", margin: 0 }}>
-            {c.subtitle}
-          </p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999" }}>{c.subtitle}</p>
         </motion.div>
 
-        {/* Column headers */}
-        <div style={{ display: "grid", gridTemplateColumns: "140px 1fr 1fr", gap: 0, marginBottom: 2 }}>
-          <div />
-          <div style={{ background: "#1A1A1A", padding: "16px 32px", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
-            {c.youLabel}
-          </div>
-          <div style={{ background: "#8B6914", padding: "16px 32px", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.8)" }}>
-            {c.meLabel}
-          </div>
-        </div>
+        {/* Split layout: step list + detail panel */}
+        <div style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 2, minHeight: 480 }}>
 
-        {/* Steps */}
-        {c.steps.map((step, i) => (
-          <motion.div key={i}
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.45, delay: i * 0.06 }}
-            style={{ display: "grid", gridTemplateColumns: "140px 1fr 1fr", gap: 0, marginBottom: 2, position: "relative" }}
-          >
-            {/* Day label */}
-            <div style={{ background: "#F0EDE5", padding: "28px 20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start" }}>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#8B6914", letterSpacing: "0.1em", whiteSpace: "pre-line", lineHeight: 1.4 }}>
-                {step.day}
-              </div>
-              {step.milestone && (
-                <div style={{ marginTop: 8, fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.1em", color: "#FAFAF8", background: "#8B6914", padding: "3px 8px", whiteSpace: "nowrap" }}>
-                  {step.milestone}
-                </div>
+          {/* Left: step list */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {c.steps.map((step, i) => {
+              const isActive = activeStep === i;
+              return (
+                <motion.button key={i}
+                  initial={{ opacity: 0, x: -16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  onClick={() => setActiveStep(isActive ? null : i)}
+                  style={{
+                    background: isActive ? "#1A1A1A" : "#FFFFFF",
+                    border: "none",
+                    padding: "20px 24px",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "background 0.25s",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "#F0EDE5"; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "#FFFFFF"; }}
+                >
+                  <div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", color: isActive ? "#8B6914" : "#BBB", marginBottom: 4 }}>
+                      {step.day}
+                    </div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: isActive ? "#FAFAF8" : "#1A1A1A", transition: "color 0.25s" }}>
+                      {step.title}
+                    </div>
+                    {step.milestone && (
+                      <div style={{ marginTop: 6, display: "inline-block", fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.1em", color: isActive ? "#D4C49A" : "#FAFAF8", background: isActive ? "#8B6914" : "#1A1A1A", padding: "2px 8px" }}>
+                        {step.milestone}
+                      </div>
+                    )}
+                  </div>
+                  <motion.span animate={{ rotate: isActive ? 90 : 0 }} transition={{ duration: 0.2 }}
+                    style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: isActive ? "#8B6914" : "#CCC", flexShrink: 0 }}
+                  >
+                    →
+                  </motion.span>
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* Right: detail panel */}
+          <div style={{ background: "#FFFFFF", position: "relative", overflow: "hidden" }}>
+            <AnimatePresence mode="wait">
+              {active ? (
+                <motion.div key={active.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ padding: "40px 48px", height: "100%" }}
+                >
+                  {/* Day + Title */}
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", color: "#8B6914", marginBottom: 8 }}>
+                    {active.day}
+                  </div>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 32, fontWeight: 600, color: "#1A1A1A", margin: "0 0 32px", lineHeight: 1.2 }}>
+                    {active.title}
+                  </h3>
+
+                  {/* Two columns: you do / I do */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
+                    <div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#BBB", marginBottom: 12 }}>
+                        {c.youLabel}
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#555", lineHeight: 1.75, margin: 0 }}>
+                        {active.youDo}
+                      </p>
+                    </div>
+                    <div style={{ borderLeft: "1px solid #E8E4DC", paddingLeft: 24 }}>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#8B6914", marginBottom: 12 }}>
+                        {c.meLabel}
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#333", lineHeight: 1.75, margin: 0 }}>
+                        {active.iDo}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Outcomes */}
+                  <div style={{ borderTop: "1px solid #E8E4DC", paddingTop: 20 }}>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", color: "#BBB", marginBottom: 12 }}>
+                      {locale === "zh" ? "交付成果" : locale === "ja" ? "成果物" : "DELIVERABLES"}
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                      {active.outcomes.map((o, i) => (
+                        <span key={i} style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.08em", color: "#8B6914", background: "#F5F2EC", padding: "4px 12px" }}>
+                          {o}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div key="hint"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  style={{ padding: "40px 48px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 64, color: "#F0EDE5", marginBottom: 16 }}>→</div>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#CCC", margin: 0 }}>
+                      {c.defaultHint}
+                    </p>
+                  </div>
+                </motion.div>
               )}
-            </div>
-
-            {/* You do */}
-            <div style={{ background: "#FFFFFF", padding: "28px 32px", borderRight: "1px solid #E8E4DC" }}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#555", margin: 0, lineHeight: 1.7 }}>
-                {step.youDo}
-              </p>
-            </div>
-
-            {/* I do */}
-            <div style={{ background: "#FAFAF8", padding: "28px 32px" }}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#333", margin: 0, lineHeight: 1.7 }}>
-                {step.iDo}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-
-        {/* Summary row */}
-        <div style={{ display: "grid", gridTemplateColumns: "140px 1fr 1fr", gap: 0, marginBottom: 56 }}>
-          <div style={{ background: "#1A1A1A" }} />
-          <div style={{ background: "#1A1A1A", padding: "20px 32px" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em" }}>{c.youSummary}</div>
-          </div>
-          <div style={{ background: "#8B6914", padding: "20px 32px" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.7)", letterSpacing: "0.1em" }}>{c.meSummary}</div>
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Guarantee */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}
+        {/* Guarantee bar */}
+        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ marginTop: 2, background: "#1A1A1A", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <div style={{ background: "#1A1A1A", padding: "48px 48px" }}>
-            <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(22px, 2.5vw, 34px)", fontWeight: 600, color: "#D4C49A", lineHeight: 1.3, marginBottom: 20 }}>
-              {c.guarantee}
-            </div>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.75, margin: 0 }}>
-              {c.guaranteeNote}
-            </p>
+          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#D4C49A" }}>
+            {c.guarantee}
           </div>
-          <div style={{ background: "#8B6914", padding: "48px 48px", display: "flex", alignItems: "center" }}>
-            <motion.a href="#contact" whileHover={{ x: 4 }}
-              style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FAFAF8", textDecoration: "none", display: "flex", alignItems: "center", gap: 12 }}
-            >
-              {c.ctaLabel}
-              <span style={{ fontSize: 18 }}>→</span>
-            </motion.a>
-          </div>
+          <motion.a href="#contact" whileHover={{ x: 4 }}
+            style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#FAFAF8", textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}
+          >
+            {c.ctaLabel} →
+          </motion.a>
         </motion.div>
       </div>
     </section>

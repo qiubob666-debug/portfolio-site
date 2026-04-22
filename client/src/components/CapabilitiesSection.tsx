@@ -1,11 +1,11 @@
-/* CapabilitiesSection — "6 Problems Your Store Solves" v2
-   Design: Alternating light/dark cards, icon-free (text-driven), gold accent
-   Strategy: Each card = 1 boss pain point → 1 concrete solution
-   NO tech terms. Every sentence answers: "What does this mean for my business?"
-   Topics: SEO/GEO, Payment, Automation, Brand Fortress, Speed/Conversion, Control */
+/* CapabilitiesSection v3 — Progressive Disclosure Cards
+   Design: 6 cards in 3×2 grid, each card shows ONLY the value headline first
+   Hover: card expands to show detail + data proof
+   Key: User sees minimal info first, gets more when curious
+   NO tech terms. Pure business value language. */
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 import type { Locale } from "@/i18n/translations";
 
@@ -13,158 +13,177 @@ const COPY: Record<Locale, {
   eyebrow: string;
   title: string;
   subtitle: string;
-  problems: {
+  cards: {
     number: string;
-    problem: string;
-    solution: string;
+    headline: string;
+    subline: string;
     detail: string;
     proof: string;
+    proofLabel: string;
   }[];
 }> = {
   zh: {
-    eyebrow: "你的独立站能解决什么",
-    title: "老板最头疼的 6 件事，独立站全能搞定",
-    subtitle: "不是技术功能，是你的业务问题。",
-    problems: [
+    eyebrow: "你能得到什么",
+    title: "6 个结果，不是 6 个功能",
+    subtitle: "悬停查看每个结果如何实现",
+    cards: [
       {
         number: "01",
-        problem: "没有流量，靠广告烧钱",
-        solution: "让 Google 和 AI 主动给你带客户",
-        detail: "品牌矩阵建站策略：每个产品、每个使用场景都有独立落地页，覆盖长尾词和短尾词。用户搜索「防水蓝牙音箱户外」，第一个出现的是你。ChatGPT、Perplexity 推荐同类产品时，引用的是你的品牌。这是持续免费的流量，不是每月烧掉的广告费。",
-        proof: "SEO 流量 vs 广告流量：SEO 每年成本递减，广告每年成本递增",
+        headline: "客户主动找上门",
+        subline: "不靠广告，靠搜索排名",
+        detail: "品牌矩阵建站：每个产品、每个使用场景都有独立落地页。用户搜索相关词，第一个看到的是你。ChatGPT 推荐同类产品时，引用的是你的品牌。这是持续免费的流量复利。",
+        proof: "SEO 流量获客成本比广告低 87%",
+        proofLabel: "HubSpot 2024",
       },
       {
         number: "02",
-        problem: "外国客户不知道怎么付款",
-        solution: "全球买家一键结账，你的账户秒到账",
-        detail: "内置 Stripe、PayPal、Apple Pay、支付宝国际版，自动识别买家所在地区，显示对应货币和支付方式。美国客户看到美元，日本客户看到日元，欧洲客户看到欧元。自定义结账流程，减少购物车放弃率。支持折扣码、分期付款、订阅制收款。",
-        proof: "多货币结账可提升转化率 12–18%（Stripe 官方数据）",
+        headline: "卖出更高的价格",
+        subline: "同款产品，品牌站溢价 30–50%",
+        detail: "专业品牌网站是最强的定价工具。品牌故事、场景化展示、用户评论——让客户觉得「这个品牌值这个价」。铺货卖 ¥99，品牌卖 ¥149，同样的产品，不同的利润率。",
+        proof: "有品牌官网的卖家平均客单价高 35%",
+        proofLabel: "Shopify 商家数据",
       },
       {
         number: "03",
-        problem: "运营太累，什么都要人盯着",
-        solution: "3 个岗位的工作，系统自动完成",
-        detail: "订单自动确认邮件、发货通知、物流追踪更新——不需要人工发送。库存低于设定值自动提醒。节假日促销自动触发折扣码和限时 Banner。社媒内容定时发布到 Instagram/TikTok/Facebook。你的团队只需要处理真正需要人判断的事情。",
-        proof: "自动化可减少 60–80% 的重复性运营工作量",
+        headline: "全球客户一键付款",
+        subline: "多货币、多支付方式，自动适配",
+        detail: "Stripe、PayPal、Apple Pay、支付宝国际版全部内置。自动识别买家所在地区，显示对应货币。美国客户看到美元，日本客户看到日元。自定义结账流程，减少购物车放弃。",
+        proof: "多货币结账提升转化率 12–18%",
+        proofLabel: "Stripe 官方数据",
       },
       {
         number: "04",
-        problem: "铺货利润越来越薄，想卖出更高客单价",
-        solution: "品牌堡垒策略：让客户觉得你的产品值这个价",
-        detail: "专业品牌网站本身就是溢价工具。同样的产品，有品牌故事、高质量图片、用户评论、完整的「关于我们」页面，客单价可以比同类铺货产品高 30–50%。品牌矩阵建站让你的每个产品都有完整的场景化展示，让客户看到「这个品牌懂我的需求」。",
-        proof: "有品牌官网的卖家平均客单价比无官网卖家高 35%",
+        headline: "运营不再靠人盯",
+        subline: "3 个岗位的工作，系统自动完成",
+        detail: "订单确认、发货通知、物流追踪自动发送。库存低于设定值自动提醒。节假日促销自动触发。社媒内容定时发布。你的团队只处理真正需要人判断的事。",
+        proof: "自动化减少 60–80% 重复运营工作量",
+        proofLabel: "Zapier 行业报告",
       },
       {
         number: "05",
-        problem: "网站加载慢，客户没耐心等",
-        solution: "比 WordPress 快 3–5 倍，转化率直接提升",
-        detail: "用现代前端技术构建，全球 CDN 加速，首屏加载时间 < 1.5 秒。Google 把加载速度作为 SEO 排名因素——你的网站快，排名更高，流量更多。研究表明：网站每慢 1 秒，转化率下降 7%。你的竞争对手用 WordPress 建站，加载 3–5 秒，你的网站 1 秒内打开，客户不会跑。",
-        proof: "加载速度每提升 1 秒，转化率提升 7%（Google 数据）",
+        headline: "比竞争对手加载更快",
+        subline: "速度 = 排名 = 转化率",
+        detail: "现代前端技术构建，全球 CDN 加速，首屏加载 < 1.5 秒。Google 把加载速度作为排名因素。你的竞争对手用 WordPress 加载 3–5 秒，你 1 秒内打开，客户不会跑。",
+        proof: "每快 1 秒，转化率提升 7%",
+        proofLabel: "Google Core Web Vitals",
       },
       {
         number: "06",
-        problem: "网站上线了，我看不懂数据，不知道哪里出了问题",
-        solution: "你的专属数据面板，一眼看懂所有关键指标",
-        detail: "云端内容管理后台，你的团队 3 分钟学会操作——不需要找开发改文字。实时流量数据：哪个产品页面访问最多、哪个地区的客户最多、哪个渠道带来的转化最高。用户评论管理：一键审核、回复、置顶好评。库存和订单状态一目了然。出了问题，你能第一时间知道，而不是等客户投诉。",
-        proof: "数据驱动决策的电商品牌，年增长率比行业平均高 2.3 倍",
+        headline: "你掌控一切数据",
+        subline: "流量、订单、用户——全在你手里",
+        detail: "云端内容管理后台，3 分钟学会操作。实时流量、产品热度、地区分布、渠道转化——一个面板全看到。用户评论一键管理。出了问题，你第一个知道，不是等客户投诉。",
+        proof: "数据驱动决策的品牌年增长率高 2.3 倍",
+        proofLabel: "McKinsey 数字化报告",
       },
     ],
   },
   en: {
-    eyebrow: "WHAT YOUR STORE SOLVES",
-    title: "The 6 things that keep bosses up at night — solved",
-    subtitle: "Not tech features. Your actual business problems.",
-    problems: [
+    eyebrow: "WHAT YOU GET",
+    title: "6 results, not 6 features",
+    subtitle: "Hover to see how each result is achieved",
+    cards: [
       {
         number: "01",
-        problem: "No traffic without burning ad budget",
-        solution: "Google and AI bring you customers on autopilot",
-        detail: "Brand matrix store strategy: every product and every use case gets its own landing page, covering long-tail and short-tail keywords. When someone searches 'waterproof bluetooth speaker outdoor,' your brand appears first. When ChatGPT or Perplexity recommends products in your category, they cite your brand. This is compounding free traffic — not monthly ad spend that disappears when you stop paying.",
-        proof: "SEO traffic cost decreases over time; ad traffic cost increases every year",
+        headline: "Customers find you",
+        subline: "No ads — organic search traffic",
+        detail: "Brand matrix store strategy: every product and use case gets its own landing page. When someone searches, your brand appears first. When ChatGPT recommends products in your category, it cites your brand. This is compounding free traffic.",
+        proof: "SEO acquisition cost is 87% lower than paid ads",
+        proofLabel: "HubSpot 2024",
       },
       {
         number: "02",
-        problem: "International customers don't know how to pay",
-        solution: "Global buyers check out in one click — money lands in your account",
-        detail: "Built-in Stripe, PayPal, Apple Pay, and international Alipay. Automatically detects buyer location and shows the right currency and payment method. US buyers see USD, Japanese buyers see JPY, European buyers see EUR. Custom checkout flow reduces cart abandonment. Supports discount codes, installment payments, and subscription billing.",
-        proof: "Multi-currency checkout can lift conversion rates 12–18% (Stripe data)",
+        headline: "Sell at higher prices",
+        subline: "Same product, brand site adds 30–50% premium",
+        detail: "A professional brand website is the strongest pricing tool. Brand story, scene-based product display, customer reviews — customers feel 'this brand is worth the price.' Dropshipping sells at ¥99, brand sells at ¥149. Same product, different margin.",
+        proof: "Sellers with brand websites average 35% higher AOV",
+        proofLabel: "Shopify Merchant Data",
       },
       {
         number: "03",
-        problem: "Operations are exhausting — everything needs manual attention",
-        solution: "3 full-time jobs, done automatically by the system",
-        detail: "Order confirmation emails, shipping notifications, tracking updates — sent automatically. Inventory alerts when stock drops below your threshold. Holiday promotions auto-trigger discount codes and limited-time banners. Social content scheduled to post to Instagram/TikTok/Facebook. Your team only handles things that genuinely require human judgment.",
-        proof: "Automation can reduce 60–80% of repetitive operational workload",
+        headline: "Global buyers pay in one click",
+        subline: "Multi-currency, multi-payment, auto-adapted",
+        detail: "Stripe, PayPal, Apple Pay, and international Alipay all built in. Automatically detects buyer location and shows the right currency. US buyers see USD, Japanese buyers see JPY. Custom checkout reduces cart abandonment.",
+        proof: "Multi-currency checkout lifts conversion 12–18%",
+        proofLabel: "Stripe Official Data",
       },
       {
         number: "04",
-        problem: "Dropshipping margins are shrinking — need to sell at higher prices",
-        solution: "Brand fortress strategy: make customers feel your product is worth the price",
-        detail: "A professional brand website is itself a premium pricing tool. The same product, with a brand story, high-quality images, customer reviews, and a complete 'About Us' page, can command 30–50% higher AOV than generic dropshipping listings. The brand matrix approach gives every product a full scene-based showcase — customers see 'this brand understands my needs.'",
-        proof: "Sellers with brand websites average 35% higher AOV than those without",
+        headline: "Operations run themselves",
+        subline: "3 full-time jobs, done by the system",
+        detail: "Order confirmations, shipping notifications, tracking updates sent automatically. Low inventory alerts. Holiday promotions auto-trigger. Social content scheduled. Your team only handles things that genuinely need human judgment.",
+        proof: "Automation reduces 60–80% of repetitive ops workload",
+        proofLabel: "Zapier Industry Report",
       },
       {
         number: "05",
-        problem: "Slow website — customers leave before it loads",
-        solution: "3–5× faster than WordPress — conversion rate goes up directly",
-        detail: "Built with modern frontend technology, global CDN acceleration, first-screen load time < 1.5 seconds. Google uses load speed as an SEO ranking factor — your fast site ranks higher, gets more traffic. Research shows: every 1-second delay reduces conversion rate by 7%. Your competitors use WordPress (3–5 second load). Your site opens in under 1 second. Customers don't leave.",
-        proof: "Every 1-second improvement in load speed = 7% conversion rate increase (Google data)",
+        headline: "Faster than your competitors",
+        subline: "Speed = ranking = conversion rate",
+        detail: "Modern frontend tech, global CDN, first-screen load < 1.5s. Google uses load speed as a ranking factor. Your competitors use WordPress (3–5s load). Your site opens in under 1 second. Customers don't leave.",
+        proof: "Every 1-second improvement = 7% conversion rate increase",
+        proofLabel: "Google Core Web Vitals",
       },
       {
         number: "06",
-        problem: "Site is live but I can't read the data — don't know what's wrong",
-        solution: "Your own dashboard — see every key metric at a glance",
-        detail: "Cloud-based content management dashboard your team learns in 3 minutes — no developer needed to change text. Real-time traffic data: which product page gets the most visits, which region your customers come from, which channel drives the most conversions. Review management: approve, reply, and pin positive reviews in one click. Inventory and order status always visible. When something goes wrong, you know first — not after customers complain.",
-        proof: "Data-driven e-commerce brands grow 2.3× faster than the industry average",
+        headline: "You own all the data",
+        subline: "Traffic, orders, users — all in your hands",
+        detail: "Cloud-based CMS dashboard, learned in 3 minutes. Real-time traffic, product popularity, regional breakdown, channel conversion — one panel shows everything. Customer review management in one click. You know when something goes wrong before customers complain.",
+        proof: "Data-driven brands grow 2.3× faster",
+        proofLabel: "McKinsey Digital Report",
       },
     ],
   },
   ja: {
-    eyebrow: "あなたのストアが解決すること",
-    title: "社長を悩ませる6つの問題 — すべて解決",
-    subtitle: "技術機能ではなく、実際のビジネス問題です。",
-    problems: [
+    eyebrow: "あなたが得るもの",
+    title: "6つの結果、6つの機能ではない",
+    subtitle: "ホバーして各結果の実現方法を確認",
+    cards: [
       {
         number: "01",
-        problem: "広告費を燃やさないとトラフィックがない",
-        solution: "GoogleとAIが自動的に顧客を連れてくる",
-        detail: "ブランドマトリックスストア戦略：すべての商品とユースケースに独自のランディングページを設置し、ロングテール・ショートテールキーワードをカバー。「防水Bluetoothスピーカー アウトドア」で検索すると、あなたのブランドが最初に表示される。ChatGPTやPerplexityがカテゴリ内の商品を推薦する際、あなたのブランドが引用される。これは複利的な無料トラフィック。",
-        proof: "SEOトラフィックコストは年々減少、広告トラフィックコストは年々増加",
+        headline: "顧客が自分から来る",
+        subline: "広告不要、検索ランキングで集客",
+        detail: "ブランドマトリックス戦略：すべての商品とユースケースに独自のランディングページ。検索すると最初にあなたのブランドが表示される。ChatGPTが同カテゴリを推薦する際、あなたのブランドが引用される。これは複利的な無料トラフィック。",
+        proof: "SEO獲得コストは広告より87%低い",
+        proofLabel: "HubSpot 2024",
       },
       {
         number: "02",
-        problem: "海外の顧客が支払い方法を知らない",
-        solution: "世界中のバイヤーがワンクリックで決済 — 即座に入金",
-        detail: "Stripe、PayPal、Apple Pay、Alipay国際版を内蔵。バイヤーの所在地を自動検出し、適切な通貨と支払い方法を表示。米国バイヤーにはUSD、日本バイヤーにはJPY、欧州バイヤーにはEURを表示。カスタムチェックアウトフローでカート放棄率を削減。割引コード、分割払い、サブスクリプション決済をサポート。",
-        proof: "多通貨チェックアウトでコンバージョン率が12〜18%向上（Stripeデータ）",
+        headline: "より高い価格で売れる",
+        subline: "同じ商品でもブランドサイトで30〜50%プレミアム",
+        detail: "プロのブランドサイトは最強の価格設定ツール。ブランドストーリー、シーンベースの展示、顧客レビューで「このブランドはこの価格の価値がある」と感じさせる。同じ商品でも利益率が変わる。",
+        proof: "ブランドサイトを持つ販売者のAOVは35%高い",
+        proofLabel: "Shopifyマーチャントデータ",
       },
       {
         number: "03",
-        problem: "運営が大変 — すべてを手動で管理しなければならない",
-        solution: "3人分の仕事をシステムが自動的に完了",
-        detail: "注文確認メール、発送通知、追跡更新を自動送信。在庫が設定値を下回ると自動アラート。季節プロモーションが割引コードと期間限定バナーを自動トリガー。SNSコンテンツをInstagram/TikTok/Facebookに定時投稿。チームは本当に人間の判断が必要なことだけを処理。",
-        proof: "自動化で繰り返し運営作業の60〜80%を削減可能",
+        headline: "世界中のバイヤーがワンクリックで決済",
+        subline: "多通貨・多決済方法、自動適応",
+        detail: "Stripe、PayPal、Apple Pay、Alipay国際版を内蔵。バイヤーの所在地を自動検出し適切な通貨を表示。米国バイヤーにはUSD、日本バイヤーにはJPY。カスタムチェックアウトでカート放棄を削減。",
+        proof: "多通貨チェックアウトでコンバージョン12〜18%向上",
+        proofLabel: "Stripe公式データ",
       },
       {
         number: "04",
-        problem: "ドロップシッピングの利益率が低下 — 高単価で売りたい",
-        solution: "ブランド要塞戦略：顧客に「この価格は価値がある」と感じさせる",
-        detail: "プロのブランドサイト自体がプレミアム価格設定ツール。同じ商品でも、ブランドストーリー、高品質な画像、顧客レビュー、充実した「About Us」ページがあれば、一般的なドロップシッピングより30〜50%高いAOVを実現できる。ブランドマトリックスアプローチで各商品を完全なシーンベースで展示。",
-        proof: "ブランドサイトを持つ販売者のAOVは持たない販売者より平均35%高い",
+        headline: "運営が自動化される",
+        subline: "3人分の仕事をシステムが自動完了",
+        detail: "注文確認、発送通知、追跡更新を自動送信。在庫アラート。季節プロモーション自動トリガー。SNSコンテンツ定時投稿。チームは本当に人間の判断が必要なことだけを処理。",
+        proof: "自動化で繰り返し作業の60〜80%を削減",
+        proofLabel: "Zapier業界レポート",
       },
       {
         number: "05",
-        problem: "サイトが遅い — 顧客が読み込みを待てない",
-        solution: "WordPressより3〜5倍速い — コンバージョン率が直接向上",
-        detail: "最新フロントエンド技術で構築、グローバルCDN加速、ファーストスクリーン読み込み時間1.5秒未満。Googleは読み込み速度をSEOランキング要因として使用。研究によると、1秒遅くなるごとにコンバージョン率が7%低下。競合他社はWordPress（3〜5秒）を使用。あなたのサイトは1秒以内に開く。",
-        proof: "読み込み速度が1秒改善するごとにコンバージョン率が7%向上（Googleデータ）",
+        headline: "競合より速く表示される",
+        subline: "速度＝ランキング＝コンバージョン率",
+        detail: "最新フロントエンド技術、グローバルCDN、ファーストスクリーン1.5秒未満。Googleは速度をランキング要因として使用。競合はWordPress（3〜5秒）、あなたのサイトは1秒以内。顧客が離れない。",
+        proof: "1秒改善するごとにコンバージョン7%向上",
+        proofLabel: "Google Core Web Vitals",
       },
       {
         number: "06",
-        problem: "サイトは公開されているがデータが読めない — 何が問題かわからない",
-        solution: "専用ダッシュボード — すべての重要指標を一目で確認",
-        detail: "クラウドベースのコンテンツ管理ダッシュボードをチームが3分で習得。リアルタイムトラフィックデータ：どの商品ページが最も訪問されているか、どの地域の顧客が最も多いか、どのチャネルが最も高いコンバージョンをもたらしているか。レビュー管理：ワンクリックで承認、返信、好評をピン留め。問題が発生したとき、顧客が苦情を言う前にあなたが最初に知る。",
-        proof: "データ駆動型ECブランドの年間成長率は業界平均の2.3倍",
+        headline: "すべてのデータを掌握",
+        subline: "トラフィック、注文、ユーザー—全部あなたの手に",
+        detail: "クラウドCMSダッシュボード、3分で習得。リアルタイムトラフィック、商品人気度、地域分布、チャネルコンバージョンを1つのパネルで確認。レビュー管理もワンクリック。問題が起きたとき、顧客より先に知る。",
+        proof: "データ駆動型ブランドの成長率は2.3倍",
+        proofLabel: "McKinseyデジタルレポート",
       },
     ],
   },
@@ -173,82 +192,96 @@ const COPY: Record<Locale, {
 export default function CapabilitiesSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
     <section id="capabilities" style={{ background: "#F5F2EC", padding: "120px 0" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 80 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
             {c.eyebrow}
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 16px", lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
             {c.title}
           </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "#777", maxWidth: 480, lineHeight: 1.7 }}>
-            {c.subtitle}
-          </p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitle}</p>
         </motion.div>
 
-        {/* Problem cards: alternating 2-col layout */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {c.problems.map((p, i) => {
-            const isEven = i % 2 === 0;
+        {/* 3×2 card grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+          {c.cards.map((card, i) => {
+            const isHovered = hoveredIdx === i;
             return (
               <motion.div key={i}
-                initial={{ opacity: 0, x: isEven ? -24 : 24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, delay: 0.05 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.45, delay: i * 0.07 }}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: isEven ? "1fr 1fr" : "1fr 1fr",
-                  background: isEven ? "#FFFFFF" : "#1A1A1A",
+                  background: isHovered ? "#1A1A1A" : "#FFFFFF",
+                  padding: "40px 36px",
+                  cursor: "default",
+                  transition: "background 0.3s",
+                  minHeight: 260,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  position: "relative",
                   overflow: "hidden",
                 }}
               >
-                {/* Number + Problem side */}
-                <div style={{
-                  padding: "48px 48px",
-                  order: isEven ? 0 : 1,
-                  borderRight: isEven ? "1px solid #E8E4DC" : "1px solid rgba(255,255,255,0.05)",
-                  display: "flex", flexDirection: "column", justifyContent: "center",
-                }}>
-                  <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 72, fontWeight: 700, lineHeight: 1, color: isEven ? "#E8E4DC" : "rgba(255,255,255,0.06)", marginBottom: 16 }}>
-                    {p.number}
-                  </div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: isEven ? "#AAA" : "rgba(255,255,255,0.25)", marginBottom: 12 }}>
-                    {locale === "zh" ? "老板的问题" : locale === "ja" ? "社長の問題" : "The problem"}
-                  </div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 30px)", fontWeight: 600, color: isEven ? "#1A1A1A" : "#FAFAF8", margin: "0 0 20px", lineHeight: 1.25 }}>
-                    {p.problem}
+                {/* Number */}
+                <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 56, fontWeight: 700, lineHeight: 1, color: isHovered ? "rgba(255,255,255,0.06)" : "#F0EDE5", position: "absolute", top: 20, right: 24, transition: "color 0.3s" }}>
+                  {card.number}
+                </div>
+
+                {/* Default view: headline + subline */}
+                <div>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2vw, 26px)", fontWeight: 600, color: isHovered ? "#FAFAF8" : "#1A1A1A", margin: "0 0 10px", lineHeight: 1.25, transition: "color 0.3s" }}>
+                    {card.headline}
                   </h3>
-                  <div style={{ height: 1, background: isEven ? "#E8E4DC" : "rgba(255,255,255,0.06)", marginBottom: 20 }} />
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "#8B6914", marginBottom: 8 }}>
-                    {locale === "zh" ? "我的方案" : locale === "ja" ? "私の解決策" : "The solution"}
-                  </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: isEven ? "#1A1A1A" : "#D4C49A", margin: 0, lineHeight: 1.5 }}>
-                    {p.solution}
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: isHovered ? "rgba(255,255,255,0.4)" : "#999", margin: 0, transition: "color 0.3s" }}>
+                    {card.subline}
                   </p>
                 </div>
 
-                {/* Detail + Proof side */}
-                <div style={{
-                  padding: "48px 48px",
-                  order: isEven ? 1 : 0,
-                  display: "flex", flexDirection: "column", justifyContent: "center",
-                }}>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: isEven ? "#555" : "rgba(255,255,255,0.55)", lineHeight: 1.8, margin: "0 0 28px" }}>
-                    {p.detail}
-                  </p>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "16px 20px", background: isEven ? "#F5F2EC" : "rgba(255,255,255,0.03)", borderLeft: "2px solid #8B6914" }}>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "#8B6914", flexShrink: 0, marginTop: 2 }}>DATA</span>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: isEven ? "#777" : "rgba(255,255,255,0.35)", lineHeight: 1.6, letterSpacing: "0.03em" }}>
-                      {p.proof}
-                    </span>
-                  </div>
-                </div>
+                {/* Hover detail: progressive disclosure */}
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.25 }}
+                      style={{ marginTop: 24 }}
+                    >
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.75, margin: "0 0 20px" }}>
+                        {card.detail}
+                      </p>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 10, borderLeft: "2px solid #8B6914", paddingLeft: 12 }}>
+                        <div>
+                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600, color: "#D4C49A", marginBottom: 2 }}>
+                            {card.proof}
+                          </div>
+                          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+                            {card.proofLabel}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Hover indicator arrow */}
+                {!isHovered && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ marginTop: 24, fontFamily: "'DM Mono', monospace", fontSize: 9, color: "#C8B87A", letterSpacing: "0.1em" }}>
+                    hover →
+                  </motion.div>
+                )}
               </motion.div>
             );
           })}

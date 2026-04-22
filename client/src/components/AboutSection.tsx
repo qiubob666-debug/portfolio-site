@@ -225,9 +225,7 @@ export default function AboutSection() {
                 React · TypeScript · Python · Docker · n8n
               </div>
               <a
-                href="https://github.com/qiubob666-debug"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#contact"
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 10,
@@ -238,7 +236,7 @@ export default function AboutSection() {
                   whiteSpace: "nowrap",
                 }}
               >
-                GitHub ↗
+                联系我 →
               </a>
             </motion.div>
           </motion.div>
