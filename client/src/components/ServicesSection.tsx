@@ -1,9 +1,8 @@
-/* ServicesSection v3 — Value-first, no tech jargon
-   Design: 3 pricing cards, center card highlighted (gold border)
-   Key fix: Each card = 1 business outcome promise, NOT a feature list
-   Structure: Outcome headline → Price → What you get (results) → Brand matrix callout
-   Hover: card lifts slightly
-   Mobile: Single column stack, full-width cards */
+/* ServicesSection v4 — Apple product page style
+   Desktop: 3-column pricing grid, center card highlighted
+   Mobile: full-width stacked cards, large price, clear CTA
+   Motion: stagger entrance, spring hover, smooth expand
+   Typography: large price display, 15px+ body text */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -249,117 +248,66 @@ export default function ServicesSection() {
   const [expandedMatrix, setExpandedMatrix] = useState(false);
 
   return (
-    <section id="services" style={{ background: "#FAFAF8", padding: "120px 0" }}>
-      <div className="services-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+    <section id="services" className="svc-section">
+      <div className="svc-container">
 
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
-            {c.eyebrow}
-          </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
-            {c.title}
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#999" }}>{c.subtitle}</p>
+        {/* ── Header ── */}
+        <motion.div
+          className="svc-header"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="svc-eyebrow">{c.eyebrow}</div>
+          <h2 className="svc-title">{c.title}</h2>
+          <p className="svc-subtitle">{c.subtitle}</p>
         </motion.div>
 
-        {/* Pricing cards */}
-        <div className="services-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2, marginBottom: 48 }}>
+        {/* ── Pricing cards ── */}
+        <div className="svc-grid">
           {c.plans.map((plan, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 24 }}
+            <motion.div
+              key={i}
+              className={`svc-card ${plan.highlight ? "svc-card--highlight" : ""}`}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              whileHover={{ y: -4 }}
-              style={{
-                background: plan.highlight ? "#1A1A1A" : "#FFFFFF",
-                border: plan.highlight ? "2px solid #8B6914" : "2px solid transparent",
-                padding: "40px 36px 36px",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-              }}
+              whileHover={{ y: -6 }}
             >
               {/* Tag */}
-              <div style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 8,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: plan.highlight ? "#8B6914" : "#BBB",
-                marginBottom: 16,
-              }}>
+              <div className={`svc-card-tag ${plan.highlight ? "svc-card-tag--highlight" : ""}`}>
                 {plan.tag}
               </div>
 
               {/* Plan name */}
-              <div style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: 22,
-                fontWeight: 600,
-                color: plan.highlight ? "#FAFAF8" : "#1A1A1A",
-                marginBottom: 12,
-                lineHeight: 1.2,
-              }}>
+              <div className={`svc-card-name ${plan.highlight ? "svc-card-name--highlight" : ""}`}>
                 {plan.name}
               </div>
 
-              {/* Promise — the key value statement */}
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 12,
-                color: plan.highlight ? "rgba(255,255,255,0.55)" : "#666",
-                lineHeight: 1.6,
-                marginBottom: 28,
-                paddingBottom: 28,
-                borderBottom: plan.highlight ? "1px solid rgba(255,255,255,0.08)" : "1px solid #E8E4DC",
-              }}>
+              {/* Promise */}
+              <div className={`svc-card-promise ${plan.highlight ? "svc-card-promise--highlight" : ""}`}>
                 {plan.promise}
               </div>
 
-              {/* Price */}
-              <div style={{ marginBottom: 8 }}>
-                <span style={{
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontSize: 44,
-                  fontWeight: 700,
-                  color: plan.highlight ? "#D4C49A" : "#1A1A1A",
-                  lineHeight: 1,
-                }}>
+              {/* Price block */}
+              <div className="svc-card-price-block">
+                <span className={`svc-card-price ${plan.highlight ? "svc-card-price--highlight" : ""}`}>
                   {plan.price}
                 </span>
-              </div>
-              <div style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 8,
-                color: plan.highlight ? "rgba(255,255,255,0.25)" : "#BBB",
-                letterSpacing: "0.1em",
-                marginBottom: 4,
-              }}>
-                {plan.priceNote}
-              </div>
-              <div style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 9,
-                color: "#8B6914",
-                letterSpacing: "0.1em",
-                marginBottom: 28,
-              }}>
-                {plan.timeline}
+                <div className={`svc-card-price-note ${plan.highlight ? "svc-card-price-note--highlight" : ""}`}>
+                  {plan.priceNote}
+                </div>
+                <div className="svc-card-timeline">{plan.timeline}</div>
               </div>
 
               {/* Results list */}
-              <div style={{ flex: 1, marginBottom: 32 }}>
+              <div className="svc-card-results">
                 {plan.results.map((r, ri) => (
-                  <div key={ri} style={{ display: "flex", gap: 10, marginBottom: 10, alignItems: "flex-start" }}>
-                    <span style={{ color: "#8B6914", fontSize: 12, flexShrink: 0, marginTop: 1 }}>✓</span>
-                    <span style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 12,
-                      color: plan.highlight ? "rgba(255,255,255,0.6)" : "#555",
-                      lineHeight: 1.5,
-                    }}>
+                  <div key={ri} className="svc-card-result-item">
+                    <span className="svc-card-check">✓</span>
+                    <span className={`svc-card-result-text ${plan.highlight ? "svc-card-result-text--highlight" : ""}`}>
                       {r}
                     </span>
                   </div>
@@ -367,26 +315,22 @@ export default function ServicesSection() {
               </div>
 
               {/* CTA */}
-              <motion.a href="#contact" whileHover={{ x: 2 }}
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 10,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  padding: "14px 24px",
-                  background: plan.highlight ? "#8B6914" : "transparent",
-                  border: plan.highlight ? "none" : "1px solid #1A1A1A",
-                  color: plan.highlight ? "#FAFAF8" : "#1A1A1A",
-                  textDecoration: "none",
-                  display: "block",
-                  textAlign: "center",
-                  transition: "all 0.2s",
-                }}
+              <motion.a
+                href="#contact"
+                className={`svc-card-cta ${plan.highlight ? "svc-card-cta--highlight" : ""}`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
                 onMouseEnter={e => {
-                  if (!plan.highlight) { e.currentTarget.style.background = "#1A1A1A"; e.currentTarget.style.color = "#FAFAF8"; }
+                  if (!plan.highlight) {
+                    e.currentTarget.style.background = "#1A1A1A";
+                    e.currentTarget.style.color = "#FAFAF8";
+                  }
                 }}
                 onMouseLeave={e => {
-                  if (!plan.highlight) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A1A"; }
+                  if (!plan.highlight) {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "#1A1A1A";
+                  }
                 }}
               >
                 {plan.cta} →
@@ -395,55 +339,51 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        {/* Brand Matrix callout — expandable */}
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+        {/* ── Brand Matrix callout ── */}
+        <motion.div
+          className="svc-matrix-wrap"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <button
+            className="svc-matrix-toggle"
             onClick={() => setExpandedMatrix(!expandedMatrix)}
-            style={{
-              width: "100%",
-              background: "#1A1A1A",
-              border: "none",
-              padding: "24px 36px",
-              cursor: "pointer",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              textAlign: "left",
-            }}
+            aria-expanded={expandedMatrix}
           >
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", color: "#8B6914", marginBottom: 6 }}>
+            <div className="svc-matrix-toggle-left">
+              <div className="svc-matrix-toggle-eyebrow">
                 {locale === "zh" ? "进阶策略" : locale === "ja" ? "上級戦略" : "ADVANCED STRATEGY"}
               </div>
-              <div className="matrix-title" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 20, fontWeight: 600, color: "#FAFAF8" }}>
-                {c.matrixTitle}
-              </div>
+              <div className="svc-matrix-toggle-title">{c.matrixTitle}</div>
             </div>
-            <motion.span animate={{ rotate: expandedMatrix ? 45 : 0 }} transition={{ duration: 0.2 }}
-              style={{ fontFamily: "'DM Mono', monospace", fontSize: 20, color: "#8B6914", flexShrink: 0, marginLeft: 16 }}
+            <motion.span
+              className="svc-matrix-toggle-icon"
+              animate={{ rotate: expandedMatrix ? 45 : 0 }}
+              transition={{ duration: 0.2 }}
             >
               +
             </motion.span>
           </button>
 
-          <AnimatePresence>
+          <AnimatePresence initial={false}>
             {expandedMatrix && (
               <motion.div
+                key="matrix-expanded"
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.35 }}
-                style={{ overflow: "hidden", background: "#111" }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: "hidden" }}
               >
-                <div className="matrix-expanded" style={{ padding: "36px 36px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, margin: 0 }}>
-                    {c.matrixDesc}
-                  </p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div className="svc-matrix-body">
+                  <p className="svc-matrix-desc">{c.matrixDesc}</p>
+                  <div className="svc-matrix-points">
                     {c.matrixPoints.map((pt, i) => (
-                      <div key={i} style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                        <span style={{ color: "#8B6914", fontSize: 12 }}>→</span>
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.55)" }}>{pt}</span>
+                      <div key={i} className="svc-matrix-point">
+                        <span className="svc-matrix-point-arrow">→</span>
+                        <span>{pt}</span>
                       </div>
                     ))}
                   </div>
@@ -453,42 +393,360 @@ export default function ServicesSection() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Compare note */}
-        <div style={{ marginTop: 32, textAlign: "center" }}>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999" }}>
-            {c.compareLabel}{" "}
-          </span>
-          <a href="#contact" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#8B6914", textDecoration: "none" }}>
-            {c.compareNote}
-          </a>
+        {/* ── Compare note ── */}
+        <div className="svc-compare">
+          <span className="svc-compare-label">{c.compareLabel} </span>
+          <a href="#contact" className="svc-compare-link">{c.compareNote}</a>
         </div>
       </div>
 
       <style>{`
+        /* ── Section ── */
+        .svc-section {
+          background: #FAFAF8;
+          padding: 120px 0;
+        }
+        .svc-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+
+        /* ── Header ── */
+        .svc-header { margin-bottom: 64px; }
+        .svc-eyebrow {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: #8B6914;
+          margin-bottom: 20px;
+        }
+        .svc-title {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(28px, 4vw, 56px);
+          font-weight: 600;
+          color: #111111;
+          margin: 0 0 12px;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+        }
+        .svc-subtitle {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 16px;
+          color: #888;
+          margin: 0;
+          line-height: 1.6;
+        }
+
+        /* ── Grid ── */
+        .svc-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2px;
+          margin-bottom: 48px;
+          align-items: stretch;
+        }
+
+        /* ── Card ── */
+        .svc-card {
+          background: #FFFFFF;
+          border: 2px solid transparent;
+          padding: 40px 32px 32px;
+          display: flex;
+          flex-direction: column;
+          transition: all 0.25s;
+        }
+        .svc-card--highlight {
+          background: #1A1A1A;
+          border-color: #8B6914;
+        }
+
+        /* Tag */
+        .svc-card-tag {
+          font-family: 'DM Mono', monospace;
+          font-size: 9px;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #BBB;
+          margin-bottom: 16px;
+        }
+        .svc-card-tag--highlight { color: #8B6914; }
+
+        /* Name */
+        .svc-card-name {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: 24px;
+          font-weight: 600;
+          color: #111111;
+          margin-bottom: 12px;
+          line-height: 1.2;
+        }
+        .svc-card-name--highlight { color: #FAFAF8; }
+
+        /* Promise */
+        .svc-card-promise {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          color: #666;
+          line-height: 1.65;
+          margin-bottom: 28px;
+          padding-bottom: 28px;
+          border-bottom: 1px solid #E8E4DC;
+        }
+        .svc-card-promise--highlight {
+          color: rgba(255,255,255,0.5);
+          border-bottom-color: rgba(255,255,255,0.08);
+        }
+
+        /* Price */
+        .svc-card-price-block { margin-bottom: 28px; }
+        .svc-card-price {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: 48px;
+          font-weight: 700;
+          color: #111111;
+          line-height: 1;
+          display: block;
+          margin-bottom: 6px;
+        }
+        .svc-card-price--highlight { color: #D4C49A; }
+        .svc-card-price-note {
+          font-family: 'DM Mono', monospace;
+          font-size: 9px;
+          color: #BBB;
+          letter-spacing: 0.1em;
+          margin-bottom: 4px;
+        }
+        .svc-card-price-note--highlight { color: rgba(255,255,255,0.25); }
+        .svc-card-timeline {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px;
+          color: #8B6914;
+          letter-spacing: 0.1em;
+        }
+
+        /* Results */
+        .svc-card-results {
+          flex: 1;
+          margin-bottom: 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .svc-card-result-item {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+        }
+        .svc-card-check {
+          color: #8B6914;
+          font-size: 12px;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .svc-card-result-text {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          color: #444;
+          line-height: 1.55;
+        }
+        .svc-card-result-text--highlight { color: rgba(255,255,255,0.6); }
+
+        /* CTA */
+        .svc-card-cta {
+          font-family: 'DM Mono', monospace;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 16px 24px;
+          background: transparent;
+          border: 1px solid #1A1A1A;
+          color: #1A1A1A;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+          min-height: 52px;
+          border-radius: 2px;
+        }
+        .svc-card-cta--highlight {
+          background: #8B6914;
+          border-color: #8B6914;
+          color: #FAFAF8;
+        }
+
+        /* ── Matrix callout ── */
+        .svc-matrix-wrap { }
+        .svc-matrix-toggle {
+          width: 100%;
+          background: #1A1A1A;
+          border: none;
+          padding: 24px 32px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          text-align: left;
+          gap: 16px;
+          min-height: 44px;
+          transition: background 0.2s;
+        }
+        .svc-matrix-toggle:hover { background: #222; }
+        .svc-matrix-toggle-left { flex: 1; min-width: 0; }
+        .svc-matrix-toggle-eyebrow {
+          font-family: 'DM Mono', monospace;
+          font-size: 8px;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #8B6914;
+          margin-bottom: 6px;
+        }
+        .svc-matrix-toggle-title {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: 20px;
+          font-weight: 600;
+          color: #FAFAF8;
+          line-height: 1.3;
+        }
+        .svc-matrix-toggle-icon {
+          font-family: 'DM Mono', monospace;
+          font-size: 22px;
+          color: #8B6914;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+        }
+        .svc-matrix-body {
+          background: #111;
+          padding: 32px 32px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+        }
+        .svc-matrix-desc {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: rgba(255,255,255,0.45);
+          line-height: 1.8;
+          margin: 0;
+        }
+        .svc-matrix-points {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .svc-matrix-point {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+        }
+        .svc-matrix-point-arrow {
+          color: #8B6914;
+          font-size: 12px;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .svc-matrix-point span:last-child {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: rgba(255,255,255,0.6);
+          line-height: 1.6;
+        }
+
+        /* ── Compare note ── */
+        .svc-compare {
+          margin-top: 28px;
+          text-align: center;
+        }
+        .svc-compare-label {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: #999;
+        }
+        .svc-compare-link {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: #8B6914;
+          text-decoration: none;
+          border-bottom: 1px solid transparent;
+          transition: border-color 0.2s;
+        }
+        .svc-compare-link:hover { border-bottom-color: #8B6914; }
+
+        /* ════════════════════════════════════
+           MOBILE — Apple-style
+           ════════════════════════════════════ */
         @media (max-width: 767px) {
-          .services-container {
-            padding: 0 20px !important;
+          .svc-section { padding: 72px 0; }
+          .svc-container { padding: 0 20px; }
+          .svc-header { margin-bottom: 40px; }
+          .svc-title {
+            font-size: clamp(26px, 7.5vw, 38px);
+            letter-spacing: -0.025em;
           }
-          #services {
-            padding: 72px 0 !important;
+          .svc-subtitle { font-size: 15px; }
+
+          /* Cards: single column, full width */
+          .svc-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
           }
-          .services-grid {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
+          .svc-card {
+            padding: 28px 24px 24px;
+            border-radius: 4px;
           }
-          .services-grid > div {
-            padding: 28px 24px 24px !important;
+          .svc-card--highlight {
+            /* Highlighted card gets extra visual weight on mobile */
+            box-shadow: 0 0 0 1px #8B6914;
           }
-          .matrix-expanded {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-            padding: 24px 20px !important;
+
+          /* Larger price on mobile */
+          .svc-card-price {
+            font-size: 52px;
           }
-          button[style*="padding: 24px 36px"] {
-            padding: 20px 20px !important;
+          .svc-card-name { font-size: 22px; }
+          .svc-card-promise {
+            font-size: 14px;
+            line-height: 1.7;
           }
-          .matrix-title {
-            font-size: 16px !important;
+          .svc-card-result-text {
+            font-size: 14px;
+            line-height: 1.6;
+          }
+          .svc-card-cta {
+            font-size: 12px;
+            padding: 16px;
+            min-height: 52px;
+          }
+
+          /* Matrix callout */
+          .svc-matrix-toggle {
+            padding: 20px 20px;
+          }
+          .svc-matrix-toggle-title {
+            font-size: 16px;
+          }
+          .svc-matrix-body {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 24px 20px;
+          }
+          .svc-matrix-desc { font-size: 14px; }
+          .svc-matrix-point span:last-child { font-size: 14px; }
+
+          /* Compare note */
+          .svc-compare {
+            margin-top: 20px;
+            text-align: left;
+          }
+          .svc-compare-label, .svc-compare-link {
+            font-size: 14px;
           }
         }
       `}</style>

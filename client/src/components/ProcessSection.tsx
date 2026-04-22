@@ -417,14 +417,57 @@ export default function ProcessSection() {
         @media (max-width: 767px) {
           #process { padding: 72px 0 !important; }
           .process-container { padding: 0 20px !important; }
+
+          /* Single column: steps list on top, detail panel below */
           .process-split {
             grid-template-columns: 1fr !important;
             min-height: unset !important;
+            gap: 0 !important;
           }
+
+          /* Left panel: step list */
+          .process-left {
+            position: static !important;
+            height: auto !important;
+            overflow: visible !important;
+            padding: 0 !important;
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+          }
+
+          /* Right panel: detail */
+          .process-right {
+            padding: 24px 0 !important;
+          }
+
+          /* Step items */
+          .process-step-item {
+            padding: 16px 0 !important;
+          }
+          .process-step-num {
+            font-size: 10px !important;
+          }
+          .process-step-title {
+            font-size: 15px !important;
+          }
+          .process-step-sub {
+            font-size: 12px !important;
+          }
+
+          /* Guarantee bar */
           .process-guarantee {
             padding: 20px !important;
             flex-direction: column !important;
             align-items: flex-start !important;
+            gap: 12px !important;
+          }
+          .process-guarantee-text {
+            font-size: 14px !important;
+          }
+
+          /* Section title */
+          #process h2 {
+            font-size: clamp(26px, 7.5vw, 36px) !important;
           }
         }
       `}</style>

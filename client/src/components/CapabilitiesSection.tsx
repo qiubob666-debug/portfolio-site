@@ -311,24 +311,65 @@ export default function CapabilitiesSection() {
           .cap-container {
             padding: 0 20px !important;
           }
+
+          /* 2-column grid on mobile */
           .cap-grid {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 2px !important;
           }
+
+          /* Cards: larger touch area, better readability */
           .cap-card {
-            padding: 24px 20px !important;
-            min-height: 180px !important;
+            padding: 20px 16px !important;
+            min-height: 160px !important;
           }
+          .cap-card-icon {
+            font-size: 20px !important;
+            margin-bottom: 10px !important;
+          }
+          .cap-card-title {
+            font-size: 14px !important;
+            margin-bottom: 8px !important;
+            line-height: 1.3 !important;
+          }
+          .cap-card-desc {
+            font-size: 12px !important;
+            line-height: 1.6 !important;
+          }
+          .cap-card-tags {
+            gap: 4px !important;
+            margin-top: 12px !important;
+          }
+          .cap-card-tag {
+            font-size: 8px !important;
+            padding: 3px 6px !important;
+          }
+
+          /* Section title */
+          #capabilities h2 {
+            font-size: clamp(26px, 7.5vw, 36px) !important;
+          }
+
+          /* Mobile text variants */
           .cap-subtitle-desktop {
             display: none !important;
           }
           .cap-subtitle-mobile {
             display: block !important;
+            font-size: 15px !important;
           }
           .cap-hint-desktop {
             display: none !important;
           }
           .cap-hint-mobile {
             display: inline !important;
+          }
+        }
+
+        /* Very small phones: 1 column */
+        @media (max-width: 360px) {
+          .cap-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

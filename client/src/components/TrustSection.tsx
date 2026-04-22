@@ -1,8 +1,7 @@
-/* TrustSection v3 — FAQ with proper font hierarchy
-   Design: White bg, accordion, gold serif question, dark body answer
-   Key fix: Question = Cormorant gold large, Answer = DM Sans light gray readable
-   Expanded state: cream bg, NOT black (avoids same-color-text issue)
-   Progressive: only question visible, answer slides in on click */
+/* TrustSection v4 — Apple-style FAQ
+   Design: Clean white, large serif questions, high-contrast answers
+   Mobile: Full-width cards, 17px+ body text, 44px touch targets
+   Motion: Smooth spring expand, stagger entrance, no jank */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -176,116 +175,67 @@ export default function TrustSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <section id="trust" style={{ background: "#FFFFFF", padding: "120px 0" }}>
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 40px" }}>
+    <section id="trust" className="trust-section">
+      <div className="trust-container">
 
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
-            {c.eyebrow}
-          </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 16px", lineHeight: 1.1 }}>
-            {c.title}
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#999", lineHeight: 1.7 }}>
-            {c.subtitle}
-          </p>
+        {/* ── Header ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="trust-header"
+        >
+          <div className="trust-eyebrow">{c.eyebrow}</div>
+          <h2 className="trust-title">{c.title}</h2>
+          <p className="trust-subtitle">{c.subtitle}</p>
         </motion.div>
 
-        {/* FAQ accordion */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        {/* ── FAQ List ── */}
+        <div className="trust-faq-list">
           {c.faqs.map((faq, i) => {
             const isOpen = openIdx === i;
             return (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 10 }}
+              <motion.div
+                key={i}
+                className="trust-faq-item"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-20px" }}
-                transition={{ duration: 0.35, delay: i * 0.04 }}
+                viewport={{ once: true, margin: "-10px" }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
               >
-                {/* Question row */}
+                {/* Question button */}
                 <button
+                  className={`trust-faq-btn ${isOpen ? "trust-faq-btn--open" : ""}`}
                   onClick={() => setOpenIdx(isOpen ? null : i)}
-                  style={{
-                    width: "100%",
-                    background: isOpen ? "#F5F2EC" : "#FAFAF8",
-                    border: "none",
-                    borderBottom: isOpen ? "none" : "1px solid #EDEAD9",
-                    padding: "22px 28px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    textAlign: "left",
-                    transition: "background 0.2s",
-                  }}
-                  onMouseEnter={e => { if (!isOpen) e.currentTarget.style.background = "#F5F2EC"; }}
-                  onMouseLeave={e => { if (!isOpen) e.currentTarget.style.background = "#FAFAF8"; }}
+                  aria-expanded={isOpen}
                 >
-                  {/* Tag */}
-                  <span style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 8,
-                    letterSpacing: "0.12em",
-                    color: isOpen ? "#8B6914" : "#BBB",
-                    background: isOpen ? "rgba(139,105,20,0.08)" : "transparent",
-                    padding: isOpen ? "3px 8px" : "0",
-                    flexShrink: 0,
-                    minWidth: 48,
-                    transition: "all 0.2s",
-                  }}>
+                  <span className={`trust-faq-tag ${isOpen ? "trust-faq-tag--open" : ""}`}>
                     {faq.tag}
                   </span>
-
-                  {/* Question text — gold serif when open, dark sans when closed */}
-                  <span style={{
-                    fontFamily: isOpen ? "'Cormorant Garamond', Georgia, serif" : "'DM Sans', sans-serif",
-                    fontSize: isOpen ? 20 : 14,
-                    fontWeight: isOpen ? 600 : 400,
-                    color: isOpen ? "#8B6914" : "#333",
-                    lineHeight: 1.35,
-                    flex: 1,
-                    transition: "all 0.25s",
-                  }}>
-                    {faq.q}
-                  </span>
-
-                  {/* Toggle icon */}
+                  <span className="trust-faq-q">{faq.q}</span>
                   <motion.span
+                    className="trust-faq-icon"
                     animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 18,
-                      color: isOpen ? "#8B6914" : "#CCC",
-                      flexShrink: 0,
-                      lineHeight: 1,
-                    }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
                   >
                     +
                   </motion.span>
                 </button>
 
-                {/* Answer — slides down */}
-                <AnimatePresence>
+                {/* Answer panel */}
+                <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      key="answer"
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      style={{ overflow: "hidden", background: "#F5F2EC", borderBottom: "1px solid #EDEAD9" }}
+                      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                      style={{ overflow: "hidden" }}
                     >
-                      <div style={{ padding: "0 28px 28px 92px" }}>
-                        <p style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          fontSize: 14,
-                          color: "#444",
-                          lineHeight: 1.85,
-                          margin: 0,
-                        }}>
-                          {faq.a}
-                        </p>
+                      <div className="trust-faq-answer">
+                        <p>{faq.a}</p>
                       </div>
                     </motion.div>
                   )}
@@ -295,26 +245,23 @@ export default function TrustSection() {
           })}
         </div>
 
-        {/* CTA */}
+        {/* ── CTA Block ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          className="trust-cta"
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ marginTop: 64, display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "center", padding: "40px 40px", background: "#F5F2EC" }}
         >
-          <div>
-            <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 26, fontWeight: 600, color: "#1A1A1A", marginBottom: 6 }}>
-              {c.ctaTitle}
-            </div>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#888", margin: 0 }}>
-              {c.ctaDesc}
-            </p>
+          <div className="trust-cta-text">
+            <div className="trust-cta-title">{c.ctaTitle}</div>
+            <p className="trust-cta-desc">{c.ctaDesc}</p>
           </div>
           <motion.a
             href="#contact"
-            whileHover={{ y: -2 }}
-            style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", padding: "14px 28px", background: "#1A1A1A", color: "#FAFAF8", textDecoration: "none", whiteSpace: "nowrap", transition: "background 0.2s" }}
+            className="trust-cta-btn"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onMouseEnter={e => (e.currentTarget.style.background = "#8B6914")}
             onMouseLeave={e => (e.currentTarget.style.background = "#1A1A1A")}
           >
@@ -322,6 +269,263 @@ export default function TrustSection() {
           </motion.a>
         </motion.div>
       </div>
+
+      <style>{`
+        /* ── Section wrapper ── */
+        .trust-section {
+          background: #FFFFFF;
+          padding: 120px 0;
+        }
+        .trust-container {
+          max-width: 860px;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+
+        /* ── Header ── */
+        .trust-header {
+          margin-bottom: 64px;
+        }
+        .trust-eyebrow {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: #8B6914;
+          margin-bottom: 20px;
+        }
+        .trust-title {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(32px, 5vw, 56px);
+          font-weight: 600;
+          color: #111111;
+          margin: 0 0 16px;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+        }
+        .trust-subtitle {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 16px;
+          color: #666;
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        /* ── FAQ list ── */
+        .trust-faq-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          border-top: 1px solid #E8E4DC;
+        }
+        .trust-faq-item {
+          border-bottom: 1px solid #E8E4DC;
+        }
+
+        /* ── FAQ button ── */
+        .trust-faq-btn {
+          width: 100%;
+          background: transparent;
+          border: none;
+          padding: 24px 0;
+          cursor: pointer;
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          text-align: left;
+          transition: background 0.2s;
+          min-height: 44px;
+        }
+        .trust-faq-btn--open {
+          background: transparent;
+        }
+        .trust-faq-btn:hover .trust-faq-q {
+          color: #8B6914;
+        }
+
+        /* ── Tag ── */
+        .trust-faq-tag {
+          font-family: 'DM Mono', monospace;
+          font-size: 9px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #AAA;
+          background: #F5F2EC;
+          padding: 4px 10px;
+          flex-shrink: 0;
+          margin-top: 3px;
+          transition: all 0.2s;
+          white-space: nowrap;
+          border-radius: 2px;
+        }
+        .trust-faq-tag--open {
+          color: #8B6914;
+          background: rgba(139,105,20,0.1);
+        }
+
+        /* ── Question text ── */
+        .trust-faq-q {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 16px;
+          font-weight: 500;
+          color: #111111;
+          line-height: 1.5;
+          flex: 1;
+          transition: color 0.2s;
+        }
+
+        /* ── Toggle icon ── */
+        .trust-faq-icon {
+          font-family: 'DM Mono', monospace;
+          font-size: 22px;
+          color: #8B6914;
+          flex-shrink: 0;
+          line-height: 1;
+          margin-top: 0px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+        }
+
+        /* ── Answer ── */
+        .trust-faq-answer {
+          padding: 0 0 28px 0;
+          padding-left: calc(16px + 52px + 16px); /* gap + tag-width + gap */
+        }
+        .trust-faq-answer p {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 15px;
+          color: #333333;
+          line-height: 1.85;
+          margin: 0;
+        }
+
+        /* ── CTA block ── */
+        .trust-cta {
+          margin-top: 64px;
+          background: #F5F2EC;
+          padding: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 32px;
+          border-radius: 4px;
+        }
+        .trust-cta-text {
+          flex: 1;
+        }
+        .trust-cta-title {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: 28px;
+          font-weight: 600;
+          color: #111111;
+          margin-bottom: 8px;
+          line-height: 1.2;
+        }
+        .trust-cta-desc {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: #666;
+          margin: 0;
+          line-height: 1.6;
+        }
+        .trust-cta-btn {
+          font-family: 'DM Mono', monospace;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 16px 32px;
+          background: #1A1A1A;
+          color: #FAFAF8;
+          text-decoration: none;
+          white-space: nowrap;
+          transition: background 0.2s;
+          flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+          min-height: 52px;
+          border-radius: 2px;
+        }
+
+        /* ════════════════════════════════════
+           MOBILE — Apple-style
+           ════════════════════════════════════ */
+        @media (max-width: 767px) {
+          .trust-section {
+            padding: 72px 0;
+          }
+          .trust-container {
+            padding: 0 20px;
+          }
+          .trust-header {
+            margin-bottom: 48px;
+          }
+          .trust-title {
+            font-size: clamp(28px, 8vw, 40px);
+            letter-spacing: -0.025em;
+          }
+          .trust-subtitle {
+            font-size: 15px;
+          }
+
+          /* FAQ items — bigger, more breathing room */
+          .trust-faq-btn {
+            padding: 20px 0;
+            gap: 12px;
+            align-items: flex-start;
+          }
+          .trust-faq-tag {
+            font-size: 8px;
+            padding: 3px 8px;
+            margin-top: 4px;
+          }
+          .trust-faq-q {
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.55;
+          }
+          .trust-faq-icon {
+            font-size: 20px;
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+          }
+
+          /* Answer — full width on mobile, no left indent */
+          .trust-faq-answer {
+            padding: 0 0 24px 0;
+          }
+          .trust-faq-answer p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #444;
+          }
+
+          /* CTA — stacked on mobile */
+          .trust-cta {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 28px 24px;
+            gap: 20px;
+            margin-top: 48px;
+          }
+          .trust-cta-title {
+            font-size: 22px;
+          }
+          .trust-cta-desc {
+            font-size: 14px;
+          }
+          .trust-cta-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px 24px;
+            font-size: 11px;
+            min-height: 52px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

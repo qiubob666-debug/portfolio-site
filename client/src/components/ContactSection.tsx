@@ -433,19 +433,39 @@ export default function ContactSection() {
           .contact-container {
             padding: 0 20px !important;
           }
+
+          /* Single column stacked */
           .contact-grid {
             grid-template-columns: 1fr !important;
-            gap: 48px !important;
+            gap: 40px !important;
           }
+
+          /* Form fields */
           .form-name-email {
             grid-template-columns: 1fr !important;
-            gap: 2px !important;
+            gap: 12px !important;
           }
+          .form-input, textarea.form-input {
+            font-size: 16px !important; /* Prevent iOS zoom */
+            padding: 14px 16px !important;
+            min-height: 52px !important;
+          }
+          textarea.form-input {
+            min-height: 120px !important;
+          }
+
+          /* Submit button */
           .contact-submit-btn {
             width: 100% !important;
-            text-align: center !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
             padding: 18px 24px !important;
+            font-size: 12px !important;
+            min-height: 56px !important;
           }
+
+          /* Contact info side */
           .wechat-number {
             font-size: 28px !important;
           }
@@ -453,7 +473,15 @@ export default function ContactSection() {
             width: 100% !important;
             justify-content: center !important;
             box-sizing: border-box !important;
+            min-height: 52px !important;
           }
+
+          /* Contact section title */
+          #contact h2 {
+            font-size: clamp(26px, 7.5vw, 36px) !important;
+          }
+
+          /* Footer */
           footer {
             padding: 20px !important;
           }

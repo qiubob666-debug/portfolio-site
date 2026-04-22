@@ -225,7 +225,7 @@ export default function HeroSection() {
 
           {/* RIGHT: Market reality ticker */}
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
-            <div style={{ background: "#111111", padding: "40px", marginBottom: 2 }}>
+            <div className="hero-ticker-box" style={{ background: "#111111", padding: "40px", marginBottom: 2 }}>
               <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B6914", marginBottom: 28, display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#22C55E" }} />
                 {c.tickerLabel}
@@ -273,20 +273,34 @@ export default function HeroSection() {
           .hero-container {
             padding: 0 20px !important;
           }
+          /* Single column stacked */
           .hero-grid {
             grid-template-columns: 1fr !important;
-            gap: 40px !important;
+            gap: 32px !important;
           }
+          /* Section top padding */
+          #home {
+            padding-top: 72px !important;
+            min-height: auto !important;
+            padding-bottom: 48px !important;
+          }
+          /* CTA buttons: full width stack */
           .hero-cta-row {
             flex-direction: column !important;
+            gap: 12px !important;
           }
           .hero-cta-primary,
           .hero-cta-secondary {
-            display: block !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
             text-align: center !important;
             padding: 16px 20px !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
+            min-height: 52px !important;
+            width: 100% !important;
           }
+          /* Stats: 3 columns but compact */
           .hero-stats-grid {
             grid-template-columns: 1fr 1fr 1fr !important;
             gap: 2px !important;
@@ -295,7 +309,14 @@ export default function HeroSection() {
             padding: 16px 8px !important;
           }
           .hero-stats-grid > div > div:first-child {
-            font-size: 22px !important;
+            font-size: 20px !important;
+          }
+          .hero-stats-grid > div > div:last-child {
+            font-size: 8px !important;
+          }
+          /* Ticker box */
+          .hero-ticker-box {
+            padding: 24px 20px !important;
           }
         }
       `}</style>

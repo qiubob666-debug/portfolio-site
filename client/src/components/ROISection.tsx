@@ -687,22 +687,33 @@ export default function ROISection() {
           .roi-container {
             padding: 0 20px !important;
           }
+
+          /* Saving banner — full width stacked */
           .roi-saving-banner {
             display: flex !important;
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 6px !important;
-            padding: 16px 20px !important;
+            padding: 20px 20px !important;
             width: 100% !important;
             box-sizing: border-box !important;
           }
+
+          /* Tabs — scrollable row */
           .roi-tabs {
-            gap: 4px !important;
+            gap: 2px !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            padding-bottom: 2px !important;
           }
+          .roi-tabs::-webkit-scrollbar { display: none; }
           .roi-tabs button {
-            font-size: 9px !important;
-            padding: 10px 12px !important;
-            flex: 1 !important;
+            font-size: 10px !important;
+            padding: 12px 14px !important;
+            flex-shrink: 0 !important;
+            white-space: nowrap !important;
+            min-height: 44px !important;
           }
 
           /* Hiring tab */
@@ -712,9 +723,9 @@ export default function ROISection() {
           }
           .hiring-row-inner > div:first-child {
             text-align: left !important;
-            font-size: 12px !important;
+            font-size: 13px !important;
             font-weight: 600 !important;
-            color: rgba(255,255,255,0.7) !important;
+            color: rgba(255,255,255,0.8) !important;
           }
           .hiring-hidden {
             margin-left: 0 !important;
@@ -730,11 +741,12 @@ export default function ROISection() {
           /* Amazon/Shopify fee rows */
           .fee-row {
             grid-template-columns: 1fr !important;
-            gap: 4px !important;
+            gap: 6px !important;
           }
           .fee-row > div:first-child {
             text-align: left !important;
-            font-size: 11px !important;
+            font-size: 13px !important;
+            color: rgba(255,255,255,0.75) !important;
           }
           .amazon-total-row {
             flex-direction: column !important;
@@ -747,6 +759,7 @@ export default function ROISection() {
           }
           .amazon-note {
             margin-left: 0 !important;
+            font-size: 12px !important;
           }
           .amazon-compare,
           .shopify-compare {
@@ -762,11 +775,29 @@ export default function ROISection() {
             grid-template-columns: 1fr !important;
             gap: 20px !important;
           }
+
+          /* Results: 2x2 grid on mobile */
           .roi-results {
             grid-template-columns: 1fr 1fr !important;
+            gap: 2px !important;
           }
           .roi-results > div {
-            padding: 16px !important;
+            padding: 16px 14px !important;
+          }
+          .roi-results > div > div:last-child {
+            font-size: 20px !important;
+          }
+
+          /* Section header */
+          #roi h2 {
+            font-size: clamp(24px, 7vw, 36px) !important;
+            line-height: 1.2 !important;
+          }
+
+          /* Data source note */
+          #roi .roi-source {
+            font-size: 10px !important;
+            line-height: 1.7 !important;
           }
         }
       `}</style>
