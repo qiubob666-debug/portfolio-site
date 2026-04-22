@@ -351,13 +351,47 @@ export default function ProcessSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  style={{ padding: "40px 48px", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  style={{ padding: "48px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#FFFFFF", border: "1px solid #E8E4DC" }}
                 >
-                  <div style={{ textAlign: "center" }}>
-                    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 64, color: "#F0EDE5", marginBottom: 16 }}>→</div>
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#CCC", margin: 0 }}>
-                      {c.defaultHint}
+                  <div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B6914", marginBottom: 24 }}>
+                      {locale === 'ja' ? 'ブランド転換' : locale === 'en' ? 'BRAND TRANSFORMATION' : '品牌转型'}
+                    </div>
+                    <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 2.5vw, 36px)", fontWeight: 600, color: "#1A1A1A", lineHeight: 1.2, margin: "0 0 20px" }}>
+                      {locale === 'ja'
+                        ? <>貧販から<em style={{ fontStyle: 'italic', color: '#8B6914' }}>ブランド</em>へ。<br />たった 7 日。</>
+                        : locale === 'en'
+                        ? <><em style={{ fontStyle: 'italic', color: '#8B6914' }}>From dropshipping</em><br />to brand. In 7 days.</>
+                        : <>从铺货到<em style={{ fontStyle: 'italic', color: '#8B6914' }}>品牌</em>，<br />只需 7 天。</>}
+                    </h3>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, lineHeight: 1.85, color: "#666", margin: "0 0 28px" }}>
+                      {locale === 'ja'
+                        ? '独自サイトを持つブランドは資産です。顧客を直接所有し、単価を自分で設定し、リピート率を高められます。プラットフォームに永遠にお金を払い続ける必要はありません。'
+                        : locale === 'en'
+                        ? 'A brand with its own store is an asset. You own your customers, set your own prices, build repeat purchase loyalty — without paying platform rent forever.'
+                        : '拥有独立站的品牌是资产。你直接拥有客户、自定价格、建立复购忠诚度——而不是永远交平台山路费。'}
                     </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {(locale === 'ja'
+                        ? ['グーグルインデックス登録　48時間以内', '独自ドメイン + 全世界からアクセス可能', 'スマホ対応 + 多言語 + 決済ゲートウェイ']
+                        : locale === 'en'
+                        ? ['Google indexed within 48 hours', 'Custom domain + globally accessible', 'Mobile-ready + multi-language + payment gateway']
+                        : ['Google 收录48小时内', '自定义域名 + 全球可访问', '手机适配 + 多语言 + 支付闸关']
+                      ).map((item, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ width: 4, height: 4, background: '#8B6914', borderRadius: '50%', flexShrink: 0 }} />
+                          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#444' }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #E8E4DC' }}>
+                    <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#B8A882', margin: '0 0 10px' }}>
+                      {locale === 'ja' ? 'ステップをクリックして詳細を確認' : locale === 'en' ? 'Click a step to see the details' : '点击左侧步骤查看详情'}
+                    </p>
+                    <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 18, color: '#1A1A1A', fontStyle: 'italic' }}>
+                      {locale === 'ja' ? 'あなたは待つだけ。後は全部私がやります。' : locale === 'en' ? 'You wait. I handle everything else.' : '你只需等待。其余的我来。'}
+                    </div>
                   </div>
                 </motion.div>
               )}
