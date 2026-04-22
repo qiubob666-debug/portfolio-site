@@ -19,6 +19,7 @@ import ProcessSection from "@/components/ProcessSection";
 import TrustSection from "@/components/TrustSection";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
+import BrandMatrixSection from "@/components/BrandMatrixSection";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
       <HeroSection />
       <ROISection />
       <ServicesSection />
+      <BrandMatrixSection />
       <CapabilitiesSection />
       <ProcessSection />
       <TrustSection />

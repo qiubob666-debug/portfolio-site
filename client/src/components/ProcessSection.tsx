@@ -1,6 +1,6 @@
 /* ProcessSection v3 — Hover-reveal interaction
    Design: Left = step list (minimal), Right = detail panel (appears on hover)
-   User sees: step name + milestone tag → hover → see "you do" + "I do" detail
+   User sees: step name + milestone tag → hover → see "you do" + "Our team does" detail
    Key: First impression is clean timeline, detail appears on demand
    Mobile: tap to reveal */
 
@@ -31,10 +31,10 @@ const COPY: Record<Locale, {
   zh: {
     eyebrow: "合作方式",
     title: "你只需要做 3 件事",
-    subtitle: "点击每个步骤，查看你需要做什么，以及我来做什么",
+    subtitle: "点击每个步骤，查看你需要做什么，以及团队来做什么",
     defaultHint: "← 点击左侧步骤查看详情",
     youLabel: "你需要做的",
-    meLabel: "我来做的",
+    meLabel: "团队来做的",
     steps: [
       {
         id: 0,
@@ -42,7 +42,7 @@ const COPY: Record<Locale, {
         title: "快速确认需求",
         milestone: "需求确认",
         youDo: "提出你的想法：品牌名、目标客户、产品类型、参考网站（有的话）。发给我你的 Logo 或参考图。大概 30 分钟的沟通。",
-        iDo: "专业需求确认路径：整理品牌定位、竞品分析、目标用户画像、网站架构规划、技术方案选型。给你一份完整的项目计划书。",
+        iDo: "专业需求确认路径：整理品牌定位、竞品分析、目标用户画像、网站架构规划、技术方案选型。团队给你一份完整的项目计划书。",
         outcomes: ["需求文档", "网站架构图", "项目时间表"],
       },
       {
@@ -50,7 +50,7 @@ const COPY: Record<Locale, {
         day: "第 2–5 天",
         title: "设计与开发",
         youDo: "看我发给你的设计稿，告诉我「这里改一下」或「可以」。你不需要懂设计，只需要告诉我你喜不喜欢。",
-        iDo: "完成品牌视觉系统（颜色、字体、Logo 应用）、所有页面设计稿、前端开发、SEO 内容写作、支付网关配置、域名部署。",
+        iDo: "团队完成品牌视觉系统（颜色、字体、Logo 应用）、所有页面设计稿、前端开发、SEO 内容写作、支付网关配置、域名部署。",
         outcomes: ["设计稿确认", "开发进度更新", "演示链接"],
       },
       {
@@ -58,7 +58,7 @@ const COPY: Record<Locale, {
         day: "第 6 天",
         title: "验收与调整",
         youDo: "在你的手机和电脑上点一遍。告诉我哪里不对，或者「没问题」。",
-        iDo: "根据你的反馈修改。性能优化（加载速度测试）。跨浏览器兼容性检查。移动端适配确认。",
+        iDo: "团队根据你的反馈修改。性能优化（加载速度测试）。跨浏览器兼容性检查。移动端适配确认。",
         outcomes: ["修改完成", "性能报告", "上线前检查清单"],
       },
       {
@@ -67,7 +67,7 @@ const COPY: Record<Locale, {
         title: "品牌站正式上线",
         milestone: "品牌站上线",
         youDo: "确认上线。",
-        iDo: "正式部署到生产环境。绑定你的域名，全球可访问。提交 Google 收录（通常 1–3 天内被索引）。发给你操作手册和后台登录信息。",
+        iDo: "团队正式部署到生产环境。绑定你的域名，全球可访问。提交 Google 收录（通常 1–3 天内被索引）。发给你操作手册和后台登录信息。",
         outcomes: ["域名绑定完成", "Google 收录提交", "全球可访问", "操作手册交付"],
       },
       {
@@ -76,7 +76,7 @@ const COPY: Record<Locale, {
         title: "电商系统上线",
         milestone: "电商站上线",
         youDo: "上传你的产品图片和描述。设置你的价格和库存。",
-        iDo: "配置购物车和结账流程。接入 Stripe/PayPal 支付网关。多币种自动转换。订单管理系统。自动化营销流程（弃购提醒、节假日促销）。数据分析面板。",
+        iDo: "团队配置购物车和结账流程。接入 Stripe/PayPal 支付网关。多币种自动转换。订单管理系统。自动化营销流程（弃购提醒、节假日促销）。数据分析面板。",
         outcomes: ["支付系统上线", "多货币支持", "订单自动化", "数据面板"],
       },
       {
@@ -94,10 +94,10 @@ const COPY: Record<Locale, {
   en: {
     eyebrow: "HOW WE WORK",
     title: "You only need to do 3 things",
-    subtitle: "Click each step to see what you do — and what I do",
+    subtitle: "Click each step to see what you do — and what Our team does",
     defaultHint: "← Click a step on the left to see details",
     youLabel: "What you do",
-    meLabel: "What I do",
+    meLabel: "What our team does",
     steps: [
       {
         id: 0,
@@ -105,7 +105,7 @@ const COPY: Record<Locale, {
         title: "Rapid requirements",
         milestone: "Requirements confirmed",
         youDo: "Share your idea: brand name, target customers, product type, reference sites (if any). Send me your logo or reference images. About 30 minutes of conversation.",
-        iDo: "Professional requirements process: brand positioning, competitive analysis, target user profiles, site architecture planning, tech stack selection. I give you a complete project plan.",
+        iDo: "Professional requirements process: brand positioning, competitive analysis, target user profiles, site architecture planning, tech stack selection. Our team gives you a complete project plan.",
         outcomes: ["Requirements doc", "Site architecture", "Project timeline"],
       },
       {
@@ -113,7 +113,7 @@ const COPY: Record<Locale, {
         day: "Days 2–5",
         title: "Design & development",
         youDo: "Review the design mockup I send you. Tell me 'change this' or 'looks good.' You don't need to know design — just tell me if you like it.",
-        iDo: "Complete brand visual system (colors, fonts, logo application), all page designs, frontend development, SEO content writing, payment gateway configuration, domain deployment.",
+        iDo: "Our team completes the brand visual system (colors, fonts, logo application), all page designs, frontend development, SEO content writing, payment gateway configuration, domain deployment.",
         outcomes: ["Design approved", "Dev progress updates", "Demo link"],
       },
       {
@@ -121,7 +121,7 @@ const COPY: Record<Locale, {
         day: "Day 6",
         title: "Review & revisions",
         youDo: "Click through the site on your phone and computer. Tell me what's off — or 'looks good.'",
-        iDo: "Apply your feedback. Performance optimization (load speed testing). Cross-browser compatibility check. Mobile responsiveness confirmation.",
+        iDo: "Our team applies your feedback. Performance optimization (load speed testing). Cross-browser compatibility check. Mobile responsiveness confirmation.",
         outcomes: ["Revisions done", "Performance report", "Pre-launch checklist"],
       },
       {
@@ -130,7 +130,7 @@ const COPY: Record<Locale, {
         title: "Brand site goes live",
         milestone: "Brand site live",
         youDo: "Confirm launch.",
-        iDo: "Deploy to production. Connect your domain — globally accessible. Submit to Google indexing (typically indexed in 1–3 days). Send you the operations manual and dashboard login.",
+        iDo: "Our team deploys to production. Connect your domain — globally accessible. Submit to Google indexing (typically indexed in 1–3 days). Send you the operations manual and dashboard login.",
         outcomes: ["Domain connected", "Google indexing submitted", "Globally accessible", "Manual delivered"],
       },
       {
@@ -139,7 +139,7 @@ const COPY: Record<Locale, {
         title: "E-commerce system live",
         milestone: "E-commerce live",
         youDo: "Upload your product photos and descriptions. Set your prices and inventory.",
-        iDo: "Configure shopping cart and checkout. Integrate Stripe/PayPal payment gateways. Multi-currency auto-conversion. Order management system. Automated marketing flows (abandoned cart, holiday promotions). Analytics dashboard.",
+        iDo: "Our team configures shopping cart and checkout. Integrate Stripe/PayPal payment gateways. Multi-currency auto-conversion. Order management system. Automated marketing flows (abandoned cart, holiday promotions). Analytics dashboard.",
         outcomes: ["Payment system live", "Multi-currency", "Order automation", "Analytics dashboard"],
       },
       {
@@ -147,7 +147,7 @@ const COPY: Record<Locale, {
         day: "After launch",
         title: "Ongoing maintenance",
         youDo: "Run your business. Message me when something comes up.",
-        iDo: "Monthly technical maintenance. Ongoing SEO optimization (keyword ranking tracking). Minor changes handled for free. 24-hour response time. Quarterly site analytics report.",
+        iDo: "Our team handles monthly technical maintenance. Ongoing SEO optimization (keyword ranking tracking). Minor changes handled for free. 24-hour response time. Quarterly site analytics report.",
         outcomes: ["24h response", "Monthly maintenance", "SEO tracking", "Quarterly report"],
       },
     ],
@@ -312,7 +312,7 @@ export default function ProcessSection() {
                     {active.title}
                   </h3>
 
-                  {/* Two columns: you do / I do */}
+                  {/* Two columns: you do / Our team does */}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 }}>
                     <div>
                       <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: "0.15em", textTransform: "uppercase", color: "#BBB", marginBottom: 12 }}>
@@ -390,7 +390,7 @@ export default function ProcessSection() {
                       {locale === 'ja' ? 'ステップをクリックして詳細を確認' : locale === 'en' ? 'Click a step to see the details' : '点击左侧步骤查看详情'}
                     </p>
                     <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 18, color: '#1A1A1A', fontStyle: 'italic' }}>
-                      {locale === 'ja' ? 'あなたは待つだけ。後は全部私がやります。' : locale === 'en' ? 'You wait. I handle everything else.' : '你只需等待。其余的我来。'}
+                      {locale === 'ja' ? 'あなたは待つだけ。後は全部私がやります。' : locale === 'en' ? 'You wait. Our team handles everything else.' : '你只需等待。其余的交给我们团队。'}
                     </div>
                   </div>
                 </motion.div>

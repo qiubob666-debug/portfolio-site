@@ -86,16 +86,16 @@ const COPY: Record<Locale, {
       {
         tag: "Risk",
         q: "What if I pay and you disappear halfway through?",
-        a: "We can do milestone-based payments: 50% after requirements are confirmed, 50% after the site launches. After each phase I'll send you progress screenshots and a demo link. If I don't deliver on time or you're not satisfied, your payment is fully refunded. That's my commitment — and how I do business.",
+        a: "We can do milestone-based payments: 50% after requirements are confirmed, 50% after the site launches. After each phase I'll send you progress screenshots and a demo link. If Our team doesn't deliver on time or you're not satisfied, your payment is fully refunded. That's my commitment — and how Our team does business.",
       },
       {
         tag: "Support",
         q: "If something breaks after launch, who fixes it?",
-        a: "I do. All packages include a 7-day free fix period after launch. After that, monthly maintenance is ¥800/month, covering technical support, minor changes, and security updates. Send me a message on WeChat — 24-hour response time. If it's a bug in my code, it's fixed for free.",
+        a: "Our team does. All packages include a 7-day free fix period after launch. After that, monthly maintenance is ¥800/month, covering technical support, minor changes, and security updates. Send me a message on WeChat — 24-hour response time. If it's a bug in my code, it's fixed for free.",
       },
       {
         tag: "Management",
-        q: "I don't know tech — can I manage the site myself after launch?",
+        q: "Our team doesn't know tech — can I manage the site myself after launch?",
         a: "Yes. I'll set up a cloud-based content management dashboard for you — your team doesn't need to know any code. Edit text, swap images, add products, check analytics — all done with a few clicks. I'll do a training session at launch and provide a written operations manual. Most clients learn the basics in 3 minutes.",
       },
       {

@@ -6,7 +6,7 @@
    Tab3: Shopify 隐藏费用 (monthly plan + plugins breakdown)
    Key: Bars animate red on scroll, saving counter prominent at top */
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 
@@ -146,6 +146,205 @@ const HIRING_ITEMS = [
     color: "#D4AC0D",
   },
 ];
+
+
+/* ─── ROI Calculator ─────────────────────────────────────────── */
+function ROICalculator({ locale }: { locale: string }) {
+  const [monthly, setMonthly] = React.useState(100000);
+  const [platform, setPlatform] = React.useState<"amazon" | "shopify">("amazon");
+
+  // Amazon total fee rate ~58% (commission 15% + FBA 20% + ads 15% + misc 8%)
+  // Shopify total cost ~¥8,800/yr + 2% transaction fee
+  const amazonFeeRate = 0.58;
+  const shopifyAnnual = 8800;
+  const shopifyTransactionRate = 0.02;
+  const ourAnnual = 8800; // our full-service package
+
+  const annualRevenue = monthly * 12;
+  const amazonLoss = annualRevenue * amazonFeeRate;
+  const shopifyLoss = shopifyAnnual + annualRevenue * shopifyTransactionRate;
+  const platformLoss = platform === "amazon" ? amazonLoss : shopifyLoss;
+  const saving = platformLoss - ourAnnual;
+  const roiMonths = ourAnnual / (saving / 12);
+
+  const fmt = (n: number) => Math.round(n).toLocaleString();
+
+  const labels = {
+    zh: {
+      title: "算一算：你每年亏多少？",
+      sub: "输入你的月销售额，看看平台每年从你口袋里拿走多少",
+      monthly_label: "月销售额（元）",
+      platform_label: "当前使用平台",
+      amazon: "亚马逊",
+      shopify: "Shopify",
+      loss_label: platform === "amazon" ? "亚马逊每年收走" : "Shopify 每年成本",
+      our_label: "找我们每年花费",
+      saving_label: "每年净节省",
+      roi_label: "回本周期",
+      roi_value: `${roiMonths < 1 ? "< 1" : fmt(roiMonths)} 个月`,
+      note: "* 亚马逊费率含：佣金 15% + FBA 头程/仓储 20% + 广告 15% + 退货/销毁/附加费 8%",
+    },
+    en: {
+      title: "Calculate Your Annual Loss",
+      sub: "Enter your monthly revenue to see how much the platform takes every year",
+      monthly_label: "Monthly Revenue (¥)",
+      platform_label: "Current Platform",
+      amazon: "Amazon",
+      shopify: "Shopify",
+      loss_label: platform === "amazon" ? "Amazon takes per year" : "Shopify costs per year",
+      our_label: "With our team per year",
+      saving_label: "Net saving per year",
+      roi_label: "Payback period",
+      roi_value: `${roiMonths < 1 ? "< 1" : fmt(roiMonths)} months`,
+      note: "* Amazon rate includes: 15% commission + 20% FBA/storage + 15% ads + 8% returns/disposal/surcharges",
+    },
+    ja: {
+      title: "年間損失を計算する",
+      sub: "月間売上を入力して、プラットフォームが毎年いくら取るかを確認",
+      monthly_label: "月間売上（¥）",
+      platform_label: "現在のプラットフォーム",
+      amazon: "Amazon",
+      shopify: "Shopify",
+      loss_label: platform === "amazon" ? "Amazonが年間取る金額" : "Shopifyの年間コスト",
+      our_label: "私たちへの年間費用",
+      saving_label: "年間純節約額",
+      roi_label: "回収期間",
+      roi_value: `${roiMonths < 1 ? "< 1" : fmt(roiMonths)} ヶ月`,
+      note: "* Amazon手数料：販売手数料15% + FBA/倉庫保管20% + 広告15% + 返品/廃棄/付加費8%",
+    },
+  };
+  const L = labels[locale as keyof typeof labels] || labels.en;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+      style={{
+        marginTop: 80,
+        padding: "48px",
+        background: "linear-gradient(135deg, #0D0D0D 0%, #1A1200 100%)",
+        border: "1px solid rgba(212,196,154,0.2)",
+      }}
+    >
+      {/* Header */}
+      <div style={{ marginBottom: 40 }}>
+        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B6914", marginBottom: 16 }}>
+          ROI Calculator
+        </div>
+        <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 600, color: "#FAFAF8", margin: "0 0 12px" }}>
+          {L.title}
+        </h3>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "#666", margin: 0 }}>
+          {L.sub}
+        </p>
+      </div>
+
+      {/* Controls */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 40 }}>
+        {/* Monthly revenue slider */}
+        <div>
+          <label style={{ display: "block", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#555", marginBottom: 12 }}>
+            {L.monthly_label}
+          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
+            <input
+              type="range"
+              min={10000}
+              max={1000000}
+              step={10000}
+              value={monthly}
+              onChange={e => setMonthly(Number(e.target.value))}
+              style={{ flex: 1, accentColor: "#D4C49A" }}
+            />
+            <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 24, fontWeight: 700, color: "#D4C49A", minWidth: 100, textAlign: "right" }}>
+              ¥{fmt(monthly)}
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'DM Mono', monospace", fontSize: 8, color: "#444" }}>
+            <span>¥10,000</span><span>¥1,000,000</span>
+          </div>
+        </div>
+
+        {/* Platform toggle */}
+        <div>
+          <label style={{ display: "block", fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#555", marginBottom: 12 }}>
+            {L.platform_label}
+          </label>
+          <div style={{ display: "flex", gap: 2 }}>
+            {(["amazon", "shopify"] as const).map(p => (
+              <button
+                key={p}
+                onClick={() => setPlatform(p)}
+                style={{
+                  flex: 1,
+                  padding: "14px",
+                  background: platform === p ? "#D4C49A" : "#1A1A1A",
+                  border: `1px solid ${platform === p ? "#D4C49A" : "#2A2A2A"}`,
+                  color: platform === p ? "#111" : "#666",
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 10,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {p === "amazon" ? L.amazon : L.shopify}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Results */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 2 }}>
+        {/* Platform loss */}
+        <div style={{ padding: "24px", background: "rgba(231,76,60,0.08)", border: "1px solid rgba(231,76,60,0.2)" }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            {L.loss_label}
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 700, color: "#E74C3C" }}>
+            ¥{fmt(platformLoss)}
+          </div>
+        </div>
+        {/* Our cost */}
+        <div style={{ padding: "24px", background: "rgba(46,204,113,0.06)", border: "1px solid rgba(46,204,113,0.18)" }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            {L.our_label}
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 700, color: "#2ECC71" }}>
+            ¥{fmt(ourAnnual)}
+          </div>
+        </div>
+        {/* Saving */}
+        <div style={{ padding: "24px", background: "rgba(212,196,154,0.06)", border: "1px solid rgba(212,196,154,0.25)" }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            {L.saving_label}
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 700, color: "#D4C49A" }}>
+            ¥{saving > 0 ? fmt(saving) : "0"}
+          </div>
+        </div>
+        {/* Payback */}
+        <div style={{ padding: "24px", background: "rgba(93,173,226,0.06)", border: "1px solid rgba(93,173,226,0.18)" }}>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            {L.roi_label}
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 700, color: "#5DADE2" }}>
+            {L.roi_value}
+          </div>
+        </div>
+      </div>
+
+      {/* Note */}
+      <div style={{ marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.2)", lineHeight: 1.8 }}>
+        {L.note}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function ROISection() {
   const { locale } = useI18n();
