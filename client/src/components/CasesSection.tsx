@@ -329,46 +329,6 @@ export default function CasesSection() {
           <p className="cases-subtitle">{c.subtitle}</p>
         </motion.div>
 
-        {/* ── Featured Live Case: Auraloop ── */}
-        <motion.a
-          href={c.featuredUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cases-featured"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          whileHover={{ scale: 1.005 }}
-        >
-          {/* Background gradient */}
-          <div className="cases-featured-bg" />
-          <div className="cases-featured-content">
-            <div className="cases-featured-left">
-              <div className="cases-featured-label">
-                <span className="cases-live-dot" />
-                {c.featuredLabel}
-              </div>
-              <div className="cases-featured-name">{c.featuredName}</div>
-              <div className="cases-featured-tagline">{c.featuredTagline}</div>
-              <p className="cases-featured-desc">{c.featuredDesc}</p>
-              <div className="cases-featured-stack">
-                {c.featuredStack.map((t) => (
-                  <span key={t} className="cases-stack-tag">{t}</span>
-                ))}
-              </div>
-            </div>
-            <div className="cases-featured-right">
-              <div className="cases-featured-visual">
-                <div className="cases-featured-visual-inner">
-                  <div className="cases-featured-visual-logo">AL</div>
-                  <div className="cases-featured-visual-url">auraloop.bobqiushao.online</div>
-                </div>
-              </div>
-              <div className="cases-featured-cta">{c.featuredCta}</div>
-            </div>
-          </div>
-        </motion.a>
 
         {/* ── Concept Design Grid ── */}
         <div className="cases-section-header">
