@@ -359,10 +359,10 @@ export default function ProcessSection() {
                     </div>
                     <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 2.5vw, 36px)", fontWeight: 600, color: "#1A1A1A", lineHeight: 1.2, margin: "0 0 20px" }}>
                       {locale === 'ja'
-                        ? <>貧販から<em style={{ fontStyle: 'italic', color: '#8B6914' }}>ブランド</em>へ。<br />たった 7 日。</>
+                        ? <>貧販から<em style={{ fontStyle: 'italic', color: '#8B6914' }}>ブランド</em>へ。<br />たった 10 日。</>
                         : locale === 'en'
-                        ? <><em style={{ fontStyle: 'italic', color: '#8B6914' }}>From dropshipping</em><br />to brand. In 7 days.</>
-                        : <>从铺货到<em style={{ fontStyle: 'italic', color: '#8B6914' }}>品牌</em>，<br />只需 7 天。</>}
+                        ? <><em style={{ fontStyle: 'italic', color: '#8B6914' }}>From dropshipping</em><br />to brand. In 10 days.</>
+                        : <>从铺货到<em style={{ fontStyle: 'italic', color: '#8B6914' }}>品牌</em>，<br />只需 10 天。</>}
                     </h3>
                     <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, lineHeight: 1.85, color: "#666", margin: "0 0 28px" }}>
                       {locale === 'ja'

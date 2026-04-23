@@ -333,18 +333,18 @@ export default function ContactSection() {
                 {(locale === 'zh'
                   ? [
                       { icon: "🔒", label: "固定报价", desc: "报价即合同，不追加费用" },
-                      { icon: "⚡", label: "7 天交付", desc: "品牌站最快 7 天上线" },
+                      { icon: "⚡", label: "10 天交付", desc: "品牌站最快 10 天上线" },
                       { icon: "🔄", label: "不满意退款", desc: "交付不符预期全额退款" },
                     ]
                   : locale === 'ja'
                   ? [
                       { icon: "🔒", label: "固定料金", desc: "見積もりが契約。追加費用なし" },
-                      { icon: "⚡", label: "7日納品", desc: "ブランドサイトは最短7日" },
+                      { icon: "⚡", label: "10日納品", desc: "ブランドサイトは最短10日" },
                       { icon: "🔄", label: "返金保証", desc: "期待に応えられなければ全額返金" },
                     ]
                   : [
                       { icon: "🔒", label: "Fixed Price", desc: "Quote is the contract. No surprises." },
-                      { icon: "⚡", label: "7-Day Delivery", desc: "Brand site live in as fast as 7 days." },
+                      { icon: "⚡", label: "10-Day Delivery", desc: "Brand site live in as fast as 10 days." },
                       { icon: "🔄", label: "Refund Guarantee", desc: "Full refund if we don't meet expectations." },
                     ]
                 ).map((item, i) => (

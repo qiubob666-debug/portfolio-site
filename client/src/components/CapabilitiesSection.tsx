@@ -1,376 +1,514 @@
-/* CapabilitiesSection v3 — Progressive Disclosure Cards
-   Design: 6 cards in 3×2 grid, each card shows ONLY the value headline first
-   Hover: card expands to show detail + data proof
-   Key: User sees minimal info first, gets more when curious
-   NO tech terms. Pure business value language.
-   Mobile: 2-column grid, tap to expand (no hover dependency) */
+/* CapabilitiesSection v4 — Capability Library
+   Design: 4 capability domain cards (2x2 grid) + 1 expansion card
+   Each card: domain name, tech stack, live case reference, demo link
+   Key: Shows technical differentiation, not just business outcomes
+   Mobile: 1-column stack */
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 import type { Locale } from "@/i18n/translations";
 
-const COPY: Record<Locale, {
+interface CapabilityCard {
+  number: string;
+  domain: string;
+  tagline: string;
+  items: string[];
+  liveCase: string;
+  liveCaseUrl: string;
+  demoLabel: string;
+}
+
+interface MoreCard {
+  label: string;
+  items: string[];
+  note: string;
+}
+
+interface CopySingle {
   eyebrow: string;
   title: string;
   subtitle: string;
-  subtitleMobile: string;
-  cards: {
-    number: string;
-    headline: string;
-    subline: string;
-    detail: string;
-    proof: string;
-    proofLabel: string;
-  }[];
-}> = {
+  cards: CapabilityCard[];
+  more: MoreCard;
+}
+
+const COPY: Record<Locale, CopySingle> = {
   zh: {
-    eyebrow: "你能得到什么",
-    title: "6 个结果，不是 6 个功能",
-    subtitle: "悬停查看每个结果如何实现",
-    subtitleMobile: "点击查看每个结果如何实现",
+    eyebrow: "CAPABILITY LIBRARY",
+    title: "\u6211\u7684\u80fd\u529b\u5e93",
+    subtitle: "4 \u7c7b\u5df2\u5b9e\u6218\u9a8c\u8bc1\u7684\u65b9\u6848\u80fd\u529b\uff0c\u6301\u7eed\u6269\u5c55\u4e2d\u3002\u6bcf\u4e00\u9879\u90fd\u5728 Auraloop \u771f\u5b9e\u8fd0\u884c\u8fc7\u3002",
     cards: [
       {
         number: "01",
-        headline: "客户主动找上门",
-        subline: "不靠广告，靠搜索排名",
-        detail: "品牌矩阵建站：每个产品、每个使用场景都有独立落地页。用户搜索相关词，第一个看到的是你。ChatGPT 推荐同类产品时，引用的是你的品牌。这是持续免费的流量复利。",
-        proof: "SEO 流量获客成本比广告低 87%",
-        proofLabel: "HubSpot 2024",
+        domain: "\u8ba4\u8bc1 + \u793e\u533a",
+        tagline: "\u8ba9\u7528\u6237\u767b\u5f55\u3001\u7559\u4e0b\u3001\u4e92\u52a8",
+        items: [
+          "Google OAuth \u4e00\u952e\u767b\u5f55",
+          "Supabase \u793e\u533a\u6570\u636e\u5e93",
+          "\u90ae\u4ef6 + \u8be2\u76d8\u7ba1\u7406\u7cfb\u7edf",
+          "\u7528\u6237\u6743\u9650\u5206\u7ea7\u63a7\u5236",
+        ],
+        liveCase: "\u5b9e\u6218\u6848\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u7acb\u523b\u770b\u6f14\u793a \u2192",
       },
       {
         number: "02",
-        headline: "卖出更高的价格",
-        subline: "同款产品，品牌站溢价 30–50%",
-        detail: "专业品牌网站是最强的定价工具。品牌故事、场景化展示、用户评论——让客户觉得「这个品牌值这个价」。铺货卖 ¥99，品牌卖 ¥149，同样的产品，不同的利润率。",
-        proof: "有品牌官网的卖家平均客单价高 35%",
-        proofLabel: "Shopify 商家数据",
+        domain: "\u54c1\u724c\u77e9\u9635",
+        tagline: "\u4e00\u5957\u7cfb\u7edf\uff0c\u591a\u4e2a\u54c1\u724c\u95e8\u6237",
+        items: [
+          "Headless WooCommerce \u96f6\u6210\u672c\u5e73\u66ff Shopify",
+          "Vercel \u591a\u524d\u7f00\u57df\u540d\u54c1\u724c\u77e9\u9635",
+          "\u591a\u4ea7\u54c1\u7ebf\u72ec\u7acb\u843d\u5730\u9875",
+          "SEO \u77e9\u9635\u5168\u8986\u76d6",
+        ],
+        liveCase: "\u5b9e\u6218\u6848\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u7acb\u523b\u770b\u6f14\u793a \u2192",
       },
       {
         number: "03",
-        headline: "全球客户一键付款",
-        subline: "多货币、多支付方式，自动适配",
-        detail: "Stripe、PayPal、Apple Pay、支付宝国际版全部内置。自动识别买家所在地区，显示对应货币。美国客户看到美元，日本客户看到日元。自定义结账流程，减少购物车放弃。",
-        proof: "多货币结账提升转化率 12–18%",
-        proofLabel: "Stripe 官方数据",
+        domain: "\u5185\u5bb9\u5de5\u5382",
+        tagline: "\u5185\u5bb9\u81ea\u52a8\u751f\u4ea7\u3001\u81ea\u52a8\u5206\u53d1",
+        items: [
+          "n8n \u5de5\u4f5c\u6d41\u81ea\u52a8\u5316\u7f16\u6392",
+          "Sanity CMS \u7ed3\u6784\u5316\u5185\u5bb9\u7ba1\u7406",
+          "\u591a\u8bed\u8a00 / \u591a\u5e73\u53f0\u81ea\u52a8\u5206\u53d1",
+          "AI \u5185\u5bb9\u751f\u6210 + \u5b9a\u65f6\u53d1\u5e03",
+        ],
+        liveCase: "\u5b9e\u6218\u6848\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u7acb\u523b\u770b\u6f14\u793a \u2192",
       },
       {
         number: "04",
-        headline: "运营不再靠人盯",
-        subline: "3 个岗位的工作，系统自动完成",
-        detail: "订单确认、发货通知、物流追踪自动发送。库存低于设定值自动提醒。节假日促销自动触发。社媒内容定时发布。你的团队只处理真正需要人判断的事。",
-        proof: "自动化减少 60–80% 重复运营工作量",
-        proofLabel: "Zapier 行业报告",
-      },
-      {
-        number: "05",
-        headline: "比竞争对手加载更快",
-        subline: "速度 = 排名 = 转化率",
-        detail: "现代前端技术构建，全球 CDN 加速，首屏加载 < 1.5 秒。Google 把加载速度作为排名因素。你的竞争对手用 WordPress 加载 3–5 秒，你 1 秒内打开，客户不会跑。",
-        proof: "每快 1 秒，转化率提升 7%",
-        proofLabel: "Google Core Web Vitals",
-      },
-      {
-        number: "06",
-        headline: "你掌控一切数据",
-        subline: "流量、订单、用户——全在你手里",
-        detail: "云端内容管理后台，3 分钟学会操作。实时流量、产品热度、地区分布、渠道转化——一个面板全看到。用户评论一键管理。出了问题，你第一个知道，不是等客户投诉。",
-        proof: "数据驱动决策的品牌年增长率高 2.3 倍",
-        proofLabel: "McKinsey 数字化报告",
+        domain: "\u524d\u7aef + CDN",
+        tagline: "\u9ad8\u5ba1\u7f8e \u00d7 \u9ad8\u6027\u80fd \u00d7 \u9ad8\u8f6c\u5316",
+        items: [
+          "\u73b0\u4ee3\u8bbe\u8ba1\u8bed\u8a00\uff08Cormorant / DM Sans\uff09",
+          "Cloudflare / Vercel \u5168\u7403 CDN",
+          "\u9996\u5c4f < 1.5s\uff0cLighthouse \u2265 90",
+          "\u9ad8\u8f6c\u5316\u7387\u843d\u5730\u9875\u4f18\u5316",
+        ],
+        liveCase: "\u5b9e\u6218\u6848\u4f8b\uff1a\u5168\u90e8\u9879\u76ee",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u7acb\u523b\u770b\u6f14\u793a \u2192",
       },
     ],
+    more: {
+      label: "+ \u66f4\u591a\u80fd\u529b\u5373\u5c06\u52a0\u5165",
+      items: [
+        "\u9009\u54c1\u7cfb\u7edf / \u7ade\u54c1\u76d1\u63a7",
+        "BI \u6570\u636e\u770b\u677f",
+        "AI Agent \u81ea\u52a8\u5ba2\u670d",
+        "\u591a\u4ed3\u5e93\u5b58\u7ba1\u7406",
+      ],
+      note: "\u80fd\u529b\u5e93\u6301\u7eed\u6269\u5c55\u4e2d\uff0c\u6bcf\u9879\u80fd\u529b\u5747\u6709\u5b9e\u6218\u9a8c\u8bc1\u540e\u624d\u52a0\u5165\u3002",
+    },
   },
   en: {
-    eyebrow: "WHAT YOU GET",
-    title: "6 results, not 6 features",
-    subtitle: "Hover to see how each result is achieved",
-    subtitleMobile: "Tap to see how each result is achieved",
+    eyebrow: "CAPABILITY LIBRARY",
+    title: "My Capability Library",
+    subtitle: "4 battle-tested capability domains, continuously expanding. Every item has been live in Auraloop.",
     cards: [
       {
         number: "01",
-        headline: "Customers find you",
-        subline: "No ads — organic search traffic",
-        detail: "Brand matrix store strategy: every product and use case gets its own landing page. When someone searches, your brand appears first. When ChatGPT recommends products in your category, it cites your brand. This is compounding free traffic.",
-        proof: "SEO acquisition cost is 87% lower than paid ads",
-        proofLabel: "HubSpot 2024",
+        domain: "Auth + Community",
+        tagline: "Let users log in, stay, and engage",
+        items: [
+          "Google OAuth one-click login",
+          "Supabase community database",
+          "Email + inquiry management system",
+          "Tiered user permission control",
+        ],
+        liveCase: "Live Case: Auraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "See live demo \u2192",
       },
       {
         number: "02",
-        headline: "Sell at higher prices",
-        subline: "Same product, brand site adds 30–50% premium",
-        detail: "A professional brand website is the strongest pricing tool. Brand story, scene-based product display, customer reviews — customers feel 'this brand is worth the price.' Dropshipping sells at ¥99, brand sells at ¥149. Same product, different margin.",
-        proof: "Sellers with brand websites average 35% higher AOV",
-        proofLabel: "Shopify Merchant Data",
+        domain: "Brand Matrix",
+        tagline: "One system, multiple brand portals",
+        items: [
+          "Headless WooCommerce as zero-cost Shopify alternative",
+          "Vercel multi-prefix domain brand matrix",
+          "Independent landing pages per product line",
+          "Full SEO matrix coverage",
+        ],
+        liveCase: "Live Case: Auraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "See live demo \u2192",
       },
       {
         number: "03",
-        headline: "Global buyers pay in one click",
-        subline: "Multi-currency, multi-payment, auto-adapted",
-        detail: "Stripe, PayPal, Apple Pay, and international Alipay all built in. Automatically detects buyer location and shows the right currency. US buyers see USD, Japanese buyers see JPY. Custom checkout reduces cart abandonment.",
-        proof: "Multi-currency checkout lifts conversion 12–18%",
-        proofLabel: "Stripe Official Data",
+        domain: "Content Factory",
+        tagline: "Auto-produce, auto-distribute content",
+        items: [
+          "n8n workflow automation orchestration",
+          "Sanity CMS structured content management",
+          "Multi-language / multi-platform auto-distribution",
+          "AI content generation + scheduled publishing",
+        ],
+        liveCase: "Live Case: Auraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "See live demo \u2192",
       },
       {
         number: "04",
-        headline: "Operations run themselves",
-        subline: "3 full-time jobs, done by the system",
-        detail: "Order confirmations, shipping notifications, tracking updates sent automatically. Low inventory alerts. Holiday promotions auto-trigger. Social content scheduled. Your team only handles things that genuinely need human judgment.",
-        proof: "Automation reduces 60–80% of repetitive ops workload",
-        proofLabel: "Zapier Industry Report",
-      },
-      {
-        number: "05",
-        headline: "Faster than your competitors",
-        subline: "Speed = ranking = conversion rate",
-        detail: "Modern frontend tech, global CDN, first-screen load < 1.5s. Google uses load speed as a ranking factor. Your competitors use WordPress (3–5s load). Your site opens in under 1 second. Customers don't leave.",
-        proof: "Every 1-second improvement = 7% conversion rate increase",
-        proofLabel: "Google Core Web Vitals",
-      },
-      {
-        number: "06",
-        headline: "You own all the data",
-        subline: "Traffic, orders, users — all in your hands",
-        detail: "Cloud-based CMS dashboard, learned in 3 minutes. Real-time traffic, product popularity, regional breakdown, channel conversion — one panel shows everything. Customer review management in one click. You know when something goes wrong before customers complain.",
-        proof: "Data-driven brands grow 2.3× faster",
-        proofLabel: "McKinsey Digital Report",
+        domain: "Frontend + CDN",
+        tagline: "High aesthetics x performance x conversion",
+        items: [
+          "Modern design language (Cormorant / DM Sans)",
+          "Cloudflare / Vercel global CDN",
+          "First paint < 1.5s, Lighthouse >= 90",
+          "High-conversion landing page optimization",
+        ],
+        liveCase: "Live Case: All projects",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "See live demo \u2192",
       },
     ],
+    more: {
+      label: "+ More capabilities coming",
+      items: [
+        "Product selection / competitor monitoring",
+        "BI data dashboards",
+        "AI Agent auto customer service",
+        "Multi-warehouse inventory management",
+      ],
+      note: "Capability library continuously expanding — each item is added only after real-world validation.",
+    },
   },
   ja: {
-    eyebrow: "あなたが得るもの",
-    title: "6つの結果、6つの機能ではない",
-    subtitle: "ホバーして各結果の実現方法を確認",
-    subtitleMobile: "タップして各結果の実現方法を確認",
+    eyebrow: "CAPABILITY LIBRARY",
+    title: "\u79c1\u306e\u80fd\u529b\u30e9\u30a4\u30d6\u30e9\u30ea",
+    subtitle: "\u5b9f\u6226\u691c\u8a3c\u6e08\u307f\u306e4\u3064\u306e\u80fd\u529b\u30c9\u30e1\u30a4\u30f3\u3001\u7d99\u7d9a\u7684\u306b\u62e1\u5f35\u4e2d\u3002\u3059\u3079\u3066Auraloop\u3067\u5b9f\u969b\u306b\u7a3c\u50cd\u3057\u3066\u3044\u307e\u3059\u3002",
     cards: [
       {
         number: "01",
-        headline: "顧客が自分から来る",
-        subline: "広告不要、検索ランキングで集客",
-        detail: "ブランドマトリックス戦略：すべての商品とユースケースに独自のランディングページ。検索すると最初にあなたのブランドが表示される。ChatGPTが同カテゴリを推薦する際、あなたのブランドが引用される。これは複利的な無料トラフィック。",
-        proof: "SEO獲得コストは広告より87%低い",
-        proofLabel: "HubSpot 2024",
+        domain: "\u8a8d\u8a3c + \u30b3\u30df\u30e5\u30cb\u30c6\u30a3",
+        tagline: "\u30e6\u30fc\u30b6\u30fc\u306e\u30ed\u30b0\u30a4\u30f3\u30fb\u5b9a\u7740\u30fb\u4ea4\u6d41\u3092\u5b9f\u73fe",
+        items: [
+          "Google OAuth\u30ef\u30f3\u30af\u30ea\u30c3\u30af\u30ed\u30b0\u30a4\u30f3",
+          "Supabase\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u30c7\u30fc\u30bf\u30d9\u30fc\u30b9",
+          "\u30e1\u30fc\u30eb\uff0b\u554f\u3044\u5408\u308f\u305b\u7ba1\u7406\u30b7\u30b9\u30c6\u30e0",
+          "\u30e6\u30fc\u30b6\u30fc\u6a29\u9650\u968e\u5c64\u5236\u5fa1",
+        ],
+        liveCase: "\u5b9f\u6226\u4e8b\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u30c7\u30e2\u3092\u898b\u308b \u2192",
       },
       {
         number: "02",
-        headline: "より高い価格で売れる",
-        subline: "同じ商品でもブランドサイトで30〜50%プレミアム",
-        detail: "プロのブランドサイトは最強の価格設定ツール。ブランドストーリー、シーンベースの展示、顧客レビューで「このブランドはこの価格の価値がある」と感じさせる。同じ商品でも利益率が変わる。",
-        proof: "ブランドサイトを持つ販売者のAOVは35%高い",
-        proofLabel: "Shopifyマーチャントデータ",
+        domain: "\u30d6\u30e9\u30f3\u30c9\u30de\u30c8\u30ea\u30c3\u30af\u30b9",
+        tagline: "1\u3064\u306e\u30b7\u30b9\u30c6\u30e0\u3067\u8907\u6570\u306e\u30d6\u30e9\u30f3\u30c9\u30dd\u30fc\u30bf\u30eb",
+        items: [
+          "Headless WooCommerce\u306b\u3088\u308bShopify\u4ee3\u66ff",
+          "Vercel\u30de\u30eb\u30c1\u30d7\u30ec\u30d5\u30a3\u30c3\u30af\u30b9\u30c9\u30e1\u30a4\u30f3",
+          "\u88fd\u54c1\u30e9\u30a4\u30f3\u3054\u3068\u306e\u72ec\u7acb\u30e9\u30f3\u30c7\u30a3\u30f3\u30b0\u30da\u30fc\u30b8",
+          "SEO\u30de\u30c8\u30ea\u30c3\u30af\u30b9\u5b8c\u5168\u30ab\u30d0\u30fc",
+        ],
+        liveCase: "\u5b9f\u6226\u4e8b\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u30c7\u30e2\u3092\u898b\u308b \u2192",
       },
       {
         number: "03",
-        headline: "世界中のバイヤーがワンクリックで決済",
-        subline: "多通貨・多決済方法、自動適応",
-        detail: "Stripe、PayPal、Apple Pay、Alipay国際版を内蔵。バイヤーの所在地を自動検出し適切な通貨を表示。米国バイヤーにはUSD、日本バイヤーにはJPY。カスタムチェックアウトでカート放棄を削減。",
-        proof: "多通貨チェックアウトでコンバージョン12〜18%向上",
-        proofLabel: "Stripe公式データ",
+        domain: "\u30b3\u30f3\u30c6\u30f3\u30c4\u30d5\u30a1\u30af\u30c8\u30ea\u30fc",
+        tagline: "\u30b3\u30f3\u30c6\u30f3\u30c4\u306e\u81ea\u52d5\u751f\u7523\u30fb\u81ea\u52d5\u914d\u4fe1",
+        items: [
+          "n8n\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u81ea\u52d5\u5316\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3",
+          "Sanity CMS\u69cb\u9020\u5316\u30b3\u30f3\u30c6\u30f3\u30c4\u7ba1\u7406",
+          "\u591a\u8a00\u8a9e/\u591a\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0\u81ea\u52d5\u914d\u4fe1",
+          "AI\u30b3\u30f3\u30c6\u30f3\u30c4\u751f\u6210\uff0b\u30b9\u30b1\u30b8\u30e5\u30fc\u30eb\u516c\u958b",
+        ],
+        liveCase: "\u5b9f\u6226\u4e8b\u4f8b\uff1aAuraloop",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u30c7\u30e2\u3092\u898b\u308b \u2192",
       },
       {
         number: "04",
-        headline: "運営が自動化される",
-        subline: "3人分の仕事をシステムが自動完了",
-        detail: "注文確認、発送通知、追跡更新を自動送信。在庫アラート。季節プロモーション自動トリガー。SNSコンテンツ定時投稿。チームは本当に人間の判断が必要なことだけを処理。",
-        proof: "自動化で繰り返し作業の60〜80%を削減",
-        proofLabel: "Zapier業界レポート",
-      },
-      {
-        number: "05",
-        headline: "競合より速く表示される",
-        subline: "速度＝ランキング＝コンバージョン率",
-        detail: "最新フロントエンド技術、グローバルCDN、ファーストスクリーン1.5秒未満。Googleは速度をランキング要因として使用。競合はWordPress（3〜5秒）、あなたのサイトは1秒以内。顧客が離れない。",
-        proof: "1秒改善するごとにコンバージョン7%向上",
-        proofLabel: "Google Core Web Vitals",
-      },
-      {
-        number: "06",
-        headline: "すべてのデータを掌握",
-        subline: "トラフィック、注文、ユーザー—全部あなたの手に",
-        detail: "クラウドCMSダッシュボード、3分で習得。リアルタイムトラフィック、商品人気度、地域分布、チャネルコンバージョンを1つのパネルで確認。レビュー管理もワンクリック。問題が起きたとき、顧客より先に知る。",
-        proof: "データ駆動型ブランドの成長率は2.3倍",
-        proofLabel: "McKinseyデジタルレポート",
+        domain: "\u30d5\u30ed\u30f3\u30c8\u30a8\u30f3\u30c9 + CDN",
+        tagline: "\u9ad8\u5be9\u7f8e \u00d7 \u9ad8\u6027\u80fd \u00d7 \u9ad8\u30b3\u30f3\u30d0\u30fc\u30b8\u30e7\u30f3",
+        items: [
+          "\u30e2\u30c0\u30f3\u30c7\u30b6\u30a4\u30f3\u8a00\u8a9e\uff08Cormorant / DM Sans\uff09",
+          "Cloudflare / Vercel\u30b0\u30ed\u30fc\u30d0\u30ebCDN",
+          "\u521d\u56de\u63cf\u753b < 1.5\u79d2\u3001Lighthouse >= 90",
+          "\u9ad8\u30b3\u30f3\u30d0\u30fc\u30b8\u30e7\u30f3\u30e9\u30f3\u30c7\u30a3\u30f3\u30b0\u30da\u30fc\u30b8\u6700\u9069\u5316",
+        ],
+        liveCase: "\u5b9f\u6226\u4e8b\u4f8b\uff1a\u5168\u30d7\u30ed\u30b8\u30a7\u30af\u30c8",
+        liveCaseUrl: "https://auraloop.bobqiushao.online",
+        demoLabel: "\u30c7\u30e2\u3092\u898b\u308b \u2192",
       },
     ],
+    more: {
+      label: "+ \u3055\u3089\u306a\u308b\u80fd\u529b\u304c\u8ffd\u52a0\u4e88\u5b9a",
+      items: [
+        "\u5546\u54c1\u9078\u5b9a/\u7af6\u5408\u30e2\u30cb\u30bf\u30ea\u30f3\u30b0",
+        "BI\u30c7\u30fc\u30bf\u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9",
+        "AI\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u81ea\u52d5\u30ab\u30b9\u30bf\u30de\u30fc\u30b5\u30fc\u30d3\u30b9",
+        "\u30de\u30eb\u30c1\u5009\u5eab\u5728\u5eab\u7ba1\u7406",
+      ],
+      note: "\u80fd\u529b\u30e9\u30a4\u30d6\u30e9\u30ea\u306f\u7d99\u7d9a\u7684\u306b\u62e1\u5f35\u4e2d\u2014\u2014\u5404\u9805\u76ee\u306f\u5b9f\u6226\u691c\u8a3c\u5f8c\u306b\u306e\u307f\u8ffd\u52a0\u3055\u308c\u307e\u3059\u3002",
+    },
   },
 };
 
 export default function CapabilitiesSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
-
-  const handleCardInteraction = (i: number) => {
-    // On mobile: toggle expand; on desktop: handled by hover
-    setExpandedIdx(expandedIdx === i ? null : i);
-  };
 
   return (
-    <section id="capabilities" style={{ background: "#F5F2EC", padding: "120px 0" }}>
-      <div className="cap-container" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
-
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ marginBottom: 72 }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B6914", marginBottom: 20 }}>
-            {c.eyebrow}
-          </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 4vw, 56px)", fontWeight: 600, color: "#1A1A1A", margin: "0 0 12px", lineHeight: 1.1 }}>
-            {c.title}
-          </h2>
-          <p className="cap-subtitle-desktop" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitle}</p>
-          <p className="cap-subtitle-mobile" style={{ display: "none", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#999", letterSpacing: "0.03em" }}>{c.subtitleMobile}</p>
+    <section id="capabilities" className="cap-section">
+      <div className="cap-container">
+        <motion.div
+          className="cap-header"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="cap-eyebrow">{c.eyebrow}</div>
+          <h2 className="cap-title">{c.title}</h2>
+          <p className="cap-subtitle">{c.subtitle}</p>
         </motion.div>
 
-        {/* 3×2 card grid (desktop) / 2×3 grid (mobile) */}
-        <div className="cap-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
-          {c.cards.map((card, i) => {
-            const isActive = hoveredIdx === i || expandedIdx === i;
-            return (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.07 }}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                onClick={() => handleCardInteraction(i)}
-                className="cap-card"
-                style={{
-                  background: isActive ? "#1A1A1A" : "#FFFFFF",
-                  padding: "40px 36px",
-                  cursor: "pointer",
-                  transition: "background 0.3s",
-                  minHeight: 260,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Number */}
-                <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 56, fontWeight: 700, lineHeight: 1, color: isActive ? "rgba(255,255,255,0.06)" : "#F0EDE5", position: "absolute", top: 20, right: 24, transition: "color 0.3s" }}>
-                  {card.number}
+        <div className="cap-grid">
+          {c.cards.map((card, i) => (
+            <motion.div
+              key={card.number}
+              className="cap-card"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <div className="cap-card-number">{card.number}</div>
+              <div className="cap-card-domain">{card.domain}</div>
+              <div className="cap-card-tagline">{card.tagline}</div>
+              <ul className="cap-card-list">
+                {card.items.map((item) => (
+                  <li key={item} className="cap-card-item">
+                    <span className="cap-card-dot">·</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="cap-card-footer">
+                <div className="cap-card-live">
+                  <span className="cap-live-dot" />
+                  {card.liveCase}
                 </div>
-
-                {/* Default view: headline + subline */}
-                <div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(18px, 2vw, 26px)", fontWeight: 600, color: isActive ? "#FAFAF8" : "#1A1A1A", margin: "0 0 10px", lineHeight: 1.25, transition: "color 0.3s" }}>
-                    {card.headline}
-                  </h3>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: isActive ? "rgba(255,255,255,0.4)" : "#999", margin: 0, transition: "color 0.3s" }}>
-                    {card.subline}
-                  </p>
-                </div>
-
-                {/* Expanded detail: progressive disclosure */}
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.25 }}
-                      style={{ marginTop: 24 }}
-                    >
-                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.75, margin: "0 0 20px" }}>
-                        {card.detail}
-                      </p>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 10, borderLeft: "2px solid #8B6914", paddingLeft: 12 }}>
-                        <div>
-                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600, color: "#D4C49A", marginBottom: 2 }}>
-                            {card.proof}
-                          </div>
-                          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
-                            {card.proofLabel}
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Expand indicator */}
-                {!isActive && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="cap-hint" style={{ marginTop: 24, fontFamily: "'DM Mono', monospace", fontSize: 9, color: "#C8B87A", letterSpacing: "0.1em" }}>
-                    <span className="cap-hint-desktop">hover →</span>
-                    <span className="cap-hint-mobile" style={{ display: "none" }}>tap →</span>
-                  </motion.div>
-                )}
-              </motion.div>
-            );
-          })}
+                <a
+                  href={card.liveCaseUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cap-card-demo"
+                >
+                  {card.demoLabel}
+                </a>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        <motion.div
+          className="cap-more"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <div className="cap-more-label">{c.more.label}</div>
+          <div className="cap-more-items">
+            {c.more.items.map((item) => (
+              <span key={item} className="cap-more-item">{item}</span>
+            ))}
+          </div>
+          <p className="cap-more-note">{c.more.note}</p>
+        </motion.div>
       </div>
 
       <style>{`
-        @media (max-width: 767px) {
-          #capabilities {
-            padding: 72px 0 !important;
-          }
-          .cap-container {
-            padding: 0 20px !important;
-          }
-
-          /* 2-column grid on mobile */
-          .cap-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 2px !important;
-          }
-
-          /* Cards: larger touch area, better readability */
-          .cap-card {
-            padding: 20px 16px !important;
-            min-height: 160px !important;
-          }
-          .cap-card-icon {
-            font-size: 20px !important;
-            margin-bottom: 10px !important;
-          }
-          .cap-card-title {
-            font-size: 14px !important;
-            margin-bottom: 8px !important;
-            line-height: 1.3 !important;
-          }
-          .cap-card-desc {
-            font-size: 12px !important;
-            line-height: 1.6 !important;
-          }
-          .cap-card-tags {
-            gap: 4px !important;
-            margin-top: 12px !important;
-          }
-          .cap-card-tag {
-            font-size: 8px !important;
-            padding: 3px 6px !important;
-          }
-
-          /* Section title */
-          #capabilities h2 {
-            font-size: clamp(26px, 7.5vw, 36px) !important;
-          }
-
-          /* Mobile text variants */
-          .cap-subtitle-desktop {
-            display: none !important;
-          }
-          .cap-subtitle-mobile {
-            display: block !important;
-            font-size: 15px !important;
-          }
-          .cap-hint-desktop {
-            display: none !important;
-          }
-          .cap-hint-mobile {
-            display: inline !important;
-          }
+        .cap-section {
+          background: #FAFAF8;
+          padding: 120px 0;
         }
-
-        /* Very small phones: 1 column */
-        @media (max-width: 360px) {
-          .cap-grid {
-            grid-template-columns: 1fr !important;
-          }
+        .cap-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+        .cap-header { margin-bottom: 64px; }
+        .cap-eyebrow {
+          font-family: "DM Mono", monospace;
+          font-size: 10px;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: #8B6914;
+          margin-bottom: 20px;
+        }
+        .cap-title {
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: clamp(28px, 4vw, 56px);
+          font-weight: 600;
+          color: #111111;
+          margin: 0 0 12px;
+          line-height: 1.1;
+        }
+        .cap-subtitle {
+          font-family: "DM Sans", sans-serif;
+          font-size: 15px;
+          color: #666;
+          max-width: 560px;
+          line-height: 1.7;
+          margin: 0;
+        }
+        .cap-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 2px;
+          margin-bottom: 2px;
+        }
+        .cap-card {
+          background: #111111;
+          padding: 48px 44px;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          min-height: 360px;
+          transition: background 0.2s;
+        }
+        .cap-card:hover { background: #161616; }
+        .cap-card-number {
+          font-family: "DM Mono", monospace;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          color: rgba(255,255,255,0.2);
+          margin-bottom: 20px;
+        }
+        .cap-card-domain {
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: clamp(22px, 2.5vw, 32px);
+          font-weight: 600;
+          color: #FAFAF8;
+          letter-spacing: -0.01em;
+          line-height: 1.1;
+          margin-bottom: 8px;
+        }
+        .cap-card-tagline {
+          font-family: "DM Sans", sans-serif;
+          font-size: 13px;
+          color: rgba(255,255,255,0.4);
+          margin-bottom: 28px;
+          line-height: 1.5;
+        }
+        .cap-card-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .cap-card-item {
+          font-family: "DM Sans", sans-serif;
+          font-size: 13px;
+          color: rgba(255,255,255,0.65);
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          line-height: 1.5;
+        }
+        .cap-card-dot {
+          color: #8B6914;
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+        .cap-card-footer {
+          margin-top: 32px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255,255,255,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+        .cap-card-live {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: "DM Mono", monospace;
+          font-size: 9px;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.35);
+        }
+        .cap-live-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #2ECC71;
+          flex-shrink: 0;
+          animation: cap-pulse 2s ease-in-out infinite;
+        }
+        @keyframes cap-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+        .cap-card-demo {
+          font-family: "DM Mono", monospace;
+          font-size: 10px;
+          letter-spacing: 0.08em;
+          color: #D4C49A;
+          text-decoration: none;
+          transition: opacity 0.2s;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .cap-card-demo:hover { opacity: 0.6; }
+        .cap-more {
+          background: #F0EDE6;
+          padding: 40px 44px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .cap-more-label {
+          font-family: "Cormorant Garamond", Georgia, serif;
+          font-size: clamp(18px, 2vw, 24px);
+          font-weight: 500;
+          color: #111111;
+        }
+        .cap-more-items {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .cap-more-item {
+          font-family: "DM Mono", monospace;
+          font-size: 10px;
+          letter-spacing: 0.08em;
+          color: #666;
+          background: rgba(0,0,0,0.06);
+          padding: 6px 12px;
+          border-radius: 2px;
+        }
+        .cap-more-note {
+          font-family: "DM Sans", sans-serif;
+          font-size: 12px;
+          color: #999;
+          margin: 0;
+          line-height: 1.6;
+        }
+        @media (max-width: 767px) {
+          .cap-container { padding: 0 20px; }
+          .cap-section { padding: 80px 0; }
+          .cap-grid { grid-template-columns: 1fr; }
+          .cap-card { padding: 36px 28px; min-height: auto; }
+          .cap-more { padding: 32px 28px; }
+        }
+        @media (min-width: 768px) and (max-width: 1024px) {
+          .cap-card { padding: 36px 32px; }
         }
       `}</style>
     </section>

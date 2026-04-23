@@ -1,7 +1,7 @@
 /* HeroSection — Boss Opportunity Cost
    Design: Warm ivory bg, asymmetric layout, gold accent
    Strategy: Open with urgency — competitor is already live, you're not
-   Key message: Every day without a store = lost orders. I fix that in 7 days.
+   Key message: Every day without a store = lost orders. I fix that in 10 days.
    NO tech terms. Boss language only: money, time, competition.
    Mobile: Single column, stacked layout, touch-friendly */
 
@@ -17,7 +17,7 @@ const TICKER: Record<Locale, { label: string; value: string }[]> = {
     { label: "Agency brand site quote", value: "¥30,000–80,000" },
     { label: "Avg. agency delivery time", value: "60–90 days" },
     { label: "Shopify avg. app spend", value: "¥2,000+/mo" },
-    { label: "Our delivery: full brand store", value: "7 days, ¥8,800" },
+    { label: "Our delivery: full brand store", value: "10 days, ¥8,800" },
     { label: "Your competitors launched", value: "Last week" },
   ],
   zh: [
@@ -26,7 +26,7 @@ const TICKER: Record<Locale, { label: string; value: string }[]> = {
     { label: "外包机构品牌官网报价", value: "¥3–8 万" },
     { label: "机构平均交付周期", value: "60–90 天" },
     { label: "Shopify 插件月均花费", value: "¥2,000+/月" },
-    { label: "找我们：全套品牌站交付", value: "7 天，¥8,800" },
+    { label: "找我们：全套品牌站交付", value: "10 天，¥8,800" },
     { label: "你的竞争对手已上线品牌站", value: "上周" },
   ],
   ja: [
@@ -35,7 +35,7 @@ const TICKER: Record<Locale, { label: string; value: string }[]> = {
     { label: "エージェンシーのブランドサイト見積", value: "¥3–8万" },
     { label: "エージェンシーの平均納期", value: "60〜90日" },
     { label: "Shopifyアプリ月平均費用", value: "¥2,000+/月" },
-    { label: "私の納期：フルブランドサイト", value: "7日、¥8,800" },
+    { label: "私の納期：フルブランドサイト", value: "10日、¥8,800" },
     { label: "競合他社はすでにローンチ済み", value: "先週" },
   ],
 };
@@ -55,8 +55,8 @@ const COPY: Record<Locale, {
     available: "Available for new projects",
     headline1: "Your competitors",
     headline2: "already have brand stores.",
-    headline3: "Yours: 7 days.",
-    sub: "Every day you delay, Amazon takes 58% of your revenue. Our team builds brand stores that generate orders from day one — 0% commission, 7-day delivery, no extra hiring needed.",
+    headline3: "Yours: 10 days.",
+    sub: "Every day you delay, Amazon takes 58% of your revenue. Our team builds brand stores that generate orders from day one — 0% commission, 10-day delivery, no extra hiring needed.",
     cta1: "Calculate your annual loss",
     cta2: "View packages",
     tickerLabel: "What your competitors are doing",
@@ -70,13 +70,13 @@ const COPY: Record<Locale, {
     available: "现在接受新项目",
     headline1: "你的竞争对手",
     headline2: "已经有品牌独立站了。",
-    headline3: "你的：7 天上线。",
-    sub: "每多拖一天，就多一天把利润拱手送给亚马逊。我们团队帮跨境电商老板 7 天搭建从第一天就能收款的品牌独立站——0% 平台佣金，不等机构 3 个月，不用另外组建团队。",
+    headline3: "你的：10 天上线。",
+    sub: "每多拖一天，就多一天把利润拱手送给亚马逊。我们团队帮跨境电商老板 10 天搭建从第一天就能收款的品牌独立站——0% 平台佣金，不等机构 3 个月，不用另外组建团队。",
     cta1: "算一算你每年亏多少",
     cta2: "查看套餐",
     tickerLabel: "你的竞争对手正在发生什么",
     stats: [
-      { value: "7天", label: "品牌站上线" },
+      { value: "10天", label: "品牌站上线" },
       { value: "0%", label: "平台佣金" },
       { value: "¥58万", label: "年均节省" },
     ],
@@ -85,13 +85,13 @@ const COPY: Record<Locale, {
     available: "新規プロジェクト受付中",
     headline1: "競合他社は",
     headline2: "すでにブランドサイトを持っています。",
-    headline3: "あなたのサイト：7日で開店。",
-    sub: "1日遅らせるごとに、Amazonに売上の58%を渡し続けます。初日から受注できるブランドサイトを0%手数料・7日納品・チーム不要で構築します。",
+    headline3: "あなたのサイト：10日で開店。",
+    sub: "1日遅らせるごとに、Amazonに売上の58%を渡し続けます。初日から受注できるブランドサイトを0%手数料・10日納品・チーム不要で構築します。",
     cta1: "年間損失を計算する",
     cta2: "プランを見る",
     tickerLabel: "競合他社の動き",
     stats: [
-      { value: "7日", label: "ブランドサイト稼働" },
+      { value: "10日", label: "ブランドサイト稼働" },
       { value: "0%", label: "プラットフォーム手数料" },
       { value: "¥58万", label: "年間節約平均" },
     ],

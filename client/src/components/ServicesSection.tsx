@@ -32,7 +32,7 @@ const COPY: Record<Locale, {
 }> = {
   zh: {
     eyebrow: "服务方案",
-    title: "选一个，7 天后你的品牌就在线了",
+    title: "选一个，10 天后你的品牌就在线了",
     subtitle: "三个方案，对应三种业务阶段。",
     matrixTitle: "品牌矩阵建站策略（所有方案均可加购）",
     matrixDesc: "不是建一个网站，而是建一个品牌堡垒。每个产品、每个使用场景、每个目标人群都有独立落地页，形成完整的 SEO 矩阵。让 Google 和 AI 持续给你带来免费流量。",
@@ -46,10 +46,10 @@ const COPY: Record<Locale, {
       {
         tag: "入门",
         name: "品牌展示站",
-        promise: "7 天内，你有一个让客户信任你的专业官网",
-        price: "¥3,800",
+        promise: "10 天内，你有一个让客户信任你的专业官网",
+        price: "¥8,800",
         priceNote: "一次性，含首年域名",
-        timeline: "7 天交付",
+        timeline: "10 天交付",
         results: [
           "客户第一眼就觉得你是正规品牌",
           "Google 能找到你（基础 SEO）",
@@ -63,10 +63,10 @@ const COPY: Record<Locale, {
       {
         tag: "推荐",
         name: "跨境电商站",
-        promise: "21 天内，你有一个能收全球订单、自动运营的独立站",
-        price: "¥8,800",
+        promise: "28 天内，你有一个能收全球订单、自动运营的独立站",
+        price: "¥22,800",
         priceNote: "一次性，含首年域名+服务器",
-        timeline: "21 天交付",
+        timeline: "28 天交付",
         results: [
           "全球客户能用自己的货币付款",
           "订单自动确认、发货通知自动发送",
@@ -81,10 +81,10 @@ const COPY: Record<Locale, {
       {
         tag: "全套",
         name: "品牌增长系统",
-        promise: "30 天内，你有一个能自动获客、自动运营、持续增长的品牌体系",
-        price: "¥18,000",
+        promise: "60 天内，你有一个能自动获客、自动运营、持续增长的品牌体系",
+        price: "¥58,000",
         priceNote: "一次性，含3个月维护",
-        timeline: "30 天交付",
+        timeline: "60 天交付",
         results: [
           "品牌矩阵建站（多产品线全覆盖）",
           "社媒内容自动发布到各平台",
@@ -99,10 +99,21 @@ const COPY: Record<Locale, {
     ],
     compareLabel: "不确定选哪个？",
     compareNote: "发消息告诉我你的情况，我帮你选最适合的方案。",
+    retainerTitle: "月度运维订阅",
+    retainerPrice: "¥1,980",
+    retainerPriceNote: "/月起",
+    retainerDesc: "上线后不用担心——我帮你持续优化、监控、更新内容。",
+    retainerItems: [
+      "每月 SEO 关键词追踪 + 报告",
+      "内容更新 & 新页面添加",
+      "性能监控 + 安全扫描",
+      "优先响应技术问题（24h 内）",
+    ],
+    retainerCta: "了解运维方案",
   },
   en: {
     eyebrow: "PACKAGES",
-    title: "Pick one — your brand is live in 7 days",
+    title: "Pick one — your brand is live in 10 days",
     subtitle: "Three packages for three business stages.",
     matrixTitle: "Brand Matrix Strategy (add-on for all packages)",
     matrixDesc: "Not just one website — a brand fortress. Every product, every use case, every target audience gets its own landing page, forming a complete SEO matrix. Google and AI continuously bring you free traffic.",
@@ -116,10 +127,10 @@ const COPY: Record<Locale, {
       {
         tag: "Starter",
         name: "Brand Showcase Site",
-        promise: "In 7 days, you have a professional website that makes customers trust you",
-        price: "¥3,800",
+        promise: "In 10 days, you have a professional website that makes customers trust you",
+        price: "¥8,800",
         priceNote: "One-time, includes first-year domain",
-        timeline: "7-day delivery",
+        timeline: "10-day delivery",
         results: [
           "Customers see you as a legitimate brand at first glance",
           "Google can find you (basic SEO)",
@@ -133,10 +144,10 @@ const COPY: Record<Locale, {
       {
         tag: "Recommended",
         name: "Cross-border E-commerce Store",
-        promise: "In 21 days, you have an independent store that takes global orders and runs itself",
-        price: "¥8,800",
+        promise: "In 28 days, you have an independent store that takes global orders and runs itself",
+        price: "¥22,800",
         priceNote: "One-time, includes first-year domain + server",
-        timeline: "21-day delivery",
+        timeline: "28-day delivery",
         results: [
           "Global customers pay in their own currency",
           "Orders auto-confirmed, shipping notifications auto-sent",
@@ -151,10 +162,10 @@ const COPY: Record<Locale, {
       {
         tag: "Full System",
         name: "Brand Growth System",
-        promise: "In 30 days, you have a brand system that auto-acquires customers, auto-operates, and keeps growing",
-        price: "¥18,000",
+        promise: "In 60 days, you have a brand system that auto-acquires customers, auto-operates, and keeps growing",
+        price: "¥58,000",
         priceNote: "One-time, includes 3 months maintenance",
-        timeline: "30-day delivery",
+        timeline: "60-day delivery",
         results: [
           "Brand matrix store (full multi-product coverage)",
           "Social content auto-published to all platforms",
@@ -169,10 +180,21 @@ const COPY: Record<Locale, {
     ],
     compareLabel: "Not sure which to pick?",
     compareNote: "Send me a message about your situation and I'll recommend the right package.",
+    retainerTitle: "Monthly Retainer",
+    retainerPrice: "¥1,980",
+    retainerPriceNote: "/month+",
+    retainerDesc: "Stay worry-free after launch — I keep your site optimized, monitored, and fresh.",
+    retainerItems: [
+      "Monthly SEO keyword tracking + report",
+      "Content updates & new page additions",
+      "Performance monitoring + security scans",
+      "Priority tech support (24h response)",
+    ],
+    retainerCta: "Learn about retainer",
   },
   ja: {
     eyebrow: "プラン",
-    title: "1つ選べば、7日後にブランドが公開される",
+    title: "1つ選べば、10日後にブランドが公開される",
     subtitle: "3つのビジネスステージに対応した3つのプラン。",
     matrixTitle: "ブランドマトリックス戦略（全プランに追加可能）",
     matrixDesc: "1つのウェブサイトではなく、ブランド要塞を構築。すべての商品、ユースケース、ターゲット層に独自のランディングページを設置し、完全なSEOマトリックスを形成。GoogleとAIが継続的に無料トラフィックをもたらす。",
@@ -186,10 +208,10 @@ const COPY: Record<Locale, {
       {
         tag: "スターター",
         name: "ブランド展示サイト",
-        promise: "7日以内に、顧客があなたを信頼するプロのウェブサイトが完成",
-        price: "¥3,800",
+        promise: "10日以内に、顧客があなたを信頼するプロのウェブサイトが完成",
+        price: "¥8,800",
         priceNote: "一回払い、初年度ドメイン込み",
-        timeline: "7日納品",
+        timeline: "10日納品",
         results: [
           "顧客が一目で正規ブランドと認識",
           "Googleがあなたを見つけられる（基本SEO）",
@@ -203,10 +225,10 @@ const COPY: Record<Locale, {
       {
         tag: "おすすめ",
         name: "越境ECストア",
-        promise: "21日以内に、世界中の注文を受け取り自動運営できる独立サイトが完成",
-        price: "¥8,800",
+        promise: "28日以内に、世界中の注文を受け取り自動運営できる独立サイトが完成",
+        price: "¥22,800",
         priceNote: "一回払い、初年度ドメイン+サーバー込み",
-        timeline: "21日納品",
+        timeline: "28日納品",
         results: [
           "世界中のバイヤーが自国通貨で決済",
           "注文自動確認、発送通知自動送信",
@@ -221,10 +243,10 @@ const COPY: Record<Locale, {
       {
         tag: "フルシステム",
         name: "ブランド成長システム",
-        promise: "30日以内に、自動集客・自動運営・継続成長するブランド体系が完成",
-        price: "¥18,000",
+        promise: "60日以内に、自動集客・自動運営・継続成長するブランド体系が完成",
+        price: "¥58,000",
         priceNote: "一回払い、3ヶ月メンテナンス込み",
-        timeline: "30日納品",
+        timeline: "60日納品",
         results: [
           "ブランドマトリックス建設（複数商品ライン全網羅）",
           "SNSコンテンツを全プラットフォームに自動投稿",
@@ -239,6 +261,17 @@ const COPY: Record<Locale, {
     ],
     compareLabel: "どれを選ぶか迷っていますか？",
     compareNote: "状況を教えてください。最適なプランをお勧めします。",
+    retainerTitle: "月額メンテナンス",
+    retainerPrice: "¥1,980",
+    retainerPriceNote: "/月〜",
+    retainerDesc: "公開後も安心——継続的な最適化・監視・コンテンツ更新を担当します。",
+    retainerItems: [
+      "毎月のSEOキーワード追跡＋レポート",
+      "コンテンツ更新＆新ページ追加",
+      "パフォーマンス監視＋セキュリティスキャン",
+      "優先テクニカルサポート（24時間以内対応）",
+    ],
+    retainerCta: "メンテナンスプランを見る",
   },
 };
 
@@ -398,6 +431,34 @@ export default function ServicesSection() {
           <span className="svc-compare-label">{c.compareLabel} </span>
           <a href="#contact" className="svc-compare-link">{c.compareNote}</a>
         </div>
+        {/* ── Monthly Retainer Add-on ── */}
+        <motion.div
+          className="svc-retainer"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="svc-retainer-left">
+            <div className="svc-retainer-label">ADD-ON</div>
+            <div className="svc-retainer-title">{c.retainerTitle}</div>
+            <div className="svc-retainer-desc">{c.retainerDesc}</div>
+            <ul className="svc-retainer-list">
+              {c.retainerItems.map((item, i) => (
+                <li key={i} className="svc-retainer-item">
+                  <span className="svc-retainer-dot">·</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="svc-retainer-right">
+            <div className="svc-retainer-price-wrap">
+              <span className="svc-retainer-price">{c.retainerPrice}</span>
+              <span className="svc-retainer-price-note">{c.retainerPriceNote}</span>
+            </div>
+            <a href="#contact" className="svc-retainer-cta">{c.retainerCta} →</a>
+          </div>
+        </motion.div>
       </div>
 
       <style>{`
@@ -748,6 +809,104 @@ export default function ServicesSection() {
           .svc-compare-label, .svc-compare-link {
             font-size: 14px;
           }
+        }
+        /* ── Monthly Retainer ── */
+        .svc-retainer {
+          margin-top: 48px;
+          background: #111111;
+          border-radius: 8px;
+          padding: 32px 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 40px;
+        }
+        .svc-retainer-left { flex: 1; }
+        .svc-retainer-label {
+          font-family: 'DM Mono', monospace;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          color: #8B6914;
+          margin-bottom: 8px;
+        }
+        .svc-retainer-title {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(18px, 2vw, 24px);
+          font-weight: 600;
+          color: #FAFAF8;
+          margin-bottom: 8px;
+        }
+        .svc-retainer-desc {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          color: rgba(255,255,255,0.5);
+          margin-bottom: 16px;
+          line-height: 1.6;
+        }
+        .svc-retainer-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+        }
+        .svc-retainer-item {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 12px;
+          color: rgba(255,255,255,0.6);
+          display: flex;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .svc-retainer-dot { color: #8B6914; flex-shrink: 0; }
+        .svc-retainer-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 16px;
+          flex-shrink: 0;
+        }
+        .svc-retainer-price-wrap {
+          display: flex;
+          align-items: baseline;
+          gap: 4px;
+        }
+        .svc-retainer-price {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(28px, 3vw, 40px);
+          font-weight: 700;
+          color: #D4C49A;
+        }
+        .svc-retainer-price-note {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          color: rgba(255,255,255,0.4);
+        }
+        .svc-retainer-cta {
+          font-family: 'DM Mono', monospace;
+          font-size: 11px;
+          letter-spacing: 0.08em;
+          color: #D4C49A;
+          text-decoration: none;
+          border: 1px solid rgba(212,196,154,0.3);
+          padding: 10px 20px;
+          border-radius: 2px;
+          transition: all 0.2s;
+          white-space: nowrap;
+        }
+        .svc-retainer-cta:hover {
+          background: rgba(212,196,154,0.1);
+          border-color: #D4C49A;
+        }
+        @media (max-width: 767px) {
+          .svc-retainer {
+            flex-direction: column;
+            padding: 24px 20px;
+            gap: 24px;
+          }
+          .svc-retainer-right { align-items: flex-start; }
+          .svc-retainer-list { grid-template-columns: 1fr; }
         }
       `}</style>
     </section>

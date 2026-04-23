@@ -340,7 +340,7 @@ export const translations: Record<Locale, Translations> = {
       index: "05 — About Us",
       headline: "The team behind",
       headline_em: "your brand store",
-      bio1: "We are a cross-border e-commerce execution team led by Bob Qiushao. We specialize in brand website infrastructure — from content platforms to full e-commerce systems. Our team delivers what agencies quote 60+ days for, in 7 days.",
+      bio1: "We are a cross-border e-commerce execution team led by Bob Qiushao. We specialize in brand website infrastructure — from content platforms to full e-commerce systems. Our team delivers what agencies quote 60+ days for, in 10 days.",
       bio2: "Our clients are brand founders and operators who need a fast, reliable technical partner — not a 3-month agency project. We care about your ROI as much as your launch date.",
       orbit_label: "Skill orbit — core to periphery",
       values: [
@@ -602,7 +602,7 @@ export const translations: Record<Locale, Translations> = {
       index: "05 — 关于我们",
       headline: "你品牌独立站背后的",
       headline_em: "执行团队",
-      bio1: "我们是一支专注于跨境电商品牌建站的执行团队，由 Bob Qiushao 带队。从品牌内容平台到完整电商系统，我们把机构报价 60 天以上的项目，压缩到 7 天交付。",
+      bio1: "我们是一支专注于跨境电商品牌建站的执行团队，由 Bob Qiushao 带队。从品牌内容平台到完整电商系统，我们把机构报价 60 天以上的项目，压缩到 10 天交付。",
       bio2: "我们的客户是需要快速、可靠技术合伙人的品牌创始人和运营者——而不是等待 3 个月的外包项目。我们对你的投资回报率的关注，不亚于对上线日期的关注。",
       orbit_label: "技能轨道——从核心到外围",
       values: [
@@ -846,7 +846,7 @@ export const translations: Record<Locale, Translations> = {
       index: "05 — 私たちについて",
       headline: "あなたのブランドストアを支える",
       headline_em: "実行チーム",
-      bio1: "私たちはBob Qiushaoが率いる越境EC特化の実行チームです。ブランドコンテンツプラットフォームからフルECシステムまで、エージェンシーが60日以上かかるプロジェクトを7日で納品します。",
+      bio1: "私たちはBob Qiushaoが率いる越境EC特化の実行チームです。ブランドコンテンツプラットフォームからフルECシステムまで、エージェンシーが60日以上かかるプロジェクトを10日で納品します。",
       bio2: "私たちのクライアントは、3ヶ月待ちの外注ではなく、迅速で信頼できる技術パートナーを必要とするブランド創業者や運営者です。あなたのROIを、納期と同じくらい大切にしています。",
       orbit_label: "スキルオービット — コアから周辺へ",
       values: [

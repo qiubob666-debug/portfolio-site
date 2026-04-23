@@ -157,7 +157,7 @@ function ROICalculator({ locale }: { locale: string }) {
   const amazonFeeRate = 0.58;
   const shopifyAnnual = 8800;
   const shopifyTransactionRate = 0.02;
-  const ourAnnual = 8800;
+  const ourAnnual = 22800;
 
   const annualRevenue = monthly * 12;
   const amazonLoss = annualRevenue * amazonFeeRate;
@@ -358,7 +358,7 @@ export default function ROISection() {
     return s + (item.salary + hiddenTotal) * 12;
   }, 0);
   const hiringCount = useCountUp(hiringTotal, 2200, inView);
-  const myFee = 8800;
+  const myFee = 22800;
   const savingCount = useCountUp(hiringTotal - myFee, 2400, inView);
 
   // Tab 2 counter
@@ -527,10 +527,10 @@ export default function ROISection() {
                     {locale === 'en' ? "WORK WITH ME / ONE-TIME" : "找我 / 一次性"}
                   </div>
                   <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 700, color: "#2ECC71", lineHeight: 1, marginBottom: 8 }}>
-                    ¥8,800
+                    ¥22,800
                   </div>
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)" }}>
-                    {locale === 'en' ? "Full-stack delivery in 7 days. Training included." : "7天交付，全栈覆盖，附带培训"}
+                    {locale === 'en' ? "Full-stack delivery in 28 days. Training included." : "28天交付，全栈覆盖，附带培训"}
                   </div>
                 </div>
               </div>
@@ -607,7 +607,7 @@ export default function ROISection() {
                     {locale === 'en' ? "INDEPENDENT STORE / YEAR" : "独立站 / 年"}
                   </div>
                   <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 3vw, 44px)", fontWeight: 700, color: "#2ECC71", lineHeight: 1 }}>
-                    ¥8,800
+                    ¥22,800
                   </div>
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 8 }}>
                     {locale === 'en' ? "One-time. 0% commission. You own everything." : "一次性。0% 佣金。品牌完全属于你。"}
@@ -659,7 +659,7 @@ export default function ROISection() {
                     {locale === 'en' ? "WITH ME / YEAR" : "找我 / 年"}
                   </div>
                   <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(24px, 3vw, 44px)", fontWeight: 700, color: "#2ECC71", lineHeight: 1 }}>
-                    ¥8,800
+                    ¥22,800
                   </div>
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 8 }}>
                     {locale === 'en' ? "All plugins built-in. No monthly app fees." : "所有功能内置，无月度插件费"}

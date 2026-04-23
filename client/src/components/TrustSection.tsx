@@ -25,7 +25,7 @@ const COPY: Record<Locale, {
       {
         tag: "价格",
         q: "¥8,800 建一个独立站，是不是太贵了？",
-        a: "对比一下：外包机构同等品质的网站报价 ¥30,000–80,000，交付周期 60–90 天。自己招一个 Shopify 开发，深圳均价 ¥15,000/月，还需要 3–6 个月磨合。我的报价包含了开发、设计、SEO、支付配置、域名部署，7 天交付。你算一下哪个贵。",
+        a: "对比一下：外包机构同等品质的网站报价 ¥30,000–80,000，交付周期 60–90 天。自己招一个 Shopify 开发，深圳均价 ¥15,000/月，还需要 3–6 个月磨合。我的报价包含了开发、设计、SEO、支付配置、域名部署，10 天交付。你算一下哪个贵。",
       },
       {
         tag: "靠谱",
@@ -40,7 +40,7 @@ const COPY: Record<Locale, {
       {
         tag: "售后",
         q: "网站上线后出了问题，谁来修？",
-        a: "我来修。所有套餐都包含上线后 7 天的免费修复期。之后的月度维护费用是 ¥800/月，包含技术支持、小改动和安全更新。有问题发微信，24 小时内响应。如果是我的代码问题，免费修复，不计入维护费。",
+        a: "我来修。所有套餐都包含上线后 7 天的免费修复期。之后的月度运维订阅是 ¥1,980/月起，包含 SEO 追踪、内容更新、性能监控和安全更新。有问题发微信，24 小时内响应。如果是我的代码问题，免费修复，不计入维护费。",
       },
       {
         tag: "操作",
@@ -75,7 +75,7 @@ const COPY: Record<Locale, {
       {
         tag: "Price",
         q: "¥8,800 for a website — isn't that expensive?",
-        a: "Compare: an agency charges ¥30,000–80,000 for equivalent quality, with a 60–90 day timeline. Hiring a Shopify developer in Shenzhen averages ¥15,000/month, plus 3–6 months to ramp up. My quote covers development, design, SEO, payment setup, and domain deployment — delivered in 7 days. You do the math.",
+        a: "Compare: an agency charges ¥30,000–80,000 for equivalent quality, with a 60–90 day timeline. Hiring a Shopify developer in Shenzhen averages ¥15,000/month, plus 3–6 months to ramp up. My quote covers development, design, SEO, payment setup, and domain deployment — delivered in 10 days. You do the math.",
       },
       {
         tag: "Reliability",
@@ -90,7 +90,7 @@ const COPY: Record<Locale, {
       {
         tag: "Support",
         q: "If something breaks after launch, who fixes it?",
-        a: "Our team does. All packages include a 7-day free fix period after launch. After that, monthly maintenance is ¥800/month, covering technical support, minor changes, and security updates. Send me a message on WeChat — 24-hour response time. If it's a bug in my code, it's fixed for free.",
+        a: "Our team does. All packages include a 7-day free fix period after launch. After that, monthly retainer starts at ¥1,980/month, covering SEO tracking, content updates, performance monitoring, and security updates. Send me a message on WeChat — 24-hour response time. If it's a bug in my code, it's fixed for free.",
       },
       {
         tag: "Management",
@@ -125,7 +125,7 @@ const COPY: Record<Locale, {
       {
         tag: "価格",
         q: "¥8,800でウェブサイトを作るのは高くないですか？",
-        a: "比較してみましょう：エージェンシーは同等品質で¥30,000〜80,000を請求し、60〜90日かかります。深センでShopify開発者を採用すると月平均¥15,000、さらに3〜6ヶ月の立ち上げ期間が必要です。私の見積もりには開発、デザイン、SEO、決済設定、ドメインデプロイが含まれ、7日で納品します。",
+        a: "比較してみましょう：エージェンシーは同等品質で¥30,000〜80,000を請求し、60〜90日かかります。深センでShopify開発者を採用すると月平均¥15,000、さらに3〜6ヶ月の立ち上げ期間が必要です。私の見積もりには開発、デザイン、SEO、決済設定、ドメインデプロイが含まれ、10日で納品します。",
       },
       {
         tag: "信頼性",
@@ -140,7 +140,7 @@ const COPY: Record<Locale, {
       {
         tag: "サポート",
         q: "ローンチ後に問題が発生したら誰が修正しますか？",
-        a: "私が修正します。すべてのプランにローンチ後7日間の無料修正期間が含まれます。その後の月次メンテナンスは¥800/月で、技術サポート、軽微な変更、セキュリティアップデートをカバーします。WeChatでメッセージを送ってください。24時間以内に返信します。",
+        a: "私が修正します。すべてのプランにローンチ後7日間の無料修正期間が含まれます。その後の月額メンテナンスは¥1,980/月〜で、SEO追跡、コンテンツ更新、パフォーマンス監視、セキュリティアップデートをカバーします。WeChatでメッセージを送ってください。24時間以内に返信します。",
       },
       {
         tag: "管理",
