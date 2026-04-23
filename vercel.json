@@ -7,6 +7,10 @@
       "destination": "/jewelry-cases/$1"
     },
     {
+      "source": "/3c-cases/(.*)",
+      "destination": "/3c-cases/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

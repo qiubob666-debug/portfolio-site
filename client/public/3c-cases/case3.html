@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXARA ALPHA X — Full-Frame Mirrorless Camera</title>
+  <meta name="description" content="NEXARA ALPHA X — 61MP full-frame mirrorless camera. Engineered for the world's most demanding photographers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F5F5F5;
+      --bg2: #FFFFFF;
+      --text: #1A1A1A;
+      --text-mid: #555555;
+      --text-light: #888888;
+      --accent: #E50914;
+      --accent-dark: #B20710;
+      --border: #E0E0E0;
+      --font: 'Inter', 'Noto Sans JP', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(245,245,245,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 80px 80px 60px;
+      background: var(--bg2);
+      gap: 60px;
+    }
+    .hero-text {}
+    .hero-category {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-category::before {
+      content: '';
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--accent);
+    }
+    .hero-title {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .hero-model {
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 28px;
+    }
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      max-width: 440px;
+      margin-bottom: 36px;
+    }
+    .hero-price {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .hero-price span {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-light);
+      margin-left: 8px;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-red {
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: background 0.2s;
+    }
+    .btn-red:hover { background: var(--accent-dark); }
+    .btn-ghost {
+      border: 1px solid var(--text);
+      color: var(--text);
+      padding: 14px 28px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-ghost:hover { background: var(--text); color: var(--bg); }
+
+    /* Camera CSS mockup */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .camera-wrap {
+      position: relative;
+      width: 320px;
+      height: 260px;
+    }
+    .camera-body {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(145deg, #2A2A2A 0%, #1A1A1A 50%, #333 100%);
+      border-radius: 12px 12px 8px 8px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+    .camera-grip {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 80px; height: 200px;
+      background: linear-gradient(145deg, #222 0%, #1A1A1A 100%);
+      border-radius: 12px 0 0 8px;
+    }
+    .camera-lens {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-30%, -50%);
+      width: 120px; height: 120px;
+      background: radial-gradient(circle at 35% 35%, #3A3A3A, #0A0A0A);
+      border-radius: 50%;
+      border: 6px solid #333;
+      box-shadow: 0 0 0 3px #444, inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    .camera-lens::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px; height: 60px;
+      background: radial-gradient(circle at 35% 35%, #1A3A5C, #050A10);
+      border-radius: 50%;
+      box-shadow: inset 0 0 20px rgba(0,80,160,0.3);
+    }
+    .camera-top {
+      position: absolute;
+      top: -20px; left: 80px; right: 0;
+      height: 30px;
+      background: linear-gradient(145deg, #2A2A2A, #1A1A1A);
+      border-radius: 8px 8px 0 0;
+    }
+    .camera-dial {
+      position: absolute;
+      top: -30px; right: 40px;
+      width: 40px; height: 40px;
+      background: linear-gradient(145deg, #3A3A3A, #222);
+      border-radius: 50%;
+      border: 2px solid #444;
+    }
+    .camera-viewfinder {
+      position: absolute;
+      top: -32px; left: 120px;
+      width: 50px; height: 30px;
+      background: #111;
+      border-radius: 4px 4px 0 0;
+    }
+    .camera-hotshoe {
+      position: absolute;
+      top: 8px; left: 100px;
+      width: 40px; height: 6px;
+      background: #333;
+      border-radius: 2px;
+    }
+
+    /* ===== Category Tabs ===== */
+    .category-section { padding: 60px 40px; background: var(--bg); }
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--border);
+      max-width: 1000px;
+      margin: 0 auto 48px;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 14px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .product-card {
+      background: var(--bg2);
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    .product-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .product-visual {
+      width: 100%;
+      height: 140px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .product-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .product-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .product-price {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* ===== Specs ===== */
+    .specs { padding: 80px 40px; background: var(--bg2); }
+    .specs-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .section-en {
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .section-ja {
+      font-size: 14px;
+      color: var(--text-light);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+    }
+    .specs-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .spec-row {
+      display: contents;
+    }
+    .spec-row > div {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .spec-row > div:nth-child(odd) {
+      color: var(--text-light);
+      background: var(--bg);
+      font-weight: 500;
+      border-right: 1px solid var(--border);
+    }
+    .spec-row > div:nth-child(even) {
+      color: var(--text);
+    }
+
+    /* ===== Story / Timeline ===== */
+    .story { padding: 80px 40px; background: var(--bg); }
+    .timeline {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      padding-left: 40px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px; top: 6px;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .timeline-year {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .timeline-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.7);
+      padding: 48px 40px;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    .footer-brand-name {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #fff;
+    }
+    .footer-brand-name span { color: var(--accent); }
+    .footer-cols {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 12px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 80px 24px 60px; }
+      .hero-visual { order: -1; }
+      .nav-links { display: none; }
+      .specs-two-col { grid-template-columns: 1fr; }
+      .spec-row > div:nth-child(odd) { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <span class="nav-logo">NEX<span>ARA</span></span>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#specs">Specs</a></li>
+      <li><a href="#story">Story</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Buy</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-category">Full-Frame Mirrorless</div>
+      <h1 class="hero-title">ALPHA X</h1>
+      <p class="hero-model">NEXARA α Series</p>
+      <p class="hero-desc">61 megapixels of extraordinary resolution. Real-time Eye AF that never misses. The camera that professional photographers have been waiting for.</p>
+      <div class="hero-price">$3,499 <span>Body Only</span></div>
+      <div class="hero-btns">
+        <a href="#" class="btn-red">Buy Now</a>
+        <a href="#" class="btn-ghost">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="camera-wrap">
+        <div class="camera-grip"></div>
+        <div class="camera-body">
+          <div class="camera-lens"></div>
+          <div class="camera-hotshoe"></div>
+        </div>
+        <div class="camera-top">
+          <div class="camera-dial"></div>
+          <div class="camera-viewfinder"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Category -->
+  <section class="category-section" id="products">
+    <div class="tabs">
+      <div class="tab active">Cameras</div>
+      <div class="tab">Lenses</div>
+      <div class="tab">Audio</div>
+      <div class="tab">Displays</div>
+      <div class="tab">Accessories</div>
+    </div>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-visual" style="background:linear-gradient(135deg,#1A1A1A,#2A2A2A);">📷</div>
+        <div class="product-name">ALPHA X</div>
+        <div class="product-desc">61MP Full-Frame Mirrorless</div>
+        <div class="product-price">$3,499</div>
+      </div>
+      <div class="product-card">
+        <div class="product-visual" style="background:linear-gradient(135deg,#222,#333);">🎥</div>
+        <div class="product-name">ALPHA FX</div>
+        <div class="product-desc">Cinema-Grade 8K Video</div>
+        <div class="product-price">$6,499</div>
+      </div>
+      <div class="product-card">
+        <div class="product-visual" style="background:linear-gradient(135deg,#1C1C1C,#2C2C2C);">📸</div>
+        <div class="product-name">ALPHA MINI</div>
+        <div class="product-desc">Compact APS-C Mirrorless</div>
+        <div class="product-price">$1,299</div>
+      </div>
+      <div class="product-card">
+        <div class="product-visual" style="background:linear-gradient(135deg,#181818,#282828);">🔭</div>
+        <div class="product-name">FE 85mm G Master</div>
+        <div class="product-desc">f/1.4 Portrait Prime Lens</div>
+        <div class="product-price">$1,799</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specs -->
+  <section class="specs" id="specs">
+    <div class="specs-inner">
+      <div class="section-header">
+        <h2 class="section-en">Specifications</h2>
+        <span class="section-ja">仕様</span>
+      </div>
+      <div class="specs-two-col">
+        <div class="spec-row">
+          <div>Image Sensor</div>
+          <div>35mm full-frame (35.9 × 23.9mm) back-illuminated Exmor R CMOS</div>
+        </div>
+        <div class="spec-row">
+          <div>Effective Pixels</div>
+          <div>61.0 megapixels</div>
+        </div>
+        <div class="spec-row">
+          <div>ISO Range</div>
+          <div>ISO 100–32,000 (expandable to ISO 50–204,800)</div>
+        </div>
+        <div class="spec-row">
+          <div>Autofocus</div>
+          <div>Real-time Eye AF, Real-time Tracking, 759 phase-detection points</div>
+        </div>
+        <div class="spec-row">
+          <div>Continuous Shooting</div>
+          <div>10fps (mechanical), 30fps (electronic)</div>
+        </div>
+        <div class="spec-row">
+          <div>Video</div>
+          <div>8K 30fps, 4K 120fps, 10-bit 4:2:2 S-Log3</div>
+        </div>
+        <div class="spec-row">
+          <div>Viewfinder</div>
+          <div>0.64-inch OLED, 9.44M dots, 0.9× magnification</div>
+        </div>
+        <div class="spec-row">
+          <div>Monitor</div>
+          <div>3.0-inch tiltable touchscreen, 1.44M dots</div>
+        </div>
+        <div class="spec-row">
+          <div>Battery Life</div>
+          <div>Approx. 530 shots (CIPA)</div>
+        </div>
+        <div class="spec-row">
+          <div>Dimensions</div>
+          <div>128.9 × 96.4 × 77.5mm, 650g (with battery)</div>
+        </div>
+        <div class="spec-row">
+          <div>Connectivity</div>
+          <div>USB-C (USB 3.2 Gen 2), HDMI Type-A, Wi-Fi 6, Bluetooth 5.0</div>
+        </div>
+        <div class="spec-row">
+          <div>Weather Sealing</div>
+          <div>Dust and moisture resistant</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story / Timeline -->
+  <section class="story" id="story">
+    <div style="max-width:700px;margin:0 auto 48px;">
+      <div class="section-header">
+        <h2 class="section-en">Our Journey</h2>
+        <span class="section-ja">私たちの歩み</span>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2008</div>
+        <div class="timeline-title">The α Revolution Begins</div>
+        <div class="timeline-text">NEXARA launches its first full-frame mirrorless camera, challenging the DSLR paradigm and introducing a new era of compact professional photography.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2014</div>
+        <div class="timeline-title">Real-Time Eye AF Breakthrough</div>
+        <div class="timeline-text">Our proprietary Eye AF technology achieves 93% accuracy in real-world conditions, setting a new industry standard that competitors would spend years trying to match.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2019</div>
+        <div class="timeline-title">61 Megapixels of Resolution</div>
+        <div class="timeline-text">The ALPHA X launches with the world's highest resolution full-frame sensor, delivering medium-format quality in a mirrorless body.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-title">AI-Powered Imaging</div>
+        <div class="timeline-text">NEXARA integrates on-device AI for real-time scene recognition, automatic color grading, and intelligent subject tracking across all product lines.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand-name">NEX<span>ARA</span></div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Products</h4>
+          <a href="#">Cameras</a>
+          <a href="#">Lenses</a>
+          <a href="#">Audio</a>
+          <a href="#">Displays</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Manuals</a>
+          <a href="#">Repair</a>
+          <a href="#">Warranty</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Press</a>
+          <a href="#">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright &copy; 2025 NEXARA Electronics Corporation. All rights reserved.</p>
+      <p style="margin-top:4px;">This is a fictional brand created for portfolio demonstration purposes only.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

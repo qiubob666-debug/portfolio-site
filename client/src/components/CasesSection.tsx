@@ -84,6 +84,76 @@ const COPY = {
         url: "/jewelry-cases/case6.html",
       },
     ],
+    threeCTitle: "3C 数码品类案例",
+    threeCSubtitle: "基于全球顶级 3C 品牌设计语言，原创虚构品牌，品牌名已脱敏，纯学习展示用途。",
+    threeCCases: [
+      {
+        id: "3c-case1",
+        label: "Concept · 智能手机",
+        name: "LUMINOS",
+        style: "极简白色系 / Apple 风格",
+        inspired: "Apple",
+        bg: "#FFFFFF",
+        accent: "#0071E3",
+        textColor: "#1D1D1F",
+        url: "/3c-cases/case1.html",
+      },
+      {
+        id: "3c-case2",
+        label: "Concept · 无人机",
+        name: "SKYVEX",
+        style: "暗色科技感 / DJI 风格",
+        inspired: "DJI",
+        bg: "#0A0A0A",
+        accent: "#FF6B00",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case2.html",
+      },
+      {
+        id: "3c-case3",
+        label: "Concept · 全画幅相机",
+        name: "NEXARA",
+        style: "日系精致多品类 / Sony 风格",
+        inspired: "Sony",
+        bg: "#F5F5F5",
+        accent: "#E50914",
+        textColor: "#1A1A1A",
+        url: "/3c-cases/case3.html",
+      },
+      {
+        id: "3c-case4",
+        label: "Concept · 降噪耳机",
+        name: "RESONIQ",
+        style: "深色金属质感 / Bose 风格",
+        inspired: "Bose",
+        bg: "#111111",
+        accent: "#C9A84C",
+        textColor: "#F5F5F5",
+        url: "/3c-cases/case4.html",
+      },
+      {
+        id: "3c-case5",
+        label: "Concept · 运动相机",
+        name: "ORBIVIEW",
+        style: "沉浸式视频驱动 / Insta360 风格",
+        inspired: "Insta360",
+        bg: "#050A14",
+        accent: "#00D4FF",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case5.html",
+      },
+      {
+        id: "3c-case6",
+        label: "Concept · 便携合成器",
+        name: "FORMWERK",
+        style: "极简工业风 / Teenage Engineering 风格",
+        inspired: "Teenage Engineering",
+        bg: "#FFFFFF",
+        accent: "#FF4500",
+        textColor: "#000000",
+        url: "/3c-cases/case6.html",
+      },
+    ],
     demoTitle: "行业 Demo",
     demoSubtitle: "为特定行业场景构建的演示站，展示定制化能力。",
     demos: [
@@ -179,6 +249,76 @@ const COPY = {
         url: "/jewelry-cases/case6.html",
       },
     ],
+    threeCTitle: "3C Consumer Electronics Cases",
+    threeCSubtitle: "Original fictional brands inspired by world-class 3C brand design languages. Brand names are fictional, for learning and portfolio display only.",
+    threeCCases: [
+      {
+        id: "3c-case1",
+        label: "Concept · Smartphone",
+        name: "LUMINOS",
+        style: "Minimal White / Apple Style",
+        inspired: "Apple",
+        bg: "#FFFFFF",
+        accent: "#0071E3",
+        textColor: "#1D1D1F",
+        url: "/3c-cases/case1.html",
+      },
+      {
+        id: "3c-case2",
+        label: "Concept · Drone",
+        name: "SKYVEX",
+        style: "Dark Tech Aesthetic / DJI Style",
+        inspired: "DJI",
+        bg: "#0A0A0A",
+        accent: "#FF6B00",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case2.html",
+      },
+      {
+        id: "3c-case3",
+        label: "Concept · Full-Frame Camera",
+        name: "NEXARA",
+        style: "Japanese Precision Multi-Category / Sony Style",
+        inspired: "Sony",
+        bg: "#F5F5F5",
+        accent: "#E50914",
+        textColor: "#1A1A1A",
+        url: "/3c-cases/case3.html",
+      },
+      {
+        id: "3c-case4",
+        label: "Concept · ANC Headphones",
+        name: "RESONIQ",
+        style: "Dark Metallic Premium / Bose Style",
+        inspired: "Bose",
+        bg: "#111111",
+        accent: "#C9A84C",
+        textColor: "#F5F5F5",
+        url: "/3c-cases/case4.html",
+      },
+      {
+        id: "3c-case5",
+        label: "Concept · Action Camera",
+        name: "ORBIVIEW",
+        style: "Immersive Video-Driven / Insta360 Style",
+        inspired: "Insta360",
+        bg: "#050A14",
+        accent: "#00D4FF",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case5.html",
+      },
+      {
+        id: "3c-case6",
+        label: "Concept · Portable Synthesizer",
+        name: "FORMWERK",
+        style: "Minimal Industrial / Teenage Engineering Style",
+        inspired: "Teenage Engineering",
+        bg: "#FFFFFF",
+        accent: "#FF4500",
+        textColor: "#000000",
+        url: "/3c-cases/case6.html",
+      },
+    ],
     demoTitle: "Industry Demos",
     demoSubtitle: "Demo sites built for specific industry scenarios to showcase customization capability.",
     demos: [
@@ -272,6 +412,76 @@ const COPY = {
         accent: "#8b6914",
         textColor: "#111111",
         url: "/jewelry-cases/case6.html",
+      },
+    ],
+    threeCTitle: "3C デジタル家電ケース",
+    threeCSubtitle: "世界トップの3Cブランドのデザイン言語にインスパイアされた架空ブランド。ブランド名は架空です。学習・ポートフォリオ展示のみ。",
+    threeCCases: [
+      {
+        id: "3c-case1",
+        label: "Concept · スマートフォン",
+        name: "LUMINOS",
+        style: "ミニマルホワイト / Apple スタイル",
+        inspired: "Apple",
+        bg: "#FFFFFF",
+        accent: "#0071E3",
+        textColor: "#1D1D1F",
+        url: "/3c-cases/case1.html",
+      },
+      {
+        id: "3c-case2",
+        label: "Concept · ドローン",
+        name: "SKYVEX",
+        style: "ダークテック / DJI スタイル",
+        inspired: "DJI",
+        bg: "#0A0A0A",
+        accent: "#FF6B00",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case2.html",
+      },
+      {
+        id: "3c-case3",
+        label: "Concept · フルサイズカメラ",
+        name: "NEXARA",
+        style: "日本精密マルチカテゴリー / Sony スタイル",
+        inspired: "Sony",
+        bg: "#F5F5F5",
+        accent: "#E50914",
+        textColor: "#1A1A1A",
+        url: "/3c-cases/case3.html",
+      },
+      {
+        id: "3c-case4",
+        label: "Concept · ノイキャンヘッドフォン",
+        name: "RESONIQ",
+        style: "ダークメタリック / Bose スタイル",
+        inspired: "Bose",
+        bg: "#111111",
+        accent: "#C9A84C",
+        textColor: "#F5F5F5",
+        url: "/3c-cases/case4.html",
+      },
+      {
+        id: "3c-case5",
+        label: "Concept · アクションカメラ",
+        name: "ORBIVIEW",
+        style: "没入型ビデオ / Insta360 スタイル",
+        inspired: "Insta360",
+        bg: "#050A14",
+        accent: "#00D4FF",
+        textColor: "#FFFFFF",
+        url: "/3c-cases/case5.html",
+      },
+      {
+        id: "3c-case6",
+        label: "Concept · ポータブルシンセサイザー",
+        name: "FORMWERK",
+        style: "ミニマル工業デザイン / Teenage Engineering スタイル",
+        inspired: "Teenage Engineering",
+        bg: "#FFFFFF",
+        accent: "#FF4500",
+        textColor: "#000000",
+        url: "/3c-cases/case6.html",
       },
     ],
     demoTitle: "業界デモ",
@@ -415,6 +625,56 @@ export default function CasesSection() {
           </div>
           <div className="cases-grid">
             {c.cases.map((cs, i) => (
+              <motion.button
+                key={cs.id}
+                type="button"
+                className="cases-card"
+                style={{ background: cs.bg, color: cs.textColor }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+                whileHover={{ y: -4 }}
+                onClick={() => openPreview(cs)}
+              >
+                <div
+                  className="cases-card-label"
+                  style={{
+                    color: cs.accent,
+                    borderColor: cs.accent + "40",
+                  }}
+                >
+                  {cs.label}
+                </div>
+                <div className="cases-card-name" style={{ color: cs.textColor }}>
+                  {cs.name}
+                </div>
+                <div
+                  className="cases-card-style"
+                  style={{ color: cs.textColor + "99" }}
+                >
+                  {cs.style}
+                </div>
+                <div
+                  className="cases-card-inspired"
+                  style={{ color: cs.textColor + "55" }}
+                >
+                  Inspired by {cs.inspired}
+                </div>
+                <div className="cases-card-arrow" style={{ color: cs.accent }}>
+                  {c.visitLabel}
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* ── 3C Consumer Electronics Cases ── */}
+          <div className="cases-section-header" style={{ marginTop: "64px" }}>
+            <h3 className="cases-section-title">{c.threeCTitle}</h3>
+            <p className="cases-section-sub">{c.threeCSubtitle}</p>
+          </div>
+          <div className="cases-grid">
+            {c.threeCCases.map((cs, i) => (
               <motion.button
                 key={cs.id}
                 type="button"

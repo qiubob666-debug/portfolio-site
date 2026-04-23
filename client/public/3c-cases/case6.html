@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FORMWERK TX-1 — Portable Synthesizer</title>
+  <meta name="description" content="FORMWERK TX-1 — a portable polyphonic synthesizer. Pure function. Pure form. Pure sound." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FFFFFF;
+      --surface: #F8F8F8;
+      --text: #000000;
+      --text-mid: #444444;
+      --text-light: #888888;
+      --accent: #FF4500;
+      --border: #E0E0E0;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--mono);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid var(--border);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+    .nav-logo {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+      text-transform: lowercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-store {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: lowercase;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 80px 80px 60px;
+      gap: 80px;
+      background: var(--bg);
+    }
+    .hero-text {}
+    .hero-product-code {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--text-light);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 700;
+      letter-spacing: -3px;
+      line-height: 0.95;
+      margin-bottom: 16px;
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-subtitle {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      color: var(--text-mid);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .hero-price-block {
+      margin-bottom: 32px;
+    }
+    .hero-price {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    .hero-price-note {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-black {
+      background: var(--text);
+      color: var(--bg);
+      padding: 12px 28px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      font-family: var(--mono);
+      transition: background 0.2s;
+    }
+    .btn-black:hover { background: #333; }
+    .btn-outline-black {
+      border: 1px solid var(--text);
+      color: var(--text);
+      padding: 12px 28px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      font-family: var(--mono);
+      transition: background 0.2s;
+    }
+    .btn-outline-black:hover { background: var(--text); color: var(--bg); }
+
+    /* Synthesizer CSS mockup */
+    .synth-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .synth-body {
+      width: 320px;
+      background: #F0F0F0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.8) inset;
+      border: 1px solid #DDD;
+    }
+    .synth-screen {
+      background: #1A1A1A;
+      border-radius: 4px;
+      height: 48px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+    }
+    .synth-screen-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .synth-screen-text {
+      font-size: 10px;
+      color: rgba(255,255,255,0.6);
+      font-family: var(--mono);
+    }
+    .synth-knobs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+    .knob {
+      width: 28px; height: 28px;
+      background: radial-gradient(circle at 35% 30%, #555, #222);
+      border-radius: 50%;
+      border: 2px solid #333;
+      position: relative;
+    }
+    .knob::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 8px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 1px;
+    }
+    .synth-keys {
+      display: flex;
+      gap: 2px;
+    }
+    .key-white {
+      flex: 1;
+      height: 60px;
+      background: #FAFAFA;
+      border: 1px solid #CCC;
+      border-radius: 0 0 4px 4px;
+    }
+    .key-black-wrap {
+      flex: 0.6;
+      position: relative;
+      height: 60px;
+    }
+    .key-black {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 38px;
+      background: #1A1A1A;
+      border-radius: 0 0 3px 3px;
+      z-index: 2;
+    }
+    .synth-label {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-light);
+      margin-top: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ===== Product Info ===== */
+    .product-info { padding: 80px; background: var(--surface); }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 1000px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+    }
+    .info-cell {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-num {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .info-label {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      text-transform: lowercase;
+      margin-bottom: 12px;
+    }
+    .info-desc {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      font-family: var(--sans);
+    }
+
+    /* ===== Specs Table ===== */
+    .specs { padding: 80px; background: var(--bg); }
+    .specs-inner { max-width: 800px; margin: 0 auto; }
+    .specs-title {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: lowercase;
+      color: var(--text-light);
+      margin-bottom: 32px;
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-key {
+      padding: 14px 0;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+    }
+    .spec-val {
+      padding: 14px 0;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .spec-section {
+      padding: 24px 0 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      grid-column: 1 / -1;
+    }
+
+    /* ===== Philosophy ===== */
+    .philosophy { padding: 120px 80px; background: var(--bg); }
+    .phil-inner {
+      max-width: 600px;
+    }
+    .phil-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: lowercase;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+    .phil-statement {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+    .phil-statement .accent { color: var(--accent); }
+    .phil-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-mid);
+      line-height: 1.9;
+      font-family: var(--sans);
+      max-width: 480px;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.5);
+      padding: 40px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: gap;
+      gap: 24px;
+    }
+    .footer-logo-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      text-transform: lowercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.8); }
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 80px 24px 60px; gap: 48px; }
+      .synth-wrap { order: -1; }
+      .product-info { padding: 60px 24px; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .specs { padding: 60px 24px; }
+      .philosophy { padding: 80px 24px; }
+      footer { padding: 40px 24px; flex-direction: column; text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <span class="nav-logo">formwerk</span>
+    <ul class="nav-links">
+      <li><a href="#product">product</a></li>
+      <li><a href="#specs">specs</a></li>
+      <li><a href="#philosophy">about</a></li>
+    </ul>
+    <a href="#" class="nav-store">store</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-product-code">fw-tx-1 / portable synthesizer / 2025</p>
+      <h1 class="hero-title">TX<span class="accent">-1</span></h1>
+      <p class="hero-subtitle">
+        a portable polyphonic synthesizer.<br>
+        pure function. pure form. pure sound.
+      </p>
+      <div class="hero-price-block">
+        <div class="hero-price">$699</div>
+        <div class="hero-price-note">includes usb-c cable and carry case</div>
+      </div>
+      <div class="hero-btns">
+        <a href="#" class="btn-black">add to cart</a>
+        <a href="#" class="btn-outline-black">learn more</a>
+      </div>
+    </div>
+    <div class="synth-wrap">
+      <!-- CSS Synthesizer Mockup -->
+      <div class="synth-body">
+        <div class="synth-screen">
+          <div class="synth-screen-dot"></div>
+          <span class="synth-screen-text">TX-1 / PATCH 01 / 120 BPM</span>
+        </div>
+        <div class="synth-knobs">
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+          <div class="knob"></div>
+        </div>
+        <div class="synth-keys">
+          <div class="key-white"></div>
+          <div class="key-black-wrap"><div class="key-black"></div></div>
+          <div class="key-white"></div>
+          <div class="key-black-wrap"><div class="key-black"></div></div>
+          <div class="key-white"></div>
+          <div class="key-white"></div>
+          <div class="key-black-wrap"><div class="key-black"></div></div>
+          <div class="key-white"></div>
+          <div class="key-black-wrap"><div class="key-black"></div></div>
+          <div class="key-white"></div>
+          <div class="key-black-wrap"><div class="key-black"></div></div>
+          <div class="key-white"></div>
+          <div class="key-white"></div>
+        </div>
+        <div class="synth-label">formwerk tx-1</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Info -->
+  <section class="product-info" id="product">
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-num">8</div>
+        <div class="info-label">voice polyphony</div>
+        <div class="info-desc">Eight independent voices, each with its own envelope, filter, and modulation. Play chords, pads, and leads simultaneously.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-num">16</div>
+        <div class="info-label">step sequencer</div>
+        <div class="info-desc">A 16-step sequencer with probability, swing, and parameter locks. Program complex patterns in seconds.</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-num">∞</div>
+        <div class="info-label">patch combinations</div>
+        <div class="info-desc">Analog-modeled oscillators with digital precision. Every patch is unique. No two TX-1s will ever sound exactly the same.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specs -->
+  <section class="specs" id="specs">
+    <div class="specs-inner">
+      <p class="specs-title">— technical specifications</p>
+      <div>
+        <div class="spec-row"><div class="spec-section">synthesis</div></div>
+        <div class="spec-row"><div class="spec-key">type</div><div class="spec-val">virtual analog (VA) + FM hybrid</div></div>
+        <div class="spec-row"><div class="spec-key">oscillators per voice</div><div class="spec-val">2 × VA + 1 × FM operator</div></div>
+        <div class="spec-row"><div class="spec-key">polyphony</div><div class="spec-val">8 voices</div></div>
+        <div class="spec-row"><div class="spec-key">filter</div><div class="spec-val">24dB/oct low-pass (Moog-style), 12dB/oct high-pass</div></div>
+        <div class="spec-row"><div class="spec-key">modulation</div><div class="spec-val">4 × LFO, 4 × envelope, 1 × step modulator</div></div>
+        <div class="spec-row"><div class="spec-key">effects</div><div class="spec-val">Reverb, Delay, Chorus, Distortion (all simultaneous)</div></div>
+
+        <div class="spec-row"><div class="spec-section">interface</div></div>
+        <div class="spec-row"><div class="spec-key">keyboard</div><div class="spec-val">25-key mini (velocity + aftertouch)</div></div>
+        <div class="spec-row"><div class="spec-key">controls</div><div class="spec-val">8 × endless encoder, 16 × step button, 4 × function key</div></div>
+        <div class="spec-row"><div class="spec-key">display</div><div class="spec-val">2.4" OLED, 128 × 64px</div></div>
+        <div class="spec-row"><div class="spec-key">sequencer</div><div class="spec-val">16-step, 64 patterns, 8 tracks</div></div>
+
+        <div class="spec-row"><div class="spec-section">connectivity</div></div>
+        <div class="spec-row"><div class="spec-key">audio out</div><div class="spec-val">1/4" stereo TRS, 3.5mm headphone</div></div>
+        <div class="spec-row"><div class="spec-key">midi</div><div class="spec-val">USB-MIDI, 3.5mm TRS MIDI in/out</div></div>
+        <div class="spec-row"><div class="spec-key">sync</div><div class="spec-val">MIDI clock, Analog clock in/out (3.5mm)</div></div>
+        <div class="spec-row"><div class="spec-key">usb</div><div class="spec-val">USB-C (power + MIDI + audio interface)</div></div>
+
+        <div class="spec-row"><div class="spec-section">physical</div></div>
+        <div class="spec-row"><div class="spec-key">dimensions</div><div class="spec-val">380 × 140 × 42mm</div></div>
+        <div class="spec-row"><div class="spec-key">weight</div><div class="spec-val">980g</div></div>
+        <div class="spec-row"><div class="spec-key">power</div><div class="spec-val">USB-C (5V/2A) or 6 × AA batteries (8h)</div></div>
+        <div class="spec-row"><div class="spec-key">material</div><div class="spec-val">Anodized aluminum chassis, ABS keys</div></div>
+        <div class="spec-row"><div class="spec-key">colors</div><div class="spec-val">White, Black, Olive</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="philosophy" id="philosophy">
+    <div class="phil-inner">
+      <p class="phil-label">— our philosophy</p>
+      <h2 class="phil-statement">
+        form <span class="accent">follows</span><br>
+        function.<br>
+        always.
+      </h2>
+      <p class="phil-text">
+        FORMWERK was founded in Stockholm in 2012 by two industrial designers and one sound engineer who were frustrated with synthesizers that were either too complex to use or too simple to be interesting. The TX-1 is the result of three years of iteration — 47 physical prototypes, 200+ hours of musician feedback sessions, and an obsessive commitment to removing every unnecessary element. What remains is pure instrument. Every knob does exactly one thing. Every button is exactly where your hand expects it. The sound is the point. Everything else is noise.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo-text">formwerk</div>
+    <div class="footer-links">
+      <a href="#">products</a>
+      <a href="#">store</a>
+      <a href="#">support</a>
+      <a href="#">press</a>
+      <a href="#">contact</a>
+    </div>
+    <div class="footer-copy">
+      <p>copyright © 2025 formwerk instruments ab.</p>
+      <p>fictional brand for portfolio demonstration only.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
