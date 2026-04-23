@@ -1,0 +1,45 @@
+# Cursor Rules for portfolio-site (bobqiushao.online)
+
+This project belongs to Bob Qiushao's bobqiushao-os.
+
+## Before any changes
+1. Read CLAUDE.md (this project's working agreement)
+2. Read docs/00-charter/CHARTER.md (world view, 5 min)
+3. Read relevant ADRs in docs/02-adr/
+
+## Core prohibitions (from Charter + ADR)
+- NEVER create product names wrapping Bob's capabilities (e.g., Auraloop X)
+- NEVER limit the capability library to 4 types (it's open and expandable)
+- NEVER redo existing assets (6 jewelry cases / Auraloop / Cursor workflow)
+- NEVER speak directly to clients on Bob's behalf
+- NEVER skip ADR / RUNBOOK / acceptance checklist before delivery
+
+## Branch rules (ADR-0033)
+- NEVER push directly to main
+- Always use feature/*, fix/*, hotfix/*, or docs/* branches
+- All merges must go through PR with description (what / why / how to test)
+
+## Commit messages (Conventional Commits)
+- feat: new feature
+- fix: bug fix
+- docs: documentation
+- refactor: refactoring (no functional change)
+- chore: build/tool changes
+
+## i18n rule
+All user-facing text changes MUST sync zh/en/ja in client/src/i18n/translations.ts
+
+## Security
+- NEVER write client credentials or API keys in code
+- NEVER remove .env from .gitignore
+
+## Performance baseline (ADR-0026)
+- LCP < 2.5s
+- CLS < 0.1
+- Lighthouse Performance > 85
+
+## CDN whitelist
+Only load from: cdnjs.cloudflare.com, cdn.jsdelivr.net, fonts.googleapis.com, fonts.gstatic.com
+
+## Animation rule
+Always include prefers-reduced-motion protection in all animations.
