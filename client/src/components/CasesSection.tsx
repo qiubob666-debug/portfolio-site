@@ -19,7 +19,7 @@ const COPY = {
     featuredDesc: "从零搭建的 Headless 品牌矩阵系统：Google + Supabase 社区认证、Headless WooCommerce 零成本平替 Shopify、Vercel 多前缀域名品牌矩阵、n8n + Sanity 内容生产工作流、高审美前端 + Cloudflare CDN 方案。这是我给客户做的所有事情，我自己先做了一遍。",
     featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
     featuredCta: "访问 Live 站点 →",
-    featuredUrl: "https://auraloop.bobqiushao.online",
+    
     conceptTitle: "概念设计案例",
     conceptSubtitle: "基于全球顶级 DTC 品牌设计语言，交叉融合创作，品牌名已脱敏。",
     cases: [
@@ -118,7 +118,7 @@ const COPY = {
     featuredDesc: "A Headless brand matrix system built from scratch: Google + Supabase community auth, Headless WooCommerce as a zero-cost Shopify alternative, Vercel multi-prefix domain brand matrix, n8n + Sanity content production workflow, high-aesthetic frontend + Cloudflare CDN. Everything I do for clients, I did for myself first.",
     featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
     featuredCta: "Visit Live Site →",
-    featuredUrl: "https://auraloop.bobqiushao.online",
+    
     conceptTitle: "Concept Design Cases",
     conceptSubtitle: "Cross-fusion designs inspired by global top DTC brands. Brand names are fictional.",
     cases: [
@@ -217,7 +217,7 @@ const COPY = {
     featuredDesc: "ゼロから構築したHeadlessブランドマトリックスシステム：Google + Supabaseコミュニティ認証、Headless WooCommerceによるShopify代替、Vercelマルチプレフィックスドメインブランドマトリックス、n8n + Sanityコンテンツ制作ワークフロー、高審美フロントエンド + Cloudflare CDN。クライアントに提供するすべてを、まず自分で実践しました。",
     featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
     featuredCta: "ライブサイトを見る →",
-    featuredUrl: "https://auraloop.bobqiushao.online",
+    
     conceptTitle: "コンセプトデザインケース",
     conceptSubtitle: "グローバルトップDTCブランドのデザイン言語を参考にした創作。ブランド名は架空です。",
     cases: [
@@ -484,16 +484,7 @@ export default function CasesSection() {
         }
 
         /* ── Featured Card ── */
-        .cases-featured {
-          display: block;
-          position: relative;
-          border: 1px solid rgba(212,196,154,0.2);
-          border-radius: 4px;
-          overflow: hidden;
-          margin-bottom: 80px;
-          text-decoration: none;
-          transition: border-color 0.3s;
-        }
+        
         .cases-featured:hover { border-color: rgba(212,196,154,0.5); }
         .cases-featured-bg {
           position: absolute;
@@ -501,13 +492,7 @@ export default function CasesSection() {
           background: linear-gradient(135deg, rgba(139,105,20,0.15) 0%, rgba(17,17,17,0) 60%);
           pointer-events: none;
         }
-        .cases-featured-content {
-          position: relative;
-          display: flex;
-          gap: 60px;
-          padding: 56px 56px;
-          align-items: flex-start;
-        }
+        
         .cases-featured-left { flex: 1; }
         .cases-featured-label {
           display: flex;
@@ -519,14 +504,7 @@ export default function CasesSection() {
           color: #D4C49A;
           margin-bottom: 16px;
         }
-        .cases-live-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #2ECC71;
-          animation: pulse-dot 2s ease-in-out infinite;
-          flex-shrink: 0;
-        }
+        
         @keyframes pulse-dot {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.5; transform: scale(0.8); }
@@ -747,14 +725,14 @@ export default function CasesSection() {
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {
-          .cases-featured-content { flex-direction: column; gap: 32px; }
+          
           .cases-featured-right { align-items: flex-start; }
           .cases-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 767px) {
           .cases-container { padding: 0 20px; }
           .cases-section { padding: 80px 0; }
-          .cases-featured-content { padding: 32px 24px; }
+          
           .cases-featured-visual { width: 100%; }
           .cases-grid { grid-template-columns: 1fr; }
           .cases-demos { grid-template-columns: 1fr; }
