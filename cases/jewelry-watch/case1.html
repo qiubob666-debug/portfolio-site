@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case Study 1 — LUMIÈRE Fine Jewelry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (extracted from Mejuri + Missoma source) ─── */
+:root{
+  --color-foreground:#000000;
+  --color-background:#ffffff;
+  --color-surface:#f9f7f4;
+  --color-surface-alt:#f0ebe3;
+  --color-border:#e5ddd4;
+  --color-muted:#7a7570;
+  --color-faint:rgba(0,0,0,.04);
+  --color-accent:#b08d57;
+  --color-accent-bg:#f5edd8;
+  --color-button-bg:#000000;
+  --color-button-fg:#ffffff;
+  --color-overlay:rgba(0,0,0,.64);
+  --font-body:"Jost","Helvetica Neue",Arial,sans-serif;
+  --font-heading:"Cormorant Garamond",Georgia,serif;
+  --fw-light:300;--fw-reg:400;--fw-med:500;
+  --text-hxxl:clamp(29px,5vw,56px);
+  --text-hxl:clamp(38px,5vw,48px);
+  --text-h0:clamp(24px,1.8vw,36px);
+  --text-h1:clamp(22px,1.8vw,30px);
+  --text-h2:clamp(20px,1.7vw,28px);
+  --text-h3:clamp(14px,3.5vw,20px);
+  --text-sm:12px;
+  --card-radius:0px;--card-padding:16px;
+  --btn-radius:0px;--btn-padding:0.9em 2.6em;--btn-ls:0.16em;
+  --ease:.3s ease;--ease-slow:.5s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-weight:var(--fw-light);color:var(--color-foreground);background:var(--color-background);line-height:1.4;-webkit-font-smoothing:antialiased;letter-spacing:0.01em}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%;height:auto}
+button{cursor:pointer;font-family:var(--font-body)}
+
+/* ─── ANNOUNCEMENT BAR ─── */
+.ann{background:var(--color-foreground);color:var(--color-background);text-align:center;padding:10px 20px;font-size:var(--text-sm);letter-spacing:.08em;font-weight:var(--fw-med)}
+.ann a{text-decoration:underline;text-underline-offset:3px;margin-left:6px;transition:opacity .2s}
+.ann a:hover{opacity:.7}
+
+/* ─── HEADER ─── */
+.hdr{position:sticky;top:0;z-index:100;background:var(--color-background);border-bottom:1px solid var(--color-border);transition:box-shadow .3s}
+.hdr.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.hdr-in{max-width:1440px;margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-heading);font-size:22px;font-weight:var(--fw-reg);letter-spacing:.12em;text-transform:uppercase}
+.nav{display:flex;gap:32px}
+.nav-item{position:relative}
+.nav-item>a{font-size:13px;font-weight:var(--fw-med);letter-spacing:.01em;color:var(--color-muted);transition:color .2s;padding:22px 0;display:inline-block}
+.nav-item>a::after{content:'';position:absolute;bottom:18px;left:0;width:0;height:1px;background:var(--color-foreground);transition:width .3s}
+.nav-item>a:hover{color:var(--color-foreground)}
+.nav-item>a:hover::after{width:100%}
+.hdr-acts{display:flex;align-items:center;gap:20px}
+.hdr-acts svg{width:20px;height:20px;stroke:var(--color-muted);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .2s}
+.hdr-acts svg:hover{stroke:var(--color-foreground)}
+.cart-count{position:relative}
+.cart-count::after{content:'2';position:absolute;top:-6px;right:-8px;width:16px;height:16px;background:var(--color-accent);color:#fff;font-size:9px;font-weight:var(--fw-med);border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* ─── MEGA MENU (Missoma pattern) ─── */
+.mega{position:absolute;top:100%;left:-48px;width:100vw;max-width:1440px;background:var(--color-background);border-top:1px solid var(--color-border);box-shadow:0 12px 40px rgba(0,0,0,.08);padding:40px 48px;display:grid;grid-template-columns:200px 200px 200px 1fr;gap:32px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:all .25s ease;z-index:200}
+.nav-item:hover .mega{opacity:1;visibility:visible;transform:translateY(0)}
+.mega-col-title{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);font-weight:var(--fw-med);margin-bottom:16px}
+.mega-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.mega-links a{font-size:13px;color:var(--color-muted);transition:color .2s}
+.mega-links a:hover{color:var(--color-foreground)}
+.mega-featured{position:relative;overflow:hidden;border-radius:0}
+.mega-featured img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.mega-featured:hover img{transform:scale(1.04)}
+.mega-featured-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent)}
+.mega-featured-label{font-family:var(--font-heading);font-size:18px;color:#fff}
+.mega-featured-cta{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:4px}
+
+/* ─── MOBILE MENU ─── */
+.burger{display:none;width:24px;height:24px;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+.burger span{display:block;width:100%;height:1.5px;background:var(--color-foreground);transition:all .3s}
+.mobile-menu{display:none;position:fixed;inset:0;top:64px;background:var(--color-background);z-index:99;overflow-y:auto;padding:24px;transform:translateX(-100%);transition:transform .3s ease}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{display:block;font-size:16px;padding:14px 0;border-bottom:1px solid var(--color-border);color:var(--color-foreground);font-weight:var(--fw-med)}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:var(--btn-padding);background:var(--color-button-bg);color:var(--color-button-fg);font-size:13px;font-weight:var(--fw-light);letter-spacing:var(--btn-ls);text-transform:uppercase;border:none;border-radius:var(--btn-radius);transition:all var(--ease);font-family:var(--font-body)}
+.btn:hover{background:#333}
+.btn--outline{background:transparent;color:var(--color-foreground);border:1px solid var(--color-foreground)}
+.btn--outline:hover{background:var(--color-foreground);color:var(--color-background)}
+.btn--small{padding:.6em 1.8em;font-size:11px}
+.btn--accent{background:var(--color-accent);color:#fff}
+.btn--accent:hover{background:#96753f}
+
+/* ─── HERO ─── */
+.hero{position:relative;height:calc(100vh - 104px);min-height:600px;overflow:hidden}
+.hero-media{position:absolute;inset:0}
+.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.45) 0%,rgba(0,0,0,.15) 50%,transparent 100%)}
+.hero-ct{position:relative;z-index:2;height:100%;max-width:1440px;margin:0 auto;padding:0 48px;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:80px}
+.hero-eyebrow{font-size:var(--text-sm);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.65);font-weight:var(--fw-med);margin-bottom:16px}
+.hero-h{font-family:var(--font-heading);font-size:var(--text-hxxl);font-weight:300;color:#fff;line-height:1.05;margin-bottom:20px;max-width:600px}
+.hero-h em{font-style:italic}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.7);line-height:1.7;max-width:420px;margin-bottom:32px}
+.hero-ctas{display:flex;gap:12px}
+.hero .btn{background:#fff;color:#000}
+.hero .btn:hover{background:var(--color-accent);color:#fff}
+.hero .btn--outline{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.hero .btn--outline:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* ─── SECTION COMMON ─── */
+.sec-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.sec-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px}
+.sec-eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--color-accent);font-weight:var(--fw-med);margin-bottom:8px}
+.sec-h{font-family:var(--font-heading);font-size:var(--text-h0);font-weight:var(--fw-reg);line-height:1.15}
+.sec-h em{font-style:italic;color:var(--color-muted)}
+.sec-link{font-size:var(--text-sm);font-weight:var(--fw-med);letter-spacing:.08em;color:var(--color-muted);transition:color .2s;display:flex;align-items:center;gap:6px}
+.sec-link:hover{color:var(--color-foreground)}
+
+/* ─── CATEGORY GRID ─── */
+.categories{padding:80px 0;background:var(--color-background)}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.cat-card{position:relative;overflow:hidden;cursor:pointer}
+.cat-card img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .5s ease}
+.cat-card:hover img{transform:scale(1.06)}
+.cat-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;transition:background .3s}
+.cat-card:hover .cat-ov{background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%)}
+.cat-name{font-family:var(--font-heading);font-size:var(--text-h2);color:#fff;font-weight:var(--fw-reg);margin-bottom:4px}
+.cat-count{font-size:var(--text-sm);color:rgba(255,255,255,.55);letter-spacing:.06em}
+
+/* ─── PRODUCT GRID ─── */
+.products{padding:80px 0;background:var(--color-surface)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.p-card{background:var(--color-background);border-radius:var(--card-radius);overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.p-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.08);transform:translateY(-4px)}
+.p-media{position:relative;overflow:hidden}
+.p-media img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .5s ease}
+.p-card:hover .p-media img{transform:scale(1.04)}
+.p-badge{position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 10px;background:var(--color-foreground);color:var(--color-background)}
+.p-badge--accent{background:var(--color-accent)}
+.p-wish{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.1);border:none;cursor:pointer}
+.p-wish svg{width:16px;height:16px;stroke:#000;stroke-width:1.5;fill:none}
+.p-card:hover .p-wish{opacity:1}
+.p-wish.active svg{fill:var(--color-accent);stroke:var(--color-accent)}
+.quick-add{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.88);color:#fff;text-align:center;padding:12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:var(--fw-med);transform:translateY(100%);transition:transform .3s ease;cursor:pointer;border:none;width:100%}
+.p-card:hover .quick-add{transform:translateY(0)}
+.p-body{padding:var(--card-padding) var(--card-padding) 20px}
+.p-name{font-size:13px;font-weight:var(--fw-med);margin-bottom:4px;line-height:1.4}
+.p-mat{font-size:var(--text-sm);color:var(--color-muted);margin-bottom:10px}
+.p-price{font-size:15px;font-weight:var(--fw-med)}
+.p-price s{color:var(--color-muted);font-weight:var(--fw-light);font-size:13px;margin-right:4px}
+.p-price .sale{color:#c0392b}
+/* Color swatches */
+.p-swatches{display:flex;gap:6px;margin-top:8px}
+.p-swatch{width:12px;height:12px;border-radius:50%;border:1px solid var(--color-border);cursor:pointer;transition:box-shadow .2s}
+.p-swatch:hover,.p-swatch.active{box-shadow:0 0 0 2px var(--color-foreground)}
+
+/* ─── EDITORIAL SPLIT ─── */
+.editorial{padding:0;background:var(--color-background)}
+.ed-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:600px}
+.ed-media{position:relative;overflow:hidden}
+.ed-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.editorial:hover .ed-media img{transform:scale(1.03)}
+.ed-ct{display:flex;flex-direction:column;justify-content:center;padding:80px 64px;background:var(--color-surface-alt)}
+.ed-ct .sec-eyebrow{margin-bottom:16px}
+.ed-ct h2{font-family:var(--font-heading);font-size:var(--text-hxl);font-weight:300;line-height:1.08;margin-bottom:20px}
+.ed-ct h2 em{font-style:italic}
+.ed-ct p{font-size:15px;line-height:1.8;color:var(--color-muted);margin-bottom:32px;max-width:420px}
+
+/* ─── STACKING GUIDE ─── */
+.stacking{padding:80px 0;background:var(--color-background)}
+.stack-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:40px}
+.stack-card{position:relative;overflow:hidden;cursor:pointer}
+.stack-card img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .5s ease}
+.stack-card:hover img{transform:scale(1.06)}
+.stack-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6) 0%,transparent 40%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.stack-label{font-family:var(--font-heading);font-size:var(--text-h3);color:#fff;font-weight:var(--fw-reg)}
+.stack-cta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:4px;transition:color .2s}
+.stack-card:hover .stack-cta{color:var(--color-accent)}
+
+/* ─── SECOND PRODUCT ROW (New Arrivals) ─── */
+.new-arrivals{padding:80px 0;background:var(--color-background)}
+
+/* ─── INSTAGRAM FEED (Missoma social proof) ─── */
+.insta{padding:80px 0;background:var(--color-surface)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:40px}
+.insta-card{position:relative;overflow:hidden;cursor:pointer}
+.insta-card img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .4s ease}
+.insta-card:hover img{transform:scale(1.08)}
+.insta-ov{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.insta-card:hover .insta-ov{opacity:1}
+.insta-ov svg{width:24px;height:24px;stroke:#fff;stroke-width:1.5;fill:none}
+
+/* ─── TRUST BAR ─── */
+.trust{padding:48px 0;background:var(--color-surface);border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}
+.trust-grid{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.trust-item{text-align:center}
+.trust-icon svg{width:24px;height:24px;stroke:var(--color-foreground);stroke-width:1.5;fill:none;margin-bottom:10px}
+.trust-title{font-size:12px;font-weight:var(--fw-med);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.trust-desc{font-size:var(--text-sm);color:var(--color-muted);line-height:1.5}
+
+/* ─── NEWSLETTER ─── */
+.nl{padding:80px 0;background:var(--color-foreground);color:var(--color-background)}
+.nl-in{max-width:520px;margin:0 auto;padding:0 48px;text-align:center}
+.nl h2{font-family:var(--font-heading);font-size:var(--text-h0);font-weight:300;margin-bottom:12px}
+.nl p{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:28px;line-height:1.6}
+.nl-form{display:flex}
+.nl-form input{flex:1;padding:14px 20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-right:none;color:#fff;font-size:13px;font-family:var(--font-body);outline:none}
+.nl-form input::placeholder{color:rgba(255,255,255,.3)}
+.nl-form button{padding:14px 28px;background:var(--color-accent);color:#fff;border:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-med);font-family:var(--font-body);transition:background .2s}
+.nl-form button:hover{background:#96753f}
+
+/* ─── FOOTER ─── */
+.ft{background:var(--color-foreground);color:rgba(255,255,255,.45);padding:80px 0 32px}
+.ft-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:60px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:32px}
+.ft-brand{font-family:var(--font-heading);font-size:20px;color:#fff;font-weight:var(--fw-reg);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.ft-desc{font-size:13px;line-height:1.7;margin-bottom:24px}
+.ft-socs{display:flex;gap:10px}
+.ft-soc{width:34px;height:34px;border:1px solid rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
+.ft-soc:hover{border-color:var(--color-accent);color:var(--color-accent)}
+.ft-col-h{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#fff;font-weight:var(--fw-med);margin-bottom:20px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-links a{font-size:13px;transition:color .2s}
+.ft-links a:hover{color:var(--color-accent)}
+.ft-bot{display:flex;justify-content:space-between;font-size:var(--text-sm)}
+.ft-legal{display:flex;gap:20px}
+.ft-legal a{transition:color .2s}
+.ft-legal a:hover{color:#fff}
+
+/* ─── BACK TO TOP ─── */
+.btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:var(--color-foreground);color:var(--color-background);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:50}
+.btt.show{opacity:1;visibility:visible}
+.btt:hover{background:var(--color-accent)}
+.btt svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .prod-grid{grid-template-columns:repeat(3,1fr)}
+  .stack-grid{grid-template-columns:repeat(3,1fr)}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .mega{display:none!important}
+}
+@media(max-width:768px){
+  .hdr-in{padding:0 20px}
+  .nav{display:none}
+  .burger{display:flex}
+  .mobile-menu{display:block}
+  .hero-ct{padding:0 20px 60px}
+  .sec-in{padding:0 20px}
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .ed-inner{grid-template-columns:1fr}
+  .ed-ct{padding:48px 20px}
+  .stack-grid{grid-template-columns:repeat(2,1fr)}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .trust-grid{grid-template-columns:repeat(2,1fr);padding:0 20px}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:32px}
+}
+</style>
+</head>
+<body>
+
+<!-- Announcement Bar -->
+<div class="ann">
+  Complimentary Shipping on Orders Over $150 <a href="#">Shop Now</a>
+</div>
+
+<!-- Header with Mega Menu -->
+<header class="hdr" id="hdr">
+<div class="hdr-in">
+  <a href="#" class="logo">Lumière</a>
+  <nav class="nav">
+    <div class="nav-item">
+      <a href="#">New In</a>
+    </div>
+    <div class="nav-item">
+      <a href="#">Earrings</a>
+      <div class="mega">
+        <div>
+          <p class="mega-col-title">By Style</p>
+          <ul class="mega-links">
+            <li><a href="#">Hoop Earrings</a></li>
+            <li><a href="#">Stud Earrings</a></li>
+            <li><a href="#">Drop Earrings</a></li>
+            <li><a href="#">Chandelier</a></li>
+            <li><a href="#">Ear Cuffs</a></li>
+            <li><a href="#">Huggie Hoops</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="mega-col-title">By Material</p>
+          <ul class="mega-links">
+            <li><a href="#">18ct Gold Plated</a></li>
+            <li><a href="#">Gold Vermeil</a></li>
+            <li><a href="#">Sterling Silver</a></li>
+            <li><a href="#">14ct Solid Gold</a></li>
+            <li><a href="#">Mixed Metals</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="mega-col-title">Collections</p>
+          <ul class="mega-links">
+            <li><a href="#">Tennis Collection</a></li>
+            <li><a href="#">Axiom Collection</a></li>
+            <li><a href="#">Sculptural</a></li>
+            <li><a href="#">Pearl Edit</a></li>
+            <li><a href="#">Gemstone</a></li>
+          </ul>
+        </div>
+        <div class="mega-featured">
+          <img src="assets/missoma/EARRINGS_e33291b5-6764-4695-9ab2-f80d775e12df.webp" alt="Earrings">
+          <div class="mega-featured-overlay">
+            <p class="mega-featured-label">The Earring Edit</p>
+            <p class="mega-featured-cta">Shop All →</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#">Necklaces</a>
+      <div class="mega">
+        <div>
+          <p class="mega-col-title">By Style</p>
+          <ul class="mega-links">
+            <li><a href="#">Chain Necklaces</a></li>
+            <li><a href="#">Pendant Necklaces</a></li>
+            <li><a href="#">Chokers</a></li>
+            <li><a href="#">Layering Sets</a></li>
+            <li><a href="#">Tennis Necklaces</a></li>
+            <li><a href="#">Personalised</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="mega-col-title">By Material</p>
+          <ul class="mega-links">
+            <li><a href="#">18ct Gold Plated</a></li>
+            <li><a href="#">Gold Vermeil</a></li>
+            <li><a href="#">Sterling Silver</a></li>
+            <li><a href="#">14ct Solid Gold</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="mega-col-title">Collections</p>
+          <ul class="mega-links">
+            <li><a href="#">Axiom</a></li>
+            <li><a href="#">Magma</a></li>
+            <li><a href="#">Lucy Williams</a></li>
+            <li><a href="#">Cord Necklaces</a></li>
+          </ul>
+        </div>
+        <div class="mega-featured">
+          <img src="assets/missoma/NECKLACES_6c698b78-3009-4122-a4b8-49145960b645.webp" alt="Necklaces">
+          <div class="mega-featured-overlay">
+            <p class="mega-featured-label">The Necklace Edit</p>
+            <p class="mega-featured-cta">Shop All →</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#">Rings</a>
+    </div>
+    <div class="nav-item">
+      <a href="#">Bracelets</a>
+    </div>
+    <div class="nav-item">
+      <a href="#">Stacking</a>
+    </div>
+    <div class="nav-item">
+      <a href="#">Gifts</a>
+    </div>
+  </nav>
+  <div class="hdr-acts">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="cart-count"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div>
+</header>
+
+<!-- Mobile Menu -->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#">New In</a>
+  <a href="#">Earrings</a>
+  <a href="#">Necklaces</a>
+  <a href="#">Rings</a>
+  <a href="#">Bracelets</a>
+  <a href="#">Stacking</a>
+  <a href="#">Gifts</a>
+  <a href="#">Our Story</a>
+  <a href="#">Contact</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-media">
+    <img src="assets/mejuri/Mejuri_Topanga_005_hscynn.jpg" alt="LUMIÈRE Fine Jewelry Store">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-ct">
+    <p class="hero-eyebrow">The Stacking Event</p>
+    <h1 class="hero-h">Fine Jewelry<br>for <em>Every Day.</em></h1>
+    <p class="hero-sub">Pieces designed to be layered, stacked, and worn from morning to midnight. Crafted in solid gold and sterling silver.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn">Shop New Arrivals</a>
+      <a href="#" class="btn btn--outline">Explore Stacking</a>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="categories">
+<div class="sec-in">
+  <div class="sec-hd">
+    <div>
+      <p class="sec-eyebrow">Shop by Category</p>
+      <h2 class="sec-h">Explore the <em>Collection</em></h2>
+    </div>
+    <a href="#" class="sec-link">View All →</a>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card">
+      <img src="assets/missoma/EARRINGS_e33291b5-6764-4695-9ab2-f80d775e12df.webp" alt="Earrings">
+      <div class="cat-ov"><p class="cat-name">Earrings</p><p class="cat-count">124 pieces</p></div>
+    </div>
+    <div class="cat-card">
+      <img src="assets/missoma/NECKLACES_6c698b78-3009-4122-a4b8-49145960b645.webp" alt="Necklaces">
+      <div class="cat-ov"><p class="cat-name">Necklaces</p><p class="cat-count">98 pieces</p></div>
+    </div>
+    <div class="cat-card">
+      <img src="assets/missoma/BRACELETS_082632ab-ffb9-47e5-bb2d-f7035573eb7e.webp" alt="Bracelets">
+      <div class="cat-ov"><p class="cat-name">Bracelets</p><p class="cat-count">76 pieces</p></div>
+    </div>
+    <div class="cat-card">
+      <img src="assets/missoma/UNDER_100_a296b359-14a8-4c8d-9118-e5a5f3c694c7.webp" alt="Under $100">
+      <div class="cat-ov"><p class="cat-name">Under $100</p><p class="cat-count">52 pieces</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Best Sellers -->
+<section class="products">
+<div class="sec-in">
+  <div class="sec-hd">
+    <div>
+      <p class="sec-eyebrow">Most Loved</p>
+      <h2 class="sec-h">Best <em>Sellers</em></h2>
+    </div>
+    <a href="#" class="sec-link">Shop All →</a>
+  </div>
+  <div class="prod-grid">
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/axiom-chain-necklace-18ct-gold-plated-necklaces-missoma-233035.jpg" alt="Axiom Chain Necklace">
+        <span class="p-badge">New In</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Axiom Chain Necklace</p>
+        <p class="p-mat">18ct Gold Plated</p>
+        <p class="p-price">$185</p>
+        <div class="p-swatches">
+          <span class="p-swatch active" style="background:#d4a574"></span>
+          <span class="p-swatch" style="background:#c0c0c0"></span>
+        </div>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/classic-flat-medium-hoop-earrings-18ct-gold-plated-vermeil-earrings-missoma-746037.jpg" alt="Classic Flat Medium Hoop">
+        <span class="p-badge p-badge--accent">Best Seller</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Classic Flat Medium Hoop Earrings</p>
+        <p class="p-mat">18ct Gold Plated Vermeil</p>
+        <p class="p-price">$135</p>
+        <div class="p-swatches">
+          <span class="p-swatch active" style="background:#d4a574"></span>
+          <span class="p-swatch" style="background:#c0c0c0"></span>
+          <span class="p-swatch" style="background:#e8c4a0"></span>
+        </div>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/magma-twisted-double-chain-necklace-set-18ct-gold-vermeil-layering-sets-missoma-155525.webp" alt="Magma Twisted Double Chain">
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Magma Twisted Double Chain Set</p>
+        <p class="p-mat">18ct Gold Vermeil</p>
+        <p class="p-price"><s>$295</s> <span class="sale">$236</span></p>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/axiom-chain-bracelet-18ct-gold-plated-bracelets-missoma-945791.jpg" alt="Axiom Chain Bracelet">
+        <span class="p-badge">New In</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Axiom Chain Bracelet</p>
+        <p class="p-mat">18ct Gold Plated</p>
+        <p class="p-price">$125</p>
+        <div class="p-swatches">
+          <span class="p-swatch active" style="background:#d4a574"></span>
+          <span class="p-swatch" style="background:#c0c0c0"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Editorial Split -->
+<section class="editorial">
+<div class="ed-inner">
+  <div class="ed-media">
+    <img src="assets/mejuri/StackingEvent_Homepage_Sidekick_Dome_M.jpg" alt="Stacking Guide">
+  </div>
+  <div class="ed-ct">
+    <p class="sec-eyebrow">The Art of Stacking</p>
+    <h2>Layer Up.<br><em>Make It Yours.</em></h2>
+    <p>Discover the art of jewellery stacking. Mix metals, textures, and styles to create a look that tells your story. Our curated guides help you find the perfect combination.</p>
+    <a href="#" class="btn">Explore Stacking Guide</a>
+  </div>
+</div>
+</section>
+
+<!-- Stacking Content Blocks -->
+<section class="stacking">
+<div class="sec-in">
+  <div class="sec-hd">
+    <div>
+      <p class="sec-eyebrow">Curated Edits</p>
+      <h2 class="sec-h">Shop the <em>Stack</em></h2>
+    </div>
+  </div>
+  <div class="stack-grid">
+    <div class="stack-card">
+      <img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Gold_DT.jpg" alt="Gold">
+      <div class="stack-ov"><p class="stack-label">Gold Essentials</p><p class="stack-cta">Shop Now →</p></div>
+    </div>
+    <div class="stack-card">
+      <img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Silver_DT.jpg" alt="Silver">
+      <div class="stack-ov"><p class="stack-label">Silver Edit</p><p class="stack-cta">Shop Now →</p></div>
+    </div>
+    <div class="stack-card">
+      <img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Rings_DT.jpg" alt="Rings">
+      <div class="stack-ov"><p class="stack-label">Ring Stacks</p><p class="stack-cta">Shop Now →</p></div>
+    </div>
+    <div class="stack-card">
+      <img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Hoops_DT.jpg" alt="Hoops">
+      <div class="stack-ov"><p class="stack-label">Hoop Edit</p><p class="stack-cta">Shop Now →</p></div>
+    </div>
+    <div class="stack-card">
+      <img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Birthstone_DT.jpg" alt="Birthstone">
+      <div class="stack-ov"><p class="stack-label">Birthstones</p><p class="stack-cta">Shop Now →</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- New Arrivals (Second Product Row) -->
+<section class="new-arrivals">
+<div class="sec-in">
+  <div class="sec-hd">
+    <div>
+      <p class="sec-eyebrow">Just Landed</p>
+      <h2 class="sec-h">New <em>Arrivals</em></h2>
+    </div>
+    <a href="#" class="sec-link">View All →</a>
+  </div>
+  <div class="prod-grid">
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/ridge-t-bar-chain-necklace-18ct-gold-plated-necklaces-missoma-497371.jpg" alt="Ridge T-Bar Chain Necklace">
+        <span class="p-badge">New In</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Ridge T-Bar Chain Necklace</p>
+        <p class="p-mat">18ct Gold Plated</p>
+        <p class="p-price">$165</p>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/sculptural-chubby-dome-small-hoop-earrings-18ct-gold-plated-earrings-missoma-800189.webp" alt="Sculptural Dome Hoop">
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Sculptural Chubby Dome Hoop</p>
+        <p class="p-mat">18ct Gold Plated</p>
+        <p class="p-price">$115</p>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/tennis-round-necklace-18ct-gold-platedcubic-zirconia-necklaces-missoma-335614.webp" alt="Tennis Round Necklace">
+        <span class="p-badge p-badge--accent">Trending</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Tennis Round Necklace</p>
+        <p class="p-mat">18ct Gold Plated / CZ</p>
+        <p class="p-price">$245</p>
+      </div>
+    </div>
+    <div class="p-card">
+      <div class="p-media">
+        <img src="assets/missoma/spiral-statement-ring-18ct-gold-plated-rings-missoma-415882.webp" alt="Spiral Statement Ring">
+        <span class="p-badge">New In</span>
+        <button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        <button class="quick-add">Quick Add</button>
+      </div>
+      <div class="p-body">
+        <p class="p-name">Spiral Statement Ring</p>
+        <p class="p-mat">18ct Gold Plated</p>
+        <p class="p-price">$95</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Instagram Feed -->
+<section class="insta">
+<div class="sec-in">
+  <div class="sec-hd">
+    <div>
+      <p class="sec-eyebrow">@lumiere.jewelry</p>
+      <h2 class="sec-h">Spotted <em>On You</em></h2>
+    </div>
+    <a href="#" class="sec-link">Follow Us →</a>
+  </div>
+  <div class="insta-grid">
+    <div class="insta-card">
+      <img src="assets/missoma/SPOTTED_ON_6_1.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+    <div class="insta-card">
+      <img src="assets/dw/1743066349_193969.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+    <div class="insta-card">
+      <img src="assets/dw/1743066353_134388.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+    <div class="insta-card">
+      <img src="assets/dw/1743066361_155155.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+    <div class="insta-card">
+      <img src="assets/dw/1743066979_153485.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+    <div class="insta-card">
+      <img src="assets/dw/1743066998_140504.jpg" alt="Instagram">
+      <div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Trust Bar -->
+<section class="trust">
+<div class="trust-grid">
+  <div class="trust-item">
+    <div class="trust-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+    <p class="trust-title">Free Shipping</p>
+    <p class="trust-desc">Complimentary on orders over $150</p>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div>
+    <p class="trust-title">60-Day Returns</p>
+    <p class="trust-desc">Hassle-free returns on all orders</p>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <p class="trust-title">2-Year Warranty</p>
+    <p class="trust-desc">On all fine jewelry pieces</p>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <p class="trust-title">Secure Checkout</p>
+    <p class="trust-desc">Encrypted payment processing</p>
+  </div>
+</div>
+</section>
+
+<!-- Newsletter -->
+<section class="nl">
+<div class="nl-in">
+  <h2>Join the Inner Circle</h2>
+  <p>Be the first to know about new collections, exclusive offers, and styling inspiration.</p>
+  <div class="nl-form">
+    <input type="email" placeholder="Enter your email address">
+    <button>Subscribe</button>
+  </div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="ft">
+<div class="ft-in">
+  <div class="ft-grid">
+    <div>
+      <p class="ft-brand">Lumière</p>
+      <p class="ft-desc">Fine jewelry for every day. Crafted in solid gold and sterling silver, designed to be layered and loved.</p>
+      <div class="ft-socs">
+        <a href="#" class="ft-soc">IG</a>
+        <a href="#" class="ft-soc">TT</a>
+        <a href="#" class="ft-soc">PT</a>
+        <a href="#" class="ft-soc">YT</a>
+      </div>
+    </div>
+    <div>
+      <p class="ft-col-h">Shop</p>
+      <ul class="ft-links">
+        <li><a href="#">New In</a></li>
+        <li><a href="#">Earrings</a></li>
+        <li><a href="#">Necklaces</a></li>
+        <li><a href="#">Rings</a></li>
+        <li><a href="#">Bracelets</a></li>
+        <li><a href="#">Gifts</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="ft-col-h">Help</p>
+      <ul class="ft-links">
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping &amp; Delivery</a></li>
+        <li><a href="#">Returns &amp; Exchanges</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="ft-col-h">About</p>
+      <ul class="ft-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="#">Stores</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>&copy; 2025 Lumi&egrave;re. For learning purposes only.</p>
+    <div class="ft-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Accessibility</a>
+    </div>
+  </div>
+</div>
+</footer>
+
+<!-- Back to Top -->
+<button class="btt" id="btt" aria-label="Back to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// Sticky header shadow
+const hdr=document.getElementById('hdr');
+window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',window.scrollY>10));
+
+// Mobile menu toggle
+const burger=document.getElementById('burger');
+const mobileMenu=document.getElementById('mobileMenu');
+burger.addEventListener('click',()=>{
+  mobileMenu.classList.toggle('open');
+  const spans=burger.querySelectorAll('span');
+  if(mobileMenu.classList.contains('open')){
+    spans[0].style.transform='rotate(45deg) translate(4px,4px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(4px,-4px)';
+  }else{
+    spans[0].style.transform='';spans[1].style.opacity='';spans[2].style.transform='';
+  }
+});
+
+// Back to top
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>600));
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// Wishlist toggle
+document.querySelectorAll('.p-wish').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    btn.classList.toggle('active');
+  });
+});
+
+// Color swatch click
+document.querySelectorAll('.p-swatches').forEach(group=>{
+  group.querySelectorAll('.p-swatch').forEach(sw=>{
+    sw.addEventListener('click',()=>{
+      group.querySelectorAll('.p-swatch').forEach(s=>s.classList.remove('active'));
+      sw.classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>

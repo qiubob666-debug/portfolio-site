@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Case Study 3 — AETHER Lab-Grown Diamond Jewelry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;--bg-card:#141414;--bg-surface:#1a1a1a;--bg-elevated:#222;
+  --fg:#ffffff;--fg-muted:rgba(255,255,255,.5);--fg-faint:rgba(255,255,255,.25);
+  --accent:#c9a96e;--accent-hover:#b8943f;
+  --border:rgba(255,255,255,.08);
+  --font-body:'Inter',sans-serif;--font-heading:'Playfair Display',Georgia,serif;
+  --fw-light:300;--fw-reg:400;--fw-med:500;
+  --text-xxl:clamp(36px,5vw,64px);--text-xl:clamp(28px,3.5vw,48px);
+  --text-lg:clamp(22px,2vw,32px);--text-md:16px;--text-sm:13px;
+  --text-xs:11px;--text-xxs:10px;
+  --ease:.3s ease;--ease-slow:.5s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-weight:var(--fw-light);color:var(--fg);background:var(--bg);line-height:1.4;-webkit-font-smoothing:antialiased;letter-spacing:.01em}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%;height:auto}button{cursor:pointer;font-family:inherit}
+
+.ann{background:var(--accent);color:#000;text-align:center;padding:10px 20px;font-size:var(--text-xxs);letter-spacing:.1em;text-transform:uppercase;font-weight:var(--fw-med)}
+
+.hdr{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+.hdr.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.4)}
+.hdr-in{max-width:1440px;margin:0 auto;padding:0 48px;height:64px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.hdr-logo{font-family:var(--font-heading);font-size:22px;font-weight:var(--fw-med);letter-spacing:.15em;text-align:center;text-transform:uppercase}
+.hdr-nav{display:flex;gap:28px}
+.nav-item{position:relative}
+.nav-item>a{font-size:var(--text-sm);font-weight:var(--fw-reg);letter-spacing:.03em;color:var(--fg-muted);transition:color .2s;padding:22px 0;display:inline-block}
+.nav-item>a:hover{color:var(--fg)}
+.hdr-acts{display:flex;gap:18px;justify-content:flex-end;align-items:center}
+.hdr-acts svg{width:20px;height:20px;stroke:var(--fg-muted);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .2s}
+.hdr-acts svg:hover{stroke:var(--fg)}
+
+.mega{position:absolute;top:100%;left:-160px;width:720px;background:var(--bg-card);border:1px solid var(--border);box-shadow:0 16px 48px rgba(0,0,0,.5);padding:36px 40px;display:grid;grid-template-columns:180px 180px 1fr;gap:32px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:all .25s ease;z-index:200}
+.nav-item:hover .mega{opacity:1;visibility:visible;transform:translateY(0)}
+.mega-col-h{font-size:var(--text-xxs);letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:var(--fw-med);margin-bottom:14px}
+.mega-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.mega-links a{font-size:var(--text-sm);color:var(--fg-muted);transition:color .2s}
+.mega-links a:hover{color:var(--fg)}
+.mega-feat{position:relative;overflow:hidden}
+.mega-feat img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.mega-feat:hover img{transform:scale(1.04)}
+
+.burger{display:none;width:24px;height:24px;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+.burger span{display:block;width:100%;height:1.5px;background:var(--fg);transition:all .3s}
+.mob-menu{display:none;position:fixed;inset:0;top:64px;background:var(--bg);z-index:99;overflow-y:auto;padding:24px;transform:translateX(-100%);transition:transform .3s ease}
+.mob-menu.open{transform:translateX(0)}
+.mob-menu a{display:block;font-size:16px;padding:14px 0;border-bottom:1px solid var(--border);color:var(--fg-muted);font-weight:var(--fw-reg)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.9em 2.6em;font-size:var(--text-xs);font-weight:var(--fw-reg);letter-spacing:.16em;text-transform:uppercase;border:none;border-radius:0;transition:all var(--ease);font-family:var(--font-body)}
+.btn--accent{background:var(--accent);color:#000}.btn--accent:hover{background:var(--accent-hover)}
+.btn--ghost{background:transparent;color:var(--fg);border:1px solid rgba(255,255,255,.2)}.btn--ghost:hover{border-color:var(--fg);background:rgba(255,255,255,.04)}
+.btn--white{background:#fff;color:#000}.btn--white:hover{background:#e0e0e0}
+
+.hero{position:relative;height:100vh;min-height:700px;overflow:hidden}
+.hero-media{position:absolute;inset:0}
+.hero-media img{width:100%;height:100%;object-fit:cover;opacity:.7}
+.hero-ct{position:relative;z-index:2;height:100%;max-width:1440px;margin:0 auto;padding:0 48px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.hero-badge{font-size:var(--text-xxs);letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:var(--fw-med);margin-bottom:20px}
+.hero-h{font-family:var(--font-heading);font-size:var(--text-xxl);font-weight:var(--fw-reg);line-height:1.05;margin-bottom:16px}
+.hero-h em{font-style:italic}
+.hero-sub{font-size:var(--text-md);color:var(--fg-muted);margin-bottom:36px;max-width:480px;line-height:1.7}
+.hero-btns{display:flex;gap:12px}
+
+.sec-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.sec-hd{text-align:center;margin-bottom:48px}
+.sec-badge{font-size:var(--text-xxs);letter-spacing:.25em;text-transform:uppercase;color:var(--accent);font-weight:var(--fw-med);margin-bottom:8px}
+.sec-h{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1}
+.sec-h em{font-style:italic}
+.sec-sub{font-size:var(--text-sm);color:var(--fg-muted);max-width:520px;margin:12px auto 0;line-height:1.6}
+
+/* Process */
+.process{padding:80px 0;background:var(--bg)}
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.proc-card{text-align:center;padding:32px 20px;border:1px solid var(--border);transition:border-color var(--ease),background var(--ease)}
+.proc-card:hover{border-color:var(--accent);background:var(--bg-card)}
+.proc-num{font-family:var(--font-heading);font-size:36px;color:var(--accent);font-weight:var(--fw-reg);margin-bottom:12px}
+.proc-title{font-size:var(--text-sm);font-weight:var(--fw-med);letter-spacing:.04em;margin-bottom:8px}
+.proc-desc{font-size:var(--text-xs);color:var(--fg-muted);line-height:1.6}
+
+/* Products */
+.products{padding:80px 0;background:var(--bg-surface)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.p-card{background:var(--bg-card);overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.p-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.4);transform:translateY(-4px)}
+.p-media{position:relative;overflow:hidden}
+.p-media img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform var(--ease-slow)}
+.p-card:hover .p-media img{transform:scale(1.04)}
+.p-badge{position:absolute;top:12px;left:12px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-med);padding:4px 10px;background:var(--accent);color:#000}
+.p-wish{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;border:none;cursor:pointer}
+.p-wish svg{width:14px;height:14px;stroke:var(--fg);stroke-width:1.5;fill:none}
+.p-card:hover .p-wish{opacity:1}
+.p-wish.active svg{fill:var(--accent);stroke:var(--accent)}
+.p-quick{position:absolute;bottom:0;left:0;right:0;background:var(--accent);color:#000;text-align:center;padding:12px;font-size:var(--text-xxs);letter-spacing:.14em;text-transform:uppercase;font-weight:var(--fw-med);transform:translateY(100%);transition:transform .3s ease;border:none;width:100%;cursor:pointer}
+.p-card:hover .p-quick{transform:translateY(0)}
+.p-body{padding:16px 16px 20px}
+.p-name{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:4px}
+.p-mat{font-size:var(--text-xs);color:var(--fg-muted);margin-bottom:8px}
+.p-price{font-size:15px;font-weight:var(--fw-med)}
+.p-from{font-size:var(--text-xs);color:var(--fg-faint);font-weight:var(--fw-light)}
+
+/* Feature */
+.feature{padding:0}
+.feat-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:560px}
+.feat-media{overflow:hidden}
+.feat-media img{width:100%;height:100%;object-fit:cover}
+.feat-ct{background:var(--bg-card);display:flex;flex-direction:column;justify-content:center;padding:80px 64px}
+.feat-ct h2{font-family:var(--font-heading);font-size:var(--text-xl);font-weight:var(--fw-reg);line-height:1.1;margin-bottom:16px}
+.feat-ct h2 em{font-style:italic}
+.feat-ct p{font-size:15px;line-height:1.8;color:var(--fg-muted);margin-bottom:32px;max-width:400px}
+
+/* Sustainability */
+.sustain{padding:80px 0;background:var(--bg)}
+.sustain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.sustain-card{text-align:center;padding:40px 24px;border:1px solid var(--border)}
+.sustain-icon{font-size:32px;margin-bottom:16px;color:var(--accent)}
+.sustain-icon svg{width:32px;height:32px;stroke:var(--accent);stroke-width:1.5;fill:none}
+.sustain-title{font-size:var(--text-sm);font-weight:var(--fw-med);margin-bottom:8px;letter-spacing:.04em}
+.sustain-desc{font-size:var(--text-xs);color:var(--fg-muted);line-height:1.6}
+
+/* Second product row */
+.rings{padding:80px 0;background:var(--bg)}
+
+/* Testimonials */
+.reviews{padding:80px 0;background:var(--bg-surface)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.rev-card{padding:32px;border:1px solid var(--border);background:var(--bg-card)}
+.rev-stars{color:var(--accent);font-size:14px;letter-spacing:2px;margin-bottom:12px}
+.rev-text{font-size:var(--text-sm);color:var(--fg-muted);line-height:1.7;margin-bottom:16px;font-style:italic}
+.rev-author{font-size:var(--text-xs);font-weight:var(--fw-med);letter-spacing:.04em}
+.rev-loc{font-size:var(--text-xxs);color:var(--fg-faint);margin-top:2px}
+
+/* Instagram */
+.insta{padding:80px 0;background:var(--bg)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:40px}
+.insta-card{position:relative;overflow:hidden;cursor:pointer}
+.insta-card img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .4s;filter:brightness(.9)}
+.insta-card:hover img{transform:scale(1.08);filter:brightness(1)}
+.insta-ov{position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.insta-card:hover .insta-ov{opacity:1}
+.insta-ov svg{width:24px;height:24px;stroke:#fff;stroke-width:1.5;fill:none}
+
+/* Newsletter */
+.nl{padding:80px 0;background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.nl-in{max-width:480px;margin:0 auto;text-align:center;padding:0 24px}
+.nl h2{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:var(--fw-reg);margin-bottom:10px}
+.nl p{font-size:var(--text-sm);color:var(--fg-muted);margin-bottom:24px;line-height:1.6}
+.nl-form{display:flex}
+.nl-form input{flex:1;padding:14px 18px;background:transparent;border:1px solid var(--border);border-right:none;color:var(--fg);font-size:var(--text-sm);font-family:var(--font-body);outline:none}
+.nl-form input::placeholder{color:var(--fg-faint)}
+.nl-form button{padding:14px 24px;background:var(--accent);color:#000;border:none;font-size:var(--text-xxs);letter-spacing:.12em;text-transform:uppercase;font-weight:var(--fw-med);font-family:var(--font-body);transition:background .2s}
+.nl-form button:hover{background:var(--accent-hover)}
+
+/* Footer */
+.ft{background:var(--bg);color:var(--fg-muted);padding:64px 0 28px;border-top:1px solid var(--border)}
+.ft-in{max-width:1440px;margin:0 auto;padding:0 48px}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.ft-brand{font-family:var(--font-heading);font-size:20px;color:var(--fg);font-weight:var(--fw-med);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.ft-desc{font-size:var(--text-sm);line-height:1.7;margin-bottom:20px}
+.ft-socs{display:flex;gap:8px}
+.ft-soc{width:32px;height:32px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:var(--text-xs);transition:all .2s}
+.ft-soc:hover{border-color:var(--accent);color:var(--accent)}
+.ft-col-h{font-size:var(--text-xxs);letter-spacing:.15em;text-transform:uppercase;color:var(--fg);font-weight:var(--fw-med);margin-bottom:16px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-links a{font-size:var(--text-sm);transition:color .2s}
+.ft-links a:hover{color:var(--accent)}
+.ft-bot{display:flex;justify-content:space-between;font-size:var(--text-xs)}
+.ft-legal{display:flex;gap:16px}
+.ft-legal a{transition:color .2s}
+.ft-legal a:hover{color:var(--fg)}
+
+.btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:var(--accent);color:#000;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .3s;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:50}
+.btt.show{opacity:1;visibility:visible}
+.btt:hover{background:var(--accent-hover)}
+.btt svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+
+@media(max-width:1024px){
+  .proc-grid{grid-template-columns:repeat(2,1fr)}
+  .prod-grid{grid-template-columns:repeat(3,1fr)}
+  .sustain-grid{grid-template-columns:1fr}
+  .rev-grid{grid-template-columns:1fr}
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .mega{display:none!important}
+}
+@media(max-width:768px){
+  .hdr-in{padding:0 20px}
+  .hdr-nav{display:none}
+  .burger{display:flex}
+  .mob-menu{display:block}
+  .sec-in{padding:0 20px}
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .feat-inner{grid-template-columns:1fr}
+  .feat-ct{padding:48px 24px}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="ann">Complimentary Diamond Consultation &mdash; Book Now</div>
+
+<header class="hdr" id="hdr">
+<div class="hdr-in">
+  <nav class="hdr-nav">
+    <div class="nav-item">
+      <a href="#">Engagement</a>
+      <div class="mega">
+        <div><p class="mega-col-h">By Style</p><ul class="mega-links"><li><a href="#">Solitaire</a></li><li><a href="#">Halo</a></li><li><a href="#">Three Stone</a></li><li><a href="#">Pavé</a></li><li><a href="#">Bezel</a></li></ul></div>
+        <div><p class="mega-col-h">By Shape</p><ul class="mega-links"><li><a href="#">Round Brilliant</a></li><li><a href="#">Oval</a></li><li><a href="#">Emerald</a></li><li><a href="#">Pear</a></li><li><a href="#">Cushion</a></li></ul></div>
+        <div class="mega-feat"><img src="assets/vrai/1718913713-engagement-rings-6-20.jpg" alt="Engagement"></div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="#">Wedding Bands</a></div>
+    <div class="nav-item">
+      <a href="#">Fine Jewelry</a>
+      <div class="mega">
+        <div><p class="mega-col-h">By Category</p><ul class="mega-links"><li><a href="#">Necklaces</a></li><li><a href="#">Earrings</a></li><li><a href="#">Bracelets</a></li><li><a href="#">Rings</a></li></ul></div>
+        <div><p class="mega-col-h">By Stone</p><ul class="mega-links"><li><a href="#">Diamond</a></li><li><a href="#">Sapphire</a></li><li><a href="#">Emerald</a></li><li><a href="#">Ruby</a></li></ul></div>
+        <div class="mega-feat"><img src="assets/vrai/1776112092-hp_4320x2430_giftingmodule.png" alt="Fine Jewelry"></div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="#">Diamonds</a></div>
+  </nav>
+  <a href="#" class="hdr-logo">Aether</a>
+  <div class="hdr-acts">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div>
+</header>
+
+<nav class="mob-menu" id="mobMenu">
+  <a href="#">Engagement</a><a href="#">Wedding Bands</a><a href="#">Fine Jewelry</a>
+  <a href="#">Diamonds</a><a href="#">Our Process</a><a href="#">Sustainability</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-media"><img src="assets/vrai/1718913713-engagement-rings-6-20.jpg" alt="Hero"></div>
+  <div class="hero-ct">
+    <p class="hero-badge">Lab-Grown Diamonds</p>
+    <h1 class="hero-h">Beyond <em>Brilliance</em></h1>
+    <p class="hero-sub">Sustainably created diamonds, set in handcrafted fine jewelry. Zero mining. Zero compromise. Pure beauty.</p>
+    <div class="hero-btns"><a href="#" class="btn btn--accent">Shop Engagement</a><a href="#" class="btn btn--ghost">Our Process</a></div>
+  </div>
+</section>
+
+<section class="process">
+<div class="sec-in">
+  <div class="sec-hd">
+    <p class="sec-badge">Our Process</p>
+    <h2 class="sec-h">From Atom to <em>Atelier</em></h2>
+    <p class="sec-sub">Every AETHER diamond begins as a tiny carbon seed, grown over weeks in a state-of-the-art reactor, then hand-cut and set by master artisans.</p>
+  </div>
+  <div class="proc-grid">
+    <div class="proc-card"><p class="proc-num">01</p><p class="proc-title">Seed Selection</p><p class="proc-desc">A microscopic diamond seed is placed in a plasma reactor at 1,500°C, replicating Earth's natural process.</p></div>
+    <div class="proc-card"><p class="proc-num">02</p><p class="proc-title">Growth</p><p class="proc-desc">Over 2-4 weeks, carbon atoms crystallize layer by layer, forming a rough diamond identical to mined stones.</p></div>
+    <div class="proc-card"><p class="proc-num">03</p><p class="proc-title">Cutting</p><p class="proc-desc">Master cutters shape each stone to maximize brilliance, fire, and scintillation using precision laser technology.</p></div>
+    <div class="proc-card"><p class="proc-num">04</p><p class="proc-title">Setting</p><p class="proc-desc">Each diamond is hand-set in recycled precious metals by our atelier craftspeople in Los Angeles.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="products">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Engagement Rings</p><h2 class="sec-h">Find Your <em>Forever</em></h2></div>
+  <div class="prod-grid">
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/EARRINGS_e33291b5-6764-4695-9ab2-f80d775e12df.webp" alt="Ring"><span class="p-badge">Best Seller</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Customize</button></div><div class="p-body"><p class="p-name">The Solitaire Round</p><p class="p-mat">Platinum / 1ct Lab Diamond</p><p class="p-price"><span class="p-from">From </span>$1,950</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/NECKLACES_6c698b78-3009-4122-a4b8-49145960b645.webp" alt="Ring"><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Customize</button></div><div class="p-body"><p class="p-name">The Oval Halo</p><p class="p-mat">18k Yellow Gold / 1.5ct</p><p class="p-price"><span class="p-from">From </span>$2,850</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/BRACELETS_082632ab-ffb9-47e5-bb2d-f7035573eb7e.webp" alt="Ring"><span class="p-badge">New</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Customize</button></div><div class="p-body"><p class="p-name">The Emerald Bezel</p><p class="p-mat">Platinum / 2ct</p><p class="p-price"><span class="p-from">From </span>$3,200</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/UNDER_100_a296b359-14a8-4c8d-9118-e5a5f3c694c7.webp" alt="Ring"><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Customize</button></div><div class="p-body"><p class="p-name">The Three Stone Pear</p><p class="p-mat">18k Rose Gold / 1ct</p><p class="p-price"><span class="p-from">From </span>$2,450</p></div></div>
+  </div>
+</div>
+</section>
+
+<section class="feature">
+<div class="feat-inner">
+  <div class="feat-media"><img src="assets/vrai/1776112092-hp_4320x2430_giftingmodule.png" alt="Feature"></div>
+  <div class="feat-ct">
+    <p class="sec-badge">The Gift of Forever</p>
+    <h2>Fine Jewelry<br><em>Gifting Guide</em></h2>
+    <p>From diamond studs to tennis bracelets, discover pieces that mark life's most meaningful moments. Each comes in our signature sustainable packaging.</p>
+    <a href="#" class="btn btn--accent">Shop Gifts</a>
+  </div>
+</div>
+</section>
+
+<section class="sustain">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Sustainability</p><h2 class="sec-h">Better for the <em>Planet</em></h2></div>
+  <div class="sustain-grid">
+    <div class="sustain-card"><div class="sustain-icon"><svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><p class="sustain-title">Zero Mining</p><p class="sustain-desc">Our diamonds are grown in reactors powered by renewable energy, eliminating the need for destructive mining operations.</p></div>
+    <div class="sustain-card"><div class="sustain-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><p class="sustain-title">Carbon Neutral</p><p class="sustain-desc">We offset 100% of our carbon emissions and use recycled precious metals in every piece we create.</p></div>
+    <div class="sustain-card"><div class="sustain-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><p class="sustain-title">Ethical Always</p><p class="sustain-desc">Fair wages, safe conditions, and transparent supply chains from reactor to your ring finger.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="rings">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Fine Jewelry</p><h2 class="sec-h">Everyday <em>Diamonds</em></h2></div>
+  <div class="prod-grid">
+    <div class="p-card"><div class="p-media"><img src="assets/mejuri/1-SingleMiniHoop-10K-OnFig.jpg" alt="Earring"><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick Add</button></div><div class="p-body"><p class="p-name">Diamond Mini Hoop</p><p class="p-mat">14k Gold / 0.1ct each</p><p class="p-price">$395</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/axiom-chain-necklace-18ct-gold-plated-necklaces-missoma-233035.jpg" alt="Necklace"><span class="p-badge">Best Seller</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick Add</button></div><div class="p-body"><p class="p-name">Solitaire Pendant</p><p class="p-mat">18k Gold / 0.5ct</p><p class="p-price">$650</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/classic-flat-medium-hoop-earrings-18ct-gold-plated-vermeil-earrings-missoma-746037.jpg" alt="Earring"><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick Add</button></div><div class="p-body"><p class="p-name">Diamond Huggie Hoops</p><p class="p-mat">Platinum / 0.2ct each</p><p class="p-price">$520</p></div></div>
+    <div class="p-card"><div class="p-media"><img src="assets/missoma/axiom-chain-bracelet-18ct-gold-plated-bracelets-missoma-945791.jpg" alt="Bracelet"><span class="p-badge">New</span><button class="p-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="p-quick">Quick Add</button></div><div class="p-body"><p class="p-name">Tennis Bracelet</p><p class="p-mat">18k Gold / 3ct total</p><p class="p-price"><span class="p-from">From </span>$2,100</p></div></div>
+  </div>
+</div>
+</section>
+
+<section class="reviews">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">Reviews</p><h2 class="sec-h">What They <em>Say</em></h2></div>
+  <div class="rev-grid">
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"The diamond is absolutely stunning. Knowing it was created sustainably makes it even more special. My fiancée was speechless."</p><p class="rev-author">James R.</p><p class="rev-loc">New York, NY</p></div>
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"I've compared AETHER diamonds side-by-side with mined stones and honestly cannot tell the difference. The brilliance is incredible."</p><p class="rev-author">Sarah M.</p><p class="rev-loc">London, UK</p></div>
+    <div class="rev-card"><p class="rev-stars">★★★★★</p><p class="rev-text">"The customization process was seamless. I designed my dream ring online and it arrived even more beautiful than I imagined."</p><p class="rev-author">Emily K.</p><p class="rev-loc">Los Angeles, CA</p></div>
+  </div>
+</div>
+</section>
+
+<section class="insta">
+<div class="sec-in">
+  <div class="sec-hd"><p class="sec-badge">@aether.diamonds</p><h2 class="sec-h">Brilliance <em>Captured</em></h2></div>
+  <div class="insta-grid">
+    <div class="insta-card"><img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Gold_DT.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Silver_DT.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/mejuri/StackingEvent_Homepage_ContentBlock_Rings_DT.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066349_193969.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066353_134388.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+    <div class="insta-card"><img src="assets/dw/1743066361_155155.jpg" alt="IG"><div class="insta-ov"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></div></div>
+  </div>
+</div>
+</section>
+
+<section class="nl">
+<div class="nl-in">
+  <h2>The Inner Circle</h2>
+  <p>Exclusive access to new collections, diamond education, and sustainable luxury insights.</p>
+  <div class="nl-form"><input type="email" placeholder="Your email address"><button>Subscribe</button></div>
+</div>
+</section>
+
+<footer class="ft">
+<div class="ft-in">
+  <div class="ft-grid">
+    <div><p class="ft-brand">Aether</p><p class="ft-desc">Lab-grown diamonds, handcrafted in Los Angeles. Sustainably created, eternally brilliant.</p><div class="ft-socs"><a href="#" class="ft-soc">IG</a><a href="#" class="ft-soc">PT</a><a href="#" class="ft-soc">TT</a><a href="#" class="ft-soc">YT</a></div></div>
+    <div><p class="ft-col-h">Shop</p><ul class="ft-links"><li><a href="#">Engagement Rings</a></li><li><a href="#">Wedding Bands</a></li><li><a href="#">Fine Jewelry</a></li><li><a href="#">Loose Diamonds</a></li></ul></div>
+    <div><p class="ft-col-h">Learn</p><ul class="ft-links"><li><a href="#">Diamond Education</a></li><li><a href="#">Ring Size Guide</a></li><li><a href="#">Lab vs. Mined</a></li><li><a href="#">Certifications</a></li></ul></div>
+    <div><p class="ft-col-h">Company</p><ul class="ft-links"><li><a href="#">Our Story</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Showrooms</a></li><li><a href="#">Press</a></li><li><a href="#">Careers</a></li></ul></div>
+  </div>
+  <div class="ft-bot"><p>&copy; 2025 AETHER. For learning purposes only.</p><div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div></div>
+</div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Back to top"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+const h=document.getElementById('hdr');
+window.addEventListener('scroll',()=>h.classList.toggle('scrolled',window.scrollY>10));
+const burger=document.getElementById('burger'),mobMenu=document.getElementById('mobMenu');
+burger.addEventListener('click',()=>{mobMenu.classList.toggle('open');const s=burger.querySelectorAll('span');if(mobMenu.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(4px,4px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(4px,-4px)';}else{s[0].style.transform='';s[1].style.opacity='';s[2].style.transform='';}});
+const btt=document.getElementById('btt');
+window.addEventListener('scroll',()=>btt.classList.toggle('show',window.scrollY>600));
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.querySelectorAll('.p-wish').forEach(b=>{b.addEventListener('click',e=>{e.stopPropagation();b.classList.toggle('active');});});
+</script>
+</body>
+</html>
