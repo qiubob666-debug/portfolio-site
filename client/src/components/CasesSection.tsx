@@ -1,10 +1,10 @@
-/* CasesSection — Work Evidence
+/* CasesSection — 案例展示区
    Structure:
-   1. Featured Live Case: Auraloop (full-width hero card)
-   2. Concept Design Grid: 6 jewelry/watch cases (3×2)
-   3. Industry Demo Row: Harrow Steelworks factory demo
+   1. Concept Design Grid: 6 jewelry/watch cases (3×2) — click → right-side drawer iframe preview
+   2. Industry Demo Row: Harrow Steelworks factory demo
    Labels: Live · Concept · Demo — legally safe, no real brand logos */
-import { motion } from "framer-motion";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/contexts/I18nContext";
 
 /* ─── Copy ─────────────────────────────────────────────────────────── */
@@ -13,13 +13,7 @@ const COPY = {
     eyebrow: "SELECTED WORK",
     title: "我做过什么",
     subtitle: "每个案例都可以点进去看，不是截图——是真实跑着的站点或可交互 Demo。",
-    featuredLabel: "LIVE · 实战运营中",
-    featuredName: "Auraloop",
-    featuredTagline: "我自己的品牌矩阵实战",
-    featuredDesc: "从零搭建的 Headless 品牌矩阵系统：Google + Supabase 社区认证、Headless WooCommerce 零成本平替 Shopify、Vercel 多前缀域名品牌矩阵、n8n + Sanity 内容生产工作流、高审美前端 + Cloudflare CDN 方案。这是我给客户做的所有事情，我自己先做了一遍。",
-    featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
-    featuredCta: "访问 Live 站点 →",
-    
+
     conceptTitle: "概念设计案例",
     conceptSubtitle: "基于全球顶级 DTC 品牌设计语言，交叉融合创作，品牌名已脱敏。",
     cases: [
@@ -106,21 +100,17 @@ const COPY = {
       },
     ],
     visitLabel: "查看案例 →",
+    openFullLabel: "在新标签页打开 ↗",
+    closeLabel: "关闭",
     conceptNote: "* 以上概念设计案例均为学习创作，品牌名为虚构，设计灵感来源已标注，不代表真实商业合作。",
   },
   en: {
     eyebrow: "SELECTED WORK",
     title: "What I've Built",
     subtitle: "Every case is clickable — not screenshots, but real running sites or interactive demos.",
-    featuredLabel: "LIVE · In Production",
-    featuredName: "Auraloop",
-    featuredTagline: "My own brand matrix in production",
-    featuredDesc: "A Headless brand matrix system built from scratch: Google + Supabase community auth, Headless WooCommerce as a zero-cost Shopify alternative, Vercel multi-prefix domain brand matrix, n8n + Sanity content production workflow, high-aesthetic frontend + Cloudflare CDN. Everything I do for clients, I did for myself first.",
-    featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
-    featuredCta: "Visit Live Site →",
-    
+
     conceptTitle: "Concept Design Cases",
-    conceptSubtitle: "Cross-fusion designs inspired by global top DTC brands. Brand names are fictional.",
+    conceptSubtitle: "Inspired by top global DTC brands, cross-fused into original concepts. Brand names are fictional.",
     cases: [
       {
         id: "case1",
@@ -137,7 +127,7 @@ const COPY = {
         id: "case2",
         label: "Concept · Watch",
         name: "ÉLAN",
-        style: "Nordic Minimal Black & White",
+        style: "Nordic Minimal B&W",
         inspired: "Daniel Wellington × Nordgreen",
         bg: "#111111",
         accent: "#ffffff",
@@ -190,14 +180,14 @@ const COPY = {
       },
     ],
     demoTitle: "Industry Demos",
-    demoSubtitle: "Demo sites built for specific industry scenarios, showcasing custom capabilities.",
+    demoSubtitle: "Demo sites built for specific industry scenarios to showcase customization capability.",
     demos: [
       {
         id: "harrow",
         label: "Demo · Factory Inquiry Site",
         name: "Harrow Steelworks",
         style: "Industrial B2B Inquiry Site",
-        desc: "UK steel manufacturer brand showcase — multilingual inquiry forms + product catalog + factory capability display.",
+        desc: "UK steel manufacturer brand site — multilingual inquiry form + product catalog + factory showcase.",
         bg: "#1C2128",
         accent: "#E8A838",
         textColor: "#ffffff",
@@ -205,21 +195,17 @@ const COPY = {
       },
     ],
     visitLabel: "View Case →",
-    conceptNote: "* Concept design cases above are for learning purposes. Brand names are fictional. Design inspiration sources are noted. Not real commercial partnerships.",
+    openFullLabel: "Open in new tab ↗",
+    closeLabel: "Close",
+    conceptNote: "* All concept design cases above are learning projects. Brand names are fictional. Design inspiration sources are noted. Not real commercial partnerships.",
   },
   ja: {
     eyebrow: "SELECTED WORK",
     title: "制作実績",
-    subtitle: "すべてのケースはクリックできます——スクリーンショットではなく、実際に動いているサイトまたはインタラクティブなデモです。",
-    featuredLabel: "LIVE · 本番稼働中",
-    featuredName: "Auraloop",
-    featuredTagline: "自分のブランドマトリックスを実戦で構築",
-    featuredDesc: "ゼロから構築したHeadlessブランドマトリックスシステム：Google + Supabaseコミュニティ認証、Headless WooCommerceによるShopify代替、Vercelマルチプレフィックスドメインブランドマトリックス、n8n + Sanityコンテンツ制作ワークフロー、高審美フロントエンド + Cloudflare CDN。クライアントに提供するすべてを、まず自分で実践しました。",
-    featuredStack: ["Next.js", "Sanity CMS", "Supabase Auth", "WooCommerce Headless", "n8n", "Vercel", "Cloudflare"],
-    featuredCta: "ライブサイトを見る →",
-    
+    subtitle: "各ケースはクリックして確認できます。スクリーンショットではなく、実際に稼働しているサイトやインタラクティブなデモです。",
+
     conceptTitle: "コンセプトデザインケース",
-    conceptSubtitle: "グローバルトップDTCブランドのデザイン言語を参考にした創作。ブランド名は架空です。",
+    conceptSubtitle: "世界トップのDTCブランドのデザイン言語にインスパイアされ、クロスフュージョンで創作。ブランド名は架空です。",
     cases: [
       {
         id: "case1",
@@ -289,14 +275,14 @@ const COPY = {
       },
     ],
     demoTitle: "業界デモ",
-    demoSubtitle: "特定業界シナリオ向けに構築されたデモサイト。カスタム能力を展示。",
+    demoSubtitle: "特定の業界シナリオ向けに構築されたデモサイト。カスタマイズ能力を示します。",
     demos: [
       {
         id: "harrow",
         label: "Demo · 工場問い合わせサイト",
         name: "Harrow Steelworks",
-        style: "インダストリアルB2B問い合わせサイト",
-        desc: "英国鉄鋼メーカーのブランドショーケース——多言語問い合わせフォーム＋製品カタログ＋工場能力展示。",
+        style: "インダストリアル B2B 問い合わせサイト",
+        desc: "英国鉄鋼メーカーのブランドサイト。多言語問い合わせフォーム＋製品カタログ＋工場実力展示。",
         bg: "#1C2128",
         accent: "#E8A838",
         textColor: "#ffffff",
@@ -304,400 +290,504 @@ const COPY = {
       },
     ],
     visitLabel: "ケースを見る →",
+    openFullLabel: "新しいタブで開く ↗",
+    closeLabel: "閉じる",
     conceptNote: "* 上記のコンセプトデザインケースは学習目的です。ブランド名は架空です。デザインのインスピレーション源は記載されています。実際の商業提携ではありません。",
   },
 };
+
+/* ─── Case Preview Drawer ───────────────────────────────────────────── */
+interface PreviewCase {
+  url: string;
+  name: string;
+  accent: string;
+}
+
+function CaseDrawer({
+  previewCase,
+  onClose,
+  openFullLabel,
+  closeLabel,
+}: {
+  previewCase: PreviewCase | null;
+  onClose: () => void;
+  openFullLabel: string;
+  closeLabel: string;
+}) {
+  return (
+    <AnimatePresence>
+      {previewCase && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            className="case-drawer-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={onClose}
+          />
+          {/* Drawer panel */}
+          <motion.div
+            className="case-drawer-panel"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 340, damping: 38 }}
+          >
+            {/* Header bar */}
+            <div className="case-drawer-header">
+              <span
+                className="case-drawer-title"
+                style={{ color: previewCase.accent }}
+              >
+                {previewCase.name}
+              </span>
+              <div className="case-drawer-actions">
+                <a
+                  href={previewCase.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="case-drawer-open-full"
+                >
+                  {openFullLabel}
+                </a>
+                <button
+                  className="case-drawer-close"
+                  onClick={onClose}
+                  aria-label={closeLabel}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            {/* iframe */}
+            <iframe
+              src={previewCase.url}
+              className="case-drawer-iframe"
+              title={previewCase.name}
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-popups"
+            />
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
 
 /* ─── Component ─────────────────────────────────────────────────────── */
 export default function CasesSection() {
   const { locale } = useI18n();
   const c = COPY[locale];
+  const [previewCase, setPreviewCase] = useState<PreviewCase | null>(null);
+
+  const openPreview = useCallback(
+    (cs: { url: string; name: string; accent: string }) => {
+      setPreviewCase({ url: cs.url, name: cs.name, accent: cs.accent });
+    },
+    []
+  );
+
+  const closePreview = useCallback(() => setPreviewCase(null), []);
 
   return (
-    <section id="cases" className="cases-section">
-      <div className="cases-container">
-        {/* ── Header ── */}
-        <motion.div
-          className="cases-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="cases-eyebrow">{c.eyebrow}</div>
-          <h2 className="cases-title">{c.title}</h2>
-          <p className="cases-subtitle">{c.subtitle}</p>
-        </motion.div>
+    <>
+      <section id="cases" className="cases-section">
+        <div className="cases-container">
+          {/* ── Header ── */}
+          <motion.div
+            className="cases-header"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="cases-eyebrow">{c.eyebrow}</div>
+            <h2 className="cases-title">{c.title}</h2>
+            <p className="cases-subtitle">{c.subtitle}</p>
+          </motion.div>
 
+          {/* ── Concept Design Grid ── */}
+          <div className="cases-section-header">
+            <h3 className="cases-section-title">{c.conceptTitle}</h3>
+            <p className="cases-section-sub">{c.conceptSubtitle}</p>
+          </div>
+          <div className="cases-grid">
+            {c.cases.map((cs, i) => (
+              <motion.button
+                key={cs.id}
+                type="button"
+                className="cases-card"
+                style={{ background: cs.bg, color: cs.textColor }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+                whileHover={{ y: -4 }}
+                onClick={() => openPreview(cs)}
+              >
+                <div
+                  className="cases-card-label"
+                  style={{
+                    color: cs.accent,
+                    borderColor: cs.accent + "40",
+                  }}
+                >
+                  {cs.label}
+                </div>
+                <div className="cases-card-name" style={{ color: cs.textColor }}>
+                  {cs.name}
+                </div>
+                <div
+                  className="cases-card-style"
+                  style={{ color: cs.textColor + "99" }}
+                >
+                  {cs.style}
+                </div>
+                <div
+                  className="cases-card-inspired"
+                  style={{ color: cs.textColor + "55" }}
+                >
+                  Inspired by {cs.inspired}
+                </div>
+                <div className="cases-card-arrow" style={{ color: cs.accent }}>
+                  {c.visitLabel}
+                </div>
+              </motion.button>
+            ))}
+          </div>
 
-        {/* ── Concept Design Grid ── */}
-        <div className="cases-section-header">
-          <h3 className="cases-section-title">{c.conceptTitle}</h3>
-          <p className="cases-section-sub">{c.conceptSubtitle}</p>
+          {/* ── Industry Demo ── */}
+          <div className="cases-section-header">
+            <h3 className="cases-section-title">{c.demoTitle}</h3>
+            <p className="cases-section-sub">{c.demoSubtitle}</p>
+          </div>
+          <div className="cases-demos">
+            {c.demos.map((d, i) => (
+              <motion.a
+                key={d.id}
+                href={d.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cases-demo-card"
+                style={{ background: d.bg, color: d.textColor }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                whileHover={{ y: -4 }}
+              >
+                <div className="cases-demo-label" style={{ color: d.accent }}>
+                  {d.label}
+                </div>
+                <div className="cases-demo-name">{d.name}</div>
+                <div
+                  className="cases-demo-style"
+                  style={{ color: d.textColor + "99" }}
+                >
+                  {d.style}
+                </div>
+                <p
+                  className="cases-demo-desc"
+                  style={{ color: d.textColor + "80" }}
+                >
+                  {d.desc}
+                </p>
+                <div className="cases-demo-cta" style={{ color: d.accent }}>
+                  {c.visitLabel}
+                </div>
+              </motion.a>
+            ))}
+          </div>
+
+          {/* ── Legal Note ── */}
+          <p className="cases-note">{c.conceptNote}</p>
         </div>
-        <div className="cases-grid">
-          {c.cases.map((cs, i) => (
-            <motion.a
-              key={cs.id}
-              href={cs.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cases-card"
-              style={{ background: cs.bg, color: cs.textColor }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
-              whileHover={{ y: -4 }}
-            >
-              <div className="cases-card-label" style={{ color: cs.accent, borderColor: cs.accent + "40" }}>
-                {cs.label}
-              </div>
-              <div className="cases-card-name" style={{ color: cs.textColor }}>
-                {cs.name}
-              </div>
-              <div className="cases-card-style" style={{ color: cs.textColor + "99" }}>
-                {cs.style}
-              </div>
-              <div className="cases-card-inspired" style={{ color: cs.textColor + "55" }}>
-                Inspired by {cs.inspired}
-              </div>
-              <div className="cases-card-arrow" style={{ color: cs.accent }}>
-                {c.visitLabel}
-              </div>
-            </motion.a>
-          ))}
-        </div>
 
-        {/* ── Industry Demo ── */}
-        <div className="cases-section-header">
-          <h3 className="cases-section-title">{c.demoTitle}</h3>
-          <p className="cases-section-sub">{c.demoSubtitle}</p>
-        </div>
-        <div className="cases-demos">
-          {c.demos.map((d, i) => (
-            <motion.a
-              key={d.id}
-              href={d.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cases-demo-card"
-              style={{ background: d.bg, color: d.textColor }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              whileHover={{ y: -4 }}
-            >
-              <div className="cases-demo-label" style={{ color: d.accent }}>
-                {d.label}
-              </div>
-              <div className="cases-demo-name">{d.name}</div>
-              <div className="cases-demo-style" style={{ color: d.textColor + "99" }}>{d.style}</div>
-              <p className="cases-demo-desc" style={{ color: d.textColor + "80" }}>{d.desc}</p>
-              <div className="cases-demo-cta" style={{ color: d.accent }}>{c.visitLabel}</div>
-            </motion.a>
-          ))}
-        </div>
+        <style>{`
+          /* ── Section ── */
+          .cases-section {
+            background: #111111;
+            padding: 120px 0;
+          }
+          .cases-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+          }
 
-        {/* ── Legal Note ── */}
-        <p className="cases-note">{c.conceptNote}</p>
-      </div>
+          /* ── Header ── */
+          .cases-header { margin-bottom: 64px; }
+          .cases-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #8B6914;
+            margin-bottom: 20px;
+          }
+          .cases-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(28px, 4vw, 56px);
+            font-weight: 600;
+            color: #FAFAF8;
+            margin: 0 0 12px;
+            line-height: 1.1;
+          }
+          .cases-subtitle {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: rgba(255,255,255,0.45);
+            max-width: 560px;
+            line-height: 1.7;
+            margin: 0;
+          }
 
-      <style>{`
-        /* ── Section ── */
-        .cases-section {
-          background: #111111;
-          padding: 120px 0;
-        }
-        .cases-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 40px;
-        }
+          /* ── Section Sub-headers ── */
+          .cases-section-header { margin-bottom: 32px; }
+          .cases-section-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(18px, 2vw, 24px);
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+            margin: 0 0 6px;
+          }
+          .cases-section-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            margin: 0;
+          }
 
-        /* ── Header ── */
-        .cases-header { margin-bottom: 64px; }
-        .cases-eyebrow {
-          font-family: 'DM Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.25em;
-          text-transform: uppercase;
-          color: #8B6914;
-          margin-bottom: 20px;
-        }
-        .cases-title {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(28px, 4vw, 56px);
-          font-weight: 600;
-          color: #FAFAF8;
-          margin: 0 0 12px;
-          line-height: 1.1;
-        }
-        .cases-subtitle {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 15px;
-          color: rgba(255,255,255,0.45);
-          max-width: 560px;
-          line-height: 1.7;
-          margin: 0;
-        }
+          /* ── Concept Grid ── */
+          .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            margin-bottom: 64px;
+          }
+          .cases-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 32px 28px;
+            text-align: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: transform 0.25s;
+            min-height: 200px;
+            position: relative;
+          }
+          .cases-card:focus-visible {
+            outline: 2px solid rgba(255,255,255,0.4);
+            outline-offset: -2px;
+          }
+          .cases-card-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            border: 1px solid;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 2px;
+            align-self: flex-start;
+            margin-bottom: 4px;
+          }
+          .cases-card-name {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(22px, 2.5vw, 32px);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            line-height: 1;
+          }
+          .cases-card-style {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
+          }
+          .cases-card-inspired {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            margin-top: auto;
+          }
+          .cases-card-arrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            margin-top: 8px;
+            transition: opacity 0.2s;
+          }
+          .cases-card:hover .cases-card-arrow { opacity: 0.6; }
 
-        /* ── Featured Card ── */
-        
-        .cases-featured:hover { border-color: rgba(212,196,154,0.5); }
-        .cases-featured-bg {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(139,105,20,0.15) 0%, rgba(17,17,17,0) 60%);
-          pointer-events: none;
-        }
-        
-        .cases-featured-left { flex: 1; }
-        .cases-featured-label {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.2em;
-          color: #D4C49A;
-          margin-bottom: 16px;
-        }
-        
-        @keyframes pulse-dot {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.8); }
-        }
-        .cases-featured-name {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(32px, 4vw, 52px);
-          font-weight: 600;
-          color: #FAFAF8;
-          letter-spacing: -0.02em;
-          margin-bottom: 8px;
-          line-height: 1;
-        }
-        .cases-featured-tagline {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          color: rgba(255,255,255,0.5);
-          margin-bottom: 20px;
-        }
-        .cases-featured-desc {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 13px;
-          color: rgba(255,255,255,0.6);
-          line-height: 1.8;
-          max-width: 520px;
-          margin: 0 0 24px;
-        }
-        .cases-featured-stack {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        .cases-stack-tag {
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.08em;
-          color: rgba(255,255,255,0.4);
-          border: 1px solid rgba(255,255,255,0.12);
-          padding: 4px 10px;
-          border-radius: 2px;
-        }
-        .cases-featured-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 24px;
-          flex-shrink: 0;
-        }
-        .cases-featured-visual {
-          width: 240px;
-          height: 160px;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .cases-featured-visual-inner {
-          text-align: center;
-        }
-        .cases-featured-visual-logo {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: 40px;
-          font-weight: 600;
-          color: #D4C49A;
-          letter-spacing: 0.1em;
-          margin-bottom: 8px;
-        }
-        .cases-featured-visual-url {
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          color: rgba(255,255,255,0.25);
-          letter-spacing: 0.06em;
-        }
-        .cases-featured-cta {
-          font-family: 'DM Mono', monospace;
-          font-size: 11px;
-          letter-spacing: 0.1em;
-          color: #D4C49A;
-          transition: opacity 0.2s;
-        }
-        .cases-featured:hover .cases-featured-cta { opacity: 0.7; }
+          /* ── Demo Cards ── */
+          .cases-demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2px;
+            margin-bottom: 40px;
+          }
+          .cases-demo-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 36px 32px;
+            text-decoration: none;
+            transition: transform 0.25s;
+            cursor: pointer;
+            min-height: 200px;
+          }
+          .cases-demo-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+          }
+          .cases-demo-name {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(22px, 2.5vw, 32px);
+            font-weight: 600;
+            line-height: 1;
+          }
+          .cases-demo-style {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+          }
+          .cases-demo-desc {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 4px 0 0;
+            max-width: 400px;
+          }
+          .cases-demo-cta {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            margin-top: auto;
+            transition: opacity 0.2s;
+          }
+          .cases-demo-card:hover .cases-demo-cta { opacity: 0.6; }
 
-        /* ── Section Sub-headers ── */
-        .cases-section-header {
-          margin-bottom: 32px;
-        }
-        .cases-section-title {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(18px, 2vw, 24px);
-          font-weight: 500;
-          color: rgba(255,255,255,0.7);
-          margin: 0 0 6px;
-        }
-        .cases-section-sub {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          color: rgba(255,255,255,0.3);
-          margin: 0;
-        }
+          /* ── Legal Note ── */
+          .cases-note {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 0.04em;
+            line-height: 1.7;
+            margin: 0;
+          }
 
-        /* ── Concept Grid ── */
-        .cases-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2px;
-          margin-bottom: 64px;
-        }
-        .cases-card {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding: 32px 28px;
-          text-decoration: none;
-          transition: transform 0.25s;
-          cursor: pointer;
-          min-height: 200px;
-        }
-        .cases-card-label {
-          font-family: 'DM Mono', monospace;
-          font-size: 8px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          border: 1px solid;
-          display: inline-block;
-          padding: 3px 8px;
-          border-radius: 2px;
-          align-self: flex-start;
-          margin-bottom: 4px;
-        }
-        .cases-card-name {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(22px, 2.5vw, 32px);
-          font-weight: 600;
-          letter-spacing: 0.05em;
-          line-height: 1;
-        }
-        .cases-card-style {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          line-height: 1.5;
-        }
-        .cases-card-inspired {
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.06em;
-          margin-top: auto;
-        }
-        .cases-card-arrow {
-          font-family: 'DM Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.08em;
-          margin-top: 8px;
-          transition: opacity 0.2s;
-        }
-        .cases-card:hover .cases-card-arrow { opacity: 0.6; }
+          /* ── Drawer Backdrop ── */
+          .case-drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+          }
 
-        /* ── Demo Cards ── */
-        .cases-demos {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          gap: 2px;
-          margin-bottom: 40px;
-        }
-        .cases-demo-card {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding: 36px 32px;
-          text-decoration: none;
-          transition: transform 0.25s;
-          cursor: pointer;
-          min-height: 200px;
-        }
-        .cases-demo-label {
-          font-family: 'DM Mono', monospace;
-          font-size: 8px;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          margin-bottom: 4px;
-        }
-        .cases-demo-name {
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          font-size: clamp(22px, 2.5vw, 32px);
-          font-weight: 600;
-          line-height: 1;
-        }
-        .cases-demo-style {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-        }
-        .cases-demo-desc {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          line-height: 1.7;
-          margin: 4px 0 0;
-          max-width: 400px;
-        }
-        .cases-demo-cta {
-          font-family: 'DM Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.08em;
-          margin-top: auto;
-          transition: opacity 0.2s;
-        }
-        .cases-demo-card:hover .cases-demo-cta { opacity: 0.6; }
+          /* ── Drawer Panel ── */
+          .case-drawer-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1001;
+            width: min(92vw, 1080px);
+            background: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -8px 0 40px rgba(0,0,0,0.6);
+          }
 
-        /* ── Legal Note ── */
-        .cases-note {
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          color: rgba(255,255,255,0.2);
-          letter-spacing: 0.04em;
-          line-height: 1.7;
-          margin: 0;
-        }
+          /* ── Drawer Header ── */
+          .case-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+            gap: 16px;
+          }
+          .case-drawer-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+          }
+          .case-drawer-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+          }
+          .case-drawer-open-full {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.45);
+            text-decoration: none;
+            transition: color 0.2s;
+            white-space: nowrap;
+          }
+          .case-drawer-open-full:hover { color: rgba(255,255,255,0.85); }
+          .case-drawer-close {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+          }
+          .case-drawer-close:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+          }
 
-        /* ── Responsive ── */
-        @media (max-width: 1024px) {
-          
-          .cases-featured-right { align-items: flex-start; }
-          .cases-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 767px) {
-          .cases-container { padding: 0 20px; }
-          .cases-section { padding: 80px 0; }
-          
-          .cases-featured-visual { width: 100%; }
-          .cases-grid { grid-template-columns: 1fr; }
-          .cases-demos { grid-template-columns: 1fr; }
-        }
-      `}</style>
-    </section>
+          /* ── Drawer iframe ── */
+          .case-drawer-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #fff;
+          }
+
+          /* ── Responsive ── */
+          @media (max-width: 1024px) {
+            .cases-grid { grid-template-columns: repeat(2, 1fr); }
+          }
+          @media (max-width: 767px) {
+            .cases-container { padding: 0 20px; }
+            .cases-section { padding: 80px 0; }
+            .cases-grid { grid-template-columns: 1fr; }
+            .cases-demos { grid-template-columns: 1fr; }
+            .case-drawer-panel { width: 100vw; }
+            .case-drawer-open-full { display: none; }
+          }
+        `}</style>
+      </section>
+
+      {/* ── Case Preview Drawer (portal outside section) ── */}
+      <CaseDrawer
+        previewCase={previewCase}
+        onClose={closePreview}
+        openFullLabel={c.openFullLabel}
+        closeLabel={c.closeLabel}
+      />
+    </>
   );
 }
