@@ -1,521 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUMINOS ONE — Redefine Your World</title>
-  <meta name="description" content="LUMINOS ONE — the next generation smartphone that redefines what's possible. Crafted with precision, designed for life." />
-  <!-- Google Fonts preconnect -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    /* ===== CSS Reset & Base ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #FFFFFF;
-      --text-primary: #1D1D1F;
-      --text-secondary: #6E6E73;
-      --accent: #0071E3;
-      --accent-hover: #0077ED;
-      --surface: #F5F5F7;
-      --border: #D2D2D7;
-      --radius: 18px;
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { max-width: 100%; display: block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINOS — Technology That Feels Like Magic</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0071e3;--blue-h:#0077ed;
+  --dark:#1d1d1f;--mid:#6e6e73;
+  --light:#f5f5f7;--white:#fff;
+  --r:18px;
+  --f:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--white);color:var(--dark);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
 
-    /* ===== Navigation ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-    .nav-brand {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
-    }
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 13px;
-      color: var(--text-primary);
-      opacity: 0.85;
-      transition: opacity 0.2s;
-    }
-    .nav-links a:hover { opacity: 1; }
-    .nav-cta {
-      font-size: 13px;
-      background: var(--accent);
-      color: #fff;
-      padding: 7px 16px;
-      border-radius: 980px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--accent-hover); }
+/* NAV */
+.gnav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:48px;background:rgba(255,255,255,.85);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;transition:background .3s;
+}
+.gnav-logo{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.gnav-links{display:flex;gap:26px}
+.gnav-links a{font-size:12px;opacity:.8;transition:opacity .2s}
+.gnav-links a:hover{opacity:1}
+.gnav-btn{
+  font-size:12px;background:var(--blue);color:#fff;
+  padding:6px 14px;border-radius:980px;font-weight:500;
+  transition:background .2s;
+}
+.gnav-btn:hover{background:var(--blue-h)}
 
-    /* ===== Hero Section ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 24px 60px;
-      background: linear-gradient(180deg, #FBFBFD 0%, #FFFFFF 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-eyebrow {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-    .hero-title {
-      font-size: clamp(40px, 7vw, 80px);
-      font-weight: 700;
-      letter-spacing: -2px;
-      line-height: 1.05;
-      color: var(--text-primary);
-      margin-bottom: 20px;
-    }
-    .hero-subtitle {
-      font-size: clamp(18px, 2.5vw, 24px);
-      font-weight: 400;
-      color: var(--text-secondary);
-      max-width: 560px;
-      margin: 0 auto 36px;
-      line-height: 1.4;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 64px;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 980px;
-      font-size: 17px;
-      font-weight: 500;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .btn-primary:hover { background: var(--accent-hover); transform: scale(1.02); }
-    .btn-secondary {
-      color: var(--accent);
-      padding: 14px 28px;
-      border-radius: 980px;
-      font-size: 17px;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .btn-secondary:hover { opacity: 0.7; }
+/* HERO */
+.hero{
+  margin-top:48px;
+  background:#fbfbfd;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:72px 24px 0;
+  min-height:90vh;
+}
+.eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--blue);margin-bottom:10px;
+}
+.hero-h1{
+  font-size:clamp(48px,8vw,96px);font-weight:700;
+  letter-spacing:-.04em;line-height:1.02;color:var(--dark);
+}
+.hero-sub{
+  font-size:clamp(18px,2.2vw,24px);color:var(--mid);
+  margin:14px auto 32px;max-width:520px;line-height:1.4;
+}
+.ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:44px;padding:0 22px;border-radius:980px;
+  font-size:14px;font-weight:500;cursor:pointer;
+  transition:all .2s;border:none;white-space:nowrap;
+}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover{background:var(--blue-h)}
+.btn-g{background:transparent;color:var(--blue);font-size:14px}
+.btn-g::after{content:" ›"}
+.btn-g:hover{opacity:.7}
+.btn-w{background:#fff;color:var(--dark)}
+.btn-w:hover{background:rgba(255,255,255,.9)}
+.btn-ow{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+.btn-ow:hover{background:rgba(255,255,255,.1)}
+.btn-ob{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-ob:hover{background:rgba(0,113,227,.06)}
 
-    /* Product mockup — CSS only */
-    .hero-device {
-      width: 280px;
-      height: 560px;
-      background: linear-gradient(145deg, #2C2C2E 0%, #1C1C1E 60%, #3A3A3C 100%);
-      border-radius: 44px;
-      box-shadow:
-        0 0 0 2px #48484A,
-        0 40px 80px rgba(0,0,0,0.25),
-        0 80px 120px rgba(0,0,0,0.12);
-      position: relative;
-      margin: 0 auto;
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-16px); }
-    }
-    .hero-device::before {
-      content: '';
-      position: absolute;
-      top: 16px; left: 50%;
-      transform: translateX(-50%);
-      width: 100px; height: 30px;
-      background: #1C1C1E;
-      border-radius: 20px;
-    }
-    .hero-device::after {
-      content: '';
-      position: absolute;
-      inset: 12px;
-      background: linear-gradient(135deg, #0A84FF 0%, #30D158 50%, #FF375F 100%);
-      border-radius: 34px;
-      opacity: 0.9;
-    }
-    .device-camera {
-      position: absolute;
-      top: 22px; left: 50%;
-      transform: translateX(-50%);
-      width: 12px; height: 12px;
-      background: #3A3A3C;
-      border-radius: 50%;
-      z-index: 2;
-    }
+.hero-img{width:100%;max-width:860px;margin:0 auto}
 
-    /* ===== Section Common ===== */
-    section { padding: 100px 24px; }
-    .section-eyebrow {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    .section-title {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 700;
-      letter-spacing: -1px;
-      text-align: center;
-      margin-bottom: 16px;
-      color: var(--text-primary);
-    }
-    .section-desc {
-      font-size: 17px;
-      color: var(--text-secondary);
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 64px;
-      line-height: 1.6;
-    }
+/* PROMO GRID */
+.promo-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;padding:8px;background:#e5e5ea;
+}
+.promo-tile{
+  border-radius:var(--r);overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;
+  padding:44px 24px 0;min-height:400px;
+}
+.promo-tile .eyebrow{margin-bottom:6px}
+.promo-h{font-size:clamp(26px,3vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.promo-sub{font-size:15px;color:var(--mid);margin:6px 0 20px;line-height:1.4}
+.promo-img{
+  width:100%;max-width:100%;
+  height:220px;object-fit:contain;margin-top:auto;
+}
 
-    /* ===== Features Grid ===== */
-    .features { background: var(--surface); }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .feature-card {
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 36px 32px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-    .feature-icon {
-      width: 56px; height: 56px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-    }
-    .feature-icon.blue { background: linear-gradient(135deg, #0071E3, #34AADC); }
-    .feature-icon.green { background: linear-gradient(135deg, #30D158, #34C759); }
-    .feature-icon.purple { background: linear-gradient(135deg, #BF5AF2, #9B59B6); }
-    .feature-icon.orange { background: linear-gradient(135deg, #FF9F0A, #FF6B00); }
-    .feature-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: var(--text-primary);
-    }
-    .feature-text {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
+/* FEATURES */
+.features{padding:100px 40px;background:var(--white);text-align:center}
+.sec-label{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.sec-title{
+  font-size:clamp(32px,4vw,56px);font-weight:700;
+  letter-spacing:-.03em;line-height:1.06;
+  color:var(--dark);max-width:700px;margin:0 auto 14px;
+}
+.sec-body{font-size:17px;color:var(--mid);max-width:560px;margin:0 auto 60px;line-height:1.6}
 
-    /* ===== Specs Section ===== */
-    .specs { background: var(--bg); }
-    .specs-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .specs-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .specs-table tr {
-      border-bottom: 1px solid var(--border);
-    }
-    .specs-table tr:last-child { border-bottom: none; }
-    .specs-table td {
-      padding: 18px 0;
-      font-size: 15px;
-    }
-    .specs-table td:first-child {
-      color: var(--text-secondary);
-      width: 40%;
-      font-weight: 500;
-    }
-    .specs-table td:last-child {
-      color: var(--text-primary);
-      font-weight: 400;
-    }
-    .specs-category {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      padding: 28px 0 8px;
-    }
+.feat-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:2px;max-width:1200px;margin:0 auto;
+  background:#e5e5ea;border-radius:var(--r);overflow:hidden;
+}
+.feat-card{
+  background:var(--white);padding:40px 32px;text-align:left;
+  transition:background .2s;
+}
+.feat-card:hover{background:#fafafa}
+.feat-icon{
+  width:48px;height:48px;background:var(--light);
+  border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;margin-bottom:18px;
+}
+.feat-title{font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--dark);margin-bottom:8px}
+.feat-desc{font-size:14px;color:var(--mid);line-height:1.6}
 
-    /* ===== Story Section ===== */
-    .story { background: var(--text-primary); color: var(--bg); }
-    .story .section-title { color: var(--bg); }
-    .story .section-desc { color: rgba(255,255,255,0.7); }
-    .story-content {
-      max-width: 720px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .story-quote {
-      font-size: clamp(22px, 3.5vw, 36px);
-      font-weight: 300;
-      line-height: 1.4;
-      letter-spacing: -0.5px;
-      color: rgba(255,255,255,0.9);
-      margin-bottom: 32px;
-    }
-    .story-quote strong {
-      font-weight: 600;
-      color: #fff;
-    }
-    .story-body {
-      font-size: 17px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.8;
-    }
+/* DARK TILE */
+.dark-tile{
+  background:#000;display:flex;flex-direction:column;
+  align-items:center;text-align:center;padding:80px 24px 0;
+  position:relative;overflow:hidden;
+}
+.dark-tile::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(0,113,227,.3) 0%,transparent 65%);
+  pointer-events:none;
+}
+.dark-tile .eyebrow{color:rgba(255,255,255,.5)}
+.dark-h{font-size:clamp(32px,5vw,64px);font-weight:700;letter-spacing:-.03em;color:#fff;line-height:1.05}
+.dark-sub{font-size:clamp(17px,2vw,21px);color:rgba(255,255,255,.65);margin:12px auto 28px;max-width:480px;line-height:1.4}
+.dark-img{width:100%;max-width:760px;margin:32px auto 0}
 
-    /* ===== CTA Section ===== */
-    .cta-section {
-      background: linear-gradient(135deg, #0071E3 0%, #34AADC 100%);
-      text-align: center;
-      padding: 80px 24px;
-    }
-    .cta-section h2 {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 16px;
-      letter-spacing: -1px;
-    }
-    .cta-section p {
-      font-size: 18px;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 36px;
-    }
-    .btn-white {
-      background: #fff;
-      color: var(--accent);
-      padding: 14px 32px;
-      border-radius: 980px;
-      font-size: 17px;
-      font-weight: 600;
-      display: inline-block;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-white:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
+/* SPECS */
+.specs{padding:100px 40px;background:var(--light)}
+.specs-inner{max-width:900px;margin:0 auto}
+.specs-table{width:100%;border-collapse:collapse;margin-top:40px}
+.specs-table th{
+  background:var(--dark);color:#fff;
+  font-size:12px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;padding:14px 20px;text-align:left;
+}
+.specs-table td{
+  padding:14px 20px;font-size:15px;
+  border-bottom:1px solid #d2d2d7;vertical-align:top;
+}
+.specs-table tr:last-child td{border-bottom:none}
+.specs-table td:first-child{color:var(--mid);width:40%}
+.specs-table td:last-child{color:var(--dark);font-weight:500}
+.specs-group td{
+  background:#e5e5ea;color:var(--dark);
+  font-size:12px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:10px 20px;border-bottom:none;
+}
 
-    /* ===== Footer ===== */
-    footer {
-      background: var(--surface);
-      padding: 40px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-    .footer-brand {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-    }
-    .footer-links {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .footer-links a {
-      font-size: 13px;
-      color: var(--text-secondary);
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--text-primary); }
-    .footer-copy {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    .disclaimer {
-      font-size: 11px;
-      color: var(--border);
-      margin-top: 8px;
-    }
+/* STORY */
+.story{
+  padding:120px 40px;background:#000;text-align:center;
+  position:relative;overflow:hidden;
+}
+.story::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(0,113,227,.25) 0%,transparent 70%);
+  pointer-events:none;
+}
+.story .sec-title{color:#fff}
+.story .sec-body{color:rgba(255,255,255,.6)}
+blockquote{
+  font-size:clamp(20px,2.5vw,30px);font-weight:300;font-style:italic;
+  color:rgba(255,255,255,.85);max-width:760px;margin:0 auto 40px;
+  line-height:1.5;letter-spacing:-.01em;
+}
+blockquote strong{color:#fff;font-weight:600;font-style:normal}
 
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hero-device { width: 220px; height: 440px; }
-      .features-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+/* CTA */
+.cta-banner{
+  padding:100px 40px;
+  background:linear-gradient(135deg,#0071e3 0%,#0055b3 100%);
+  text-align:center;
+}
+.cta-banner .sec-title{color:#fff}
+.cta-banner .sec-body{color:rgba(255,255,255,.75)}
+
+/* FOOTER */
+.footer{background:#f5f5f7;padding:40px;border-top:1px solid #d2d2d7}
+.footer-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-copy{font-size:12px;color:var(--mid)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:var(--mid);transition:color .2s}
+.footer-links a:hover{color:var(--dark)}
+.footer-disc{
+  max-width:1200px;margin:20px auto 0;
+  font-size:11px;color:#aaa;line-height:1.6;
+  border-top:1px solid #d2d2d7;padding-top:20px;
+}
+
+/* ANIMATIONS */
+.fu{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.fu.vis{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .gnav-links{display:none}
+  .promo-grid{grid-template-columns:1fr}
+  .feat-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <span class="nav-brand">LUMINOS</span>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#specs">Specs</a></li>
-      <li><a href="#story">Story</a></li>
-    </ul>
-    <a href="#" class="nav-cta">Buy Now</a>
-  </nav>
+<!-- NAV -->
+<nav class="gnav">
+  <div class="gnav-logo">LUMINOS</div>
+  <div class="gnav-links">
+    <a href="#features">Features</a>
+    <a href="#products">Products</a>
+    <a href="#specs">Specs</a>
+    <a href="#story">Story</a>
+  </div>
+  <a href="#buy" class="gnav-btn">Buy Now</a>
+</nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <p class="hero-eyebrow">Introducing</p>
-    <h1 class="hero-title">LUMINOS ONE</h1>
-    <p class="hero-subtitle">The smartphone that doesn't just keep up with your life — it elevates it.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary">Learn More</a>
-      <a href="#" class="btn-secondary">Shop LUMINOS ONE ›</a>
-    </div>
-    <!-- CSS-only device mockup -->
-    <div class="hero-device">
-      <div class="device-camera"></div>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="hero">
+  <p class="eyebrow">Introducing</p>
+  <h1 class="hero-h1">LUMINOS ONE</h1>
+  <p class="hero-sub">The smartphone that doesn't just keep up with your life — it elevates it.</p>
+  <div class="ctas">
+    <a href="#buy" class="btn btn-p">Buy Now</a>
+    <a href="#features" class="btn btn-g">Learn more</a>
+  </div>
+  <img class="hero-img"
+       src="../3c-assets/apple/hero_iphone_family_fuz5j2v5xx6y_large.webp"
+       alt="LUMINOS ONE — three colors">
+</section>
 
-  <!-- Features -->
-  <section class="features" id="features">
-    <p class="section-eyebrow">Why LUMINOS</p>
-    <h2 class="section-title">Engineered for the extraordinary.</h2>
-    <p class="section-desc">Every detail of LUMINOS ONE is crafted with a single purpose: to give you more.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon blue">📷</div>
-        <h3 class="feature-title">Luminary Camera System</h3>
-        <p class="feature-text">A triple-lens 200MP array with computational photography that captures light the way your eyes do — even in complete darkness.</p>
+<!-- PROMO GRID -->
+<section id="products">
+  <div class="promo-grid">
+
+    <div class="promo-tile" style="background:#e8f0fe">
+      <p class="eyebrow" style="color:#0071e3">New</p>
+      <h2 class="promo-h">LUMINOS AIR</h2>
+      <p class="promo-sub">Impossibly thin. Surprisingly powerful.</p>
+      <div class="ctas" style="margin-bottom:0">
+        <a href="#" class="btn btn-p" style="height:38px;font-size:13px">Learn more</a>
+        <a href="#" class="btn btn-ob" style="height:38px;font-size:13px">Buy</a>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon green">⚡</div>
-        <h3 class="feature-title">Nexus A3 Chip</h3>
-        <p class="feature-text">Our most powerful chip yet. 40% faster CPU, 60% faster GPU. Runs on-device AI models that would have required a data center just two years ago.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon purple">🔋</div>
-        <h3 class="feature-title">All-Day Adaptive Battery</h3>
-        <p class="feature-text">Intelligent power management learns your usage patterns and adapts in real time. 5,200mAh that feels like more.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon orange">🌐</div>
-        <h3 class="feature-title">Ceramic Shield Pro</h3>
-        <p class="feature-text">The toughest front glass ever in a smartphone, combined with aerospace-grade titanium frame. Built to last, designed to impress.</p>
-      </div>
+      <img class="promo-img"
+           src="../3c-assets/apple/promo_macbook_air_m5_dibaetiq7nu6_large.webp"
+           alt="LUMINOS Air">
     </div>
-  </section>
 
-  <!-- Specs -->
-  <section class="specs" id="specs">
-    <p class="section-eyebrow">Technical Specifications</p>
-    <h2 class="section-title">Every detail, precisely engineered.</h2>
-    <div class="specs-container">
-      <table class="specs-table">
-        <tr><td colspan="2" class="specs-category">Display</td></tr>
-        <tr><td>Display Type</td><td>6.7" Super Retina XDR OLED</td></tr>
-        <tr><td>Resolution</td><td>2796 × 1290 pixels at 460 ppi</td></tr>
-        <tr><td>Refresh Rate</td><td>1–120Hz ProMotion Adaptive</td></tr>
-        <tr><td>Peak Brightness</td><td>2,000 nits (HDR), 1,000 nits (typical)</td></tr>
-
-        <tr><td colspan="2" class="specs-category">Performance</td></tr>
-        <tr><td>Chip</td><td>Nexus A3 Bionic (3nm)</td></tr>
-        <tr><td>CPU</td><td>6-core (2 performance + 4 efficiency)</td></tr>
-        <tr><td>GPU</td><td>6-core Luminos GPU</td></tr>
-        <tr><td>RAM</td><td>8GB unified memory</td></tr>
-        <tr><td>Storage</td><td>256GB / 512GB / 1TB</td></tr>
-
-        <tr><td colspan="2" class="specs-category">Camera</td></tr>
-        <tr><td>Main Camera</td><td>200MP, f/1.6, OIS, 24mm</td></tr>
-        <tr><td>Ultra Wide</td><td>48MP, f/2.2, 120° FOV</td></tr>
-        <tr><td>Telephoto</td><td>12MP, 5× optical zoom, f/2.8</td></tr>
-        <tr><td>Front Camera</td><td>12MP TrueDepth, f/1.9</td></tr>
-        <tr><td>Video</td><td>8K ProRes at 30fps, 4K at 120fps</td></tr>
-
-        <tr><td colspan="2" class="specs-category">Battery & Connectivity</td></tr>
-        <tr><td>Battery</td><td>5,200mAh Li-Ion</td></tr>
-        <tr><td>Charging</td><td>45W wired, 25W MagCharge wireless</td></tr>
-        <tr><td>Connectivity</td><td>5G Sub-6GHz + mmWave, Wi-Fi 7, Bluetooth 5.4</td></tr>
-        <tr><td>Dimensions</td><td>160.7 × 77.6 × 7.8mm, 221g</td></tr>
-        <tr><td>Water Resistance</td><td>IP68 (6m for 30 minutes)</td></tr>
-      </table>
+    <div class="promo-tile" style="background:#fff0f3">
+      <p class="eyebrow" style="color:#e3006e">Series 3</p>
+      <h2 class="promo-h">LUMINOS WATCH</h2>
+      <p class="promo-sub">Health. Fitness. Connection.</p>
+      <div class="ctas" style="margin-bottom:0">
+        <a href="#" class="btn btn-p" style="background:#e3006e;height:38px;font-size:13px">Learn more</a>
+        <a href="#" class="btn btn-g" style="color:#e3006e;font-size:13px">Buy</a>
+      </div>
+      <img class="promo-img"
+           src="../3c-assets/apple/promo_apple_watch_series_11_b63hxviqvonm.webp"
+           alt="LUMINOS Watch">
     </div>
-  </section>
 
-  <!-- Story -->
-  <section class="story" id="story">
-    <div class="story-content">
-      <p class="section-eyebrow" style="color:#6E9FD4;">Our Story</p>
-      <h2 class="section-title">Technology that <br>feels like magic.</h2>
-      <blockquote class="story-quote">
-        "We don't just build phones. We build <strong>windows into possibility</strong> — devices that disappear into your life and let you focus on what matters."
-      </blockquote>
-      <p class="story-body">
-        LUMINOS was founded on a single belief: that the best technology is invisible. Our team of 2,400 engineers, designers, and dreamers across 12 countries works obsessively to remove friction from your digital life. LUMINOS ONE is the culmination of seven years of research into materials science, computational photography, and human-computer interaction. It is not just a phone. It is a statement about what technology can be when it truly serves people.
-      </p>
+    <div class="promo-tile" style="background:#f0f4ff">
+      <p class="eyebrow" style="color:#6e3aff">Now with M4</p>
+      <h2 class="promo-h">LUMINOS PAD</h2>
+      <p class="promo-sub">Supercharged for everything you do.</p>
+      <div class="ctas" style="margin-bottom:0">
+        <a href="#" class="btn btn-p" style="background:#6e3aff;height:38px;font-size:13px">Learn more</a>
+        <a href="#" class="btn btn-g" style="color:#6e3aff;font-size:13px">Buy</a>
+      </div>
+      <img class="promo-img"
+           src="../3c-assets/apple/hero_ipad_air_m4_ew8k92mk1w6e_large.webp"
+           alt="LUMINOS Pad">
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="cta-section">
-    <h2>Ready to experience LUMINOS ONE?</h2>
-    <p>Starting from $999. Available in Midnight, Starlight, Space Blue, and Desert Gold.</p>
-    <a href="#" class="btn-white">Order Now</a>
-  </section>
+    <div class="promo-tile" style="background:#f5f5f7">
+      <p class="eyebrow" style="color:#555">Generation 3</p>
+      <h2 class="promo-h">LUMINOS PODS</h2>
+      <p class="promo-sub">Adaptive noise cancellation. All day.</p>
+      <div class="ctas" style="margin-bottom:0">
+        <a href="#" class="btn btn-p" style="height:38px;font-size:13px">Learn more</a>
+        <a href="#" class="btn btn-g" style="font-size:13px">Buy</a>
+      </div>
+      <img class="promo-img"
+           src="../3c-assets/apple/promo_airpodspro_3_f6xmza7bglei_large.webp"
+           alt="LUMINOS Pods">
+    </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-brand">LUMINOS</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <p class="sec-label fu">Why LUMINOS ONE</p>
+  <h2 class="sec-title fu">Engineered for<br>the extraordinary.</h2>
+  <p class="sec-body fu">Every component, every material, every line of code exists to give you one thing: more.</p>
+  <div class="feat-grid">
+    <div class="feat-card fu">
+      <div class="feat-icon">📷</div>
+      <h3 class="feat-title">Luminary Camera</h3>
+      <p class="feat-desc">200MP triple-lens array with computational photography. Captures light the way your eyes do — even in complete darkness.</p>
+    </div>
+    <div class="feat-card fu">
+      <div class="feat-icon">⚡</div>
+      <h3 class="feat-title">Nexus A3 Chip</h3>
+      <p class="feat-desc">Our most powerful chip yet. 40% faster CPU, 60% faster GPU. Runs on-device AI models in real time.</p>
+    </div>
+    <div class="feat-card fu">
+      <div class="feat-icon">🔋</div>
+      <h3 class="feat-title">Adaptive Battery</h3>
+      <p class="feat-desc">5,200mAh intelligent power management learns your patterns. All-day battery that adapts to you.</p>
+    </div>
+    <div class="feat-card fu">
+      <div class="feat-icon">🛡️</div>
+      <h3 class="feat-title">Ceramic Shield Pro</h3>
+      <p class="feat-desc">The toughest front glass ever in a smartphone, combined with aerospace-grade titanium frame.</p>
+    </div>
+    <div class="feat-card fu">
+      <div class="feat-icon">🌐</div>
+      <h3 class="feat-title">Wi-Fi 7 + 5G</h3>
+      <p class="feat-desc">Sub-6GHz and mmWave 5G with Wi-Fi 7. Faster than you'll ever need, ready for what comes next.</p>
+    </div>
+    <div class="feat-card fu">
+      <div class="feat-icon">🔒</div>
+      <h3 class="feat-title">Privacy by Design</h3>
+      <p class="feat-desc">On-device processing for Face ID, Siri, and Photos. Your data stays yours — always.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DARK TRADE-IN TILE -->
+<section class="dark-tile">
+  <p class="eyebrow">Trade In &amp; Save</p>
+  <h2 class="dark-h fu">Get up to $800 off.</h2>
+  <p class="dark-sub fu">Trade in your current phone and upgrade to LUMINOS ONE.</p>
+  <div class="ctas fu">
+    <a href="#" class="btn btn-w">Get your estimate</a>
+    <a href="#" class="btn btn-ow">Learn more</a>
+  </div>
+  <img class="dark-img"
+       src="../3c-assets/apple/promo_iphone_tradein_bugw15ka691e_large.webp"
+       alt="Trade in your old device">
+</section>
+
+<!-- SPECS -->
+<section class="specs" id="specs">
+  <div class="specs-inner">
+    <p class="sec-label fu">Technical Specifications</p>
+    <h2 class="sec-title fu" style="text-align:left">Every detail,<br>precisely engineered.</h2>
+    <table class="specs-table fu">
+      <tr class="specs-group"><td colspan="2">Display</td></tr>
+      <tr><td>Display Type</td><td>6.7" Super Retina XDR OLED</td></tr>
+      <tr><td>Resolution</td><td>2796 × 1290 px at 460 ppi</td></tr>
+      <tr><td>Refresh Rate</td><td>1–120Hz ProMotion Adaptive</td></tr>
+      <tr><td>Peak Brightness</td><td>2,000 nits (HDR)</td></tr>
+      <tr class="specs-group"><td colspan="2">Performance</td></tr>
+      <tr><td>Chip</td><td>Nexus A3 Bionic (3nm)</td></tr>
+      <tr><td>CPU</td><td>6-core (2 performance + 4 efficiency)</td></tr>
+      <tr><td>RAM</td><td>8GB unified memory</td></tr>
+      <tr><td>Storage</td><td>256GB / 512GB / 1TB</td></tr>
+      <tr class="specs-group"><td colspan="2">Camera</td></tr>
+      <tr><td>Main Camera</td><td>200MP, f/1.6, OIS, 24mm equivalent</td></tr>
+      <tr><td>Ultra Wide</td><td>48MP, f/2.2, 120° FOV</td></tr>
+      <tr><td>Telephoto</td><td>12MP, 5× optical zoom, f/2.8</td></tr>
+      <tr><td>Video</td><td>8K ProRes at 30fps, 4K at 120fps</td></tr>
+      <tr class="specs-group"><td colspan="2">Battery &amp; Connectivity</td></tr>
+      <tr><td>Battery</td><td>5,200mAh Li-Ion</td></tr>
+      <tr><td>Charging</td><td>45W wired, 25W MagCharge wireless</td></tr>
+      <tr><td>Connectivity</td><td>5G Sub-6GHz + mmWave, Wi-Fi 7, Bluetooth 5.4</td></tr>
+      <tr><td>Water Resistance</td><td>IP68 (6m for 30 minutes)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <p class="sec-label fu" style="color:rgba(255,255,255,.4)">Our Philosophy</p>
+  <h2 class="sec-title fu">Technology that<br>feels like magic.</h2>
+  <blockquote class="fu">
+    "We don't build phones. We build <strong>windows into possibility</strong> — devices that disappear into your life and let you focus on what matters."
+  </blockquote>
+  <p class="sec-body fu">LUMINOS was founded on a single belief: the best technology is invisible. Our team of 2,400 engineers, designers, and dreamers across 12 countries works obsessively to remove friction from your digital life.</p>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner" id="buy">
+  <p class="sec-label fu" style="color:rgba(255,255,255,.55)">Available Now</p>
+  <h2 class="sec-title fu">Ready to experience<br>LUMINOS ONE?</h2>
+  <p class="sec-body fu">Starting from $999. Available in Midnight, Starlight, Space Blue, and Desert Gold.</p>
+  <div class="ctas fu" style="justify-content:center;margin-top:32px">
+    <a href="#" class="btn btn-w">Order Now</a>
+    <a href="#" class="btn btn-ow">Compare Models</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-copy">© 2025 LUMINOS Technology, Inc. All rights reserved.</span>
     <div class="footer-links">
       <a href="#">Products</a>
       <a href="#">Store</a>
@@ -523,9 +422,23 @@
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Use</a>
     </div>
-    <p class="footer-copy">Copyright &copy; 2025 LUMINOS Technology. All rights reserved.</p>
-    <p class="disclaimer">This is a fictional brand created for portfolio demonstration purposes only. Not affiliated with any real company.</p>
-  </footer>
+  </div>
+  <p class="footer-disc">LUMINOS is a fictional brand created for portfolio demonstration purposes only. Product images sourced from Apple Inc. official website for educational reference. This page is not affiliated with or endorsed by Apple Inc.</p>
+</footer>
 
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, {threshold:0.1, rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.fu').forEach((el,i) => {
+  el.style.transitionDelay = (i % 5) * 0.07 + 's';
+  obs.observe(el);
+});
+const gnav = document.querySelector('.gnav');
+window.addEventListener('scroll', () => {
+  gnav.style.background = window.scrollY > 10
+    ? 'rgba(255,255,255,.96)' : 'rgba(255,255,255,.85)';
+});
+</script>
 </body>
 </html>
