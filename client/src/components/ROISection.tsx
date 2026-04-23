@@ -375,10 +375,10 @@ export default function ROISection() {
   }));
 
   const tabs = locale === 'ja'
-    ? ["採用 vs 私", "Amazon全費用", "Shopify隠れコスト"]
+    ? ["採用 vs 私", "Amazon全費用", "Shopify隠れコスト", "競合代理店 vs 私"]
     : locale === 'en'
-    ? ["Hiring vs Me", "Amazon All Fees", "Shopify Hidden Costs"]
-    : ["招人 vs 找我", "亚马逊全费用", "Shopify 隐藏费用"];
+    ? ["Hiring vs Me", "Amazon All Fees", "Shopify Hidden Costs", "Agency vs Me"]
+    : ["招人 vs 找我", "亚马逊全费用", "Shopify 隐藏费用", "竞品建站 vs 找我"];
 
   const eyebrow = locale === 'ja' ? "コスト比較" : locale === 'en' ? "COST COMPARISON" : "成本对比";
   const titleLine = locale === 'ja'
@@ -664,6 +664,98 @@ export default function ROISection() {
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 8 }}>
                     {locale === 'en' ? "All plugins built-in. No monthly app fees." : "所有功能内置，无月度插件费"}
                   </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* TAB 4: Agency / Competitor vs Me */}
+          {activeTab === 3 && (
+            <motion.div key="agency" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.3 }}>
+              <div style={{ marginBottom: 10, fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.12em" }}>
+                {locale === 'en' ? "Agency & platform pricing vs working with me — same deliverable, real market quotes" : "外贸建站机构 & 平台报价 vs 找我 — 同等交付物，真实市场价"}
+              </div>
+
+              {/* Competitor comparison bars */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 40 }}>
+                {[
+                  {
+                    name: locale === 'en' ? "Agency (Ruinuo / Sanxing tier)" : "外贸建站机构（瑞诺 / 三行同级）",
+                    price: locale === 'en' ? "¥30,000–80,000/yr" : "¥30,000–80,000/年",
+                    note: locale === 'en' ? "Template-based · 60–90 day delivery · annual renewal required" : "模板建站 · 60–90 天交付 · 每年续费",
+                    color: "#E74C3C",
+                    pct: 100,
+                  },
+                  {
+                    name: locale === 'en' ? "Shopify + Plugins + Developer" : "Shopify + 插件 + 开发",
+                    price: locale === 'en' ? "¥25,000–40,000/yr" : "¥25,000–40,000/年",
+                    note: locale === 'en' ? "Monthly fees + transaction cut + plugin lock-in, ongoing cost" : "月费 + 交易抽成 + 插件绑定，持续支出",
+                    color: "#E67E22",
+                    pct: 65,
+                  },
+                  {
+                    name: locale === 'en' ? "Freelancer (template, no custom)" : "普通接单个人（模板，无定制）",
+                    price: locale === 'en' ? "¥3,000–8,000" : "¥3,000–8,000",
+                    note: locale === 'en' ? "Template only · no SEO · no training · no after-sales" : "纯模板 · 无 SEO · 无培训 · 无售后",
+                    color: "#F39C12",
+                    pct: 22,
+                  },
+                  {
+                    name: locale === 'en' ? "Working with me (custom, full-stack)" : "找我（定制，全栈交付）",
+                    price: locale === 'en' ? "¥8,800 one-time" : "¥8,800 一次性",
+                    note: locale === 'en' ? "Custom design + SEO + payment + auth + training · 10-day delivery · you own everything" : "定制设计 + SEO + 支付 + 认证 + 培训 · 10 天交付 · 代码数据全归你",
+                    color: "#2ECC71",
+                    pct: 18,
+                  },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: "220px 1fr 180px", gap: 16, alignItems: "center", padding: "20px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                    <div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 500, marginBottom: 4 }}>{item.name}</div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.3)", lineHeight: 1.5 }}>{item.note}</div>
+                    </div>
+                    <div style={{ height: 20, background: "rgba(255,255,255,0.04)", borderRadius: 2, overflow: "hidden" }}>
+                      <AnimatedBar pct={item.pct} color={item.color} delay={0.2 + i * 0.1} start={inView && activeTab === 3} />
+                    </div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: item.color, fontWeight: 600, textAlign: "right" }}>{item.price}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Summary comparison */}
+              <div className="hiring-compare" style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 0 }}>
+                <div style={{ background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.25)", padding: "36px 32px" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", marginBottom: 12 }}>
+                    {locale === 'en' ? "AGENCY / YEAR" : "外贸机构 / 年"}
+                  </div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 700, color: "#E74C3C", lineHeight: 1, marginBottom: 8 }}>
+                    ¥30,000+
+                  </div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)" }}>
+                    {locale === 'en' ? "Template · 60–90 days · annual renewal" : "模板建站 · 60–90 天 · 每年续费"}
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0 24px", background: "rgba(255,255,255,0.02)" }}>
+                  <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 28, color: "rgba(255,255,255,0.15)", fontStyle: "italic" }}>vs</span>
+                </div>
+                <div style={{ background: "rgba(46,204,113,0.08)", border: "1px solid rgba(46,204,113,0.2)", padding: "36px 32px" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", marginBottom: 12 }}>
+                    {locale === 'en' ? "WORK WITH ME / ONE-TIME" : "找我 / 一次性"}
+                  </div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 700, color: "#2ECC71", lineHeight: 1, marginBottom: 8 }}>
+                    ¥8,800
+                  </div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.2)" }}>
+                    {locale === 'en' ? "Custom · 10 days · you own everything" : "定制建站 · 10 天交付 · 代码数据全归你"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Differentiation note */}
+              <div style={{ marginTop: 24, padding: "16px 20px", background: "rgba(212,196,154,0.06)", border: "1px solid rgba(212,196,154,0.15)" }}>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em", lineHeight: 1.8 }}>
+                  {locale === 'en'
+                    ? "Key difference: agencies use templates and lock you into annual renewals. Freelancers skip SEO and training. I deliver custom-built sites with full-stack coverage — design, SEO, payment, auth, automation — in 10 days, one-time fee. You own all code and data."
+                    : "核心差异：机构用模板绑定续费，普通接单者跳过 SEO 和培训。我提供定制建站，覆盖设计、SEO、支付、认证、自动化全栈，10 天交付，一次性收费，代码和数据完全归你。"}
                 </div>
               </div>
             </motion.div>

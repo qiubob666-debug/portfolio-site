@@ -96,7 +96,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#0071E3",
         textColor: "#1D1D1F",
-        url: "/3c-cases/case1.html",
+        url: "/3c-react/index.html#/luminos",
       },
       {
         id: "3c-case2",
@@ -107,7 +107,7 @@ const COPY = {
         bg: "#0A0A0A",
         accent: "#FF6B00",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case2.html",
+        url: "/3c-react/index.html#/skyvex",
       },
       {
         id: "3c-case3",
@@ -118,7 +118,7 @@ const COPY = {
         bg: "#F5F5F5",
         accent: "#E50914",
         textColor: "#1A1A1A",
-        url: "/3c-cases/case3.html",
+        url: "/3c-react/index.html#/nexara",
       },
       {
         id: "3c-case4",
@@ -129,7 +129,7 @@ const COPY = {
         bg: "#111111",
         accent: "#C9A84C",
         textColor: "#F5F5F5",
-        url: "/3c-cases/case4.html",
+        url: "/3c-react/index.html#/resoniq",
       },
       {
         id: "3c-case5",
@@ -140,7 +140,7 @@ const COPY = {
         bg: "#050A14",
         accent: "#00D4FF",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case5.html",
+        url: "/3c-react/index.html#/orbiview",
       },
       {
         id: "3c-case6",
@@ -151,7 +151,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#FF4500",
         textColor: "#000000",
-        url: "/3c-cases/case6.html",
+        url: "/3c-react/index.html#/formwerk",
       },
     ],
     demoTitle: "行业 Demo",
@@ -261,7 +261,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#0071E3",
         textColor: "#1D1D1F",
-        url: "/3c-cases/case1.html",
+        url: "/3c-react/index.html#/luminos",
       },
       {
         id: "3c-case2",
@@ -272,7 +272,7 @@ const COPY = {
         bg: "#0A0A0A",
         accent: "#FF6B00",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case2.html",
+        url: "/3c-react/index.html#/skyvex",
       },
       {
         id: "3c-case3",
@@ -283,7 +283,7 @@ const COPY = {
         bg: "#F5F5F5",
         accent: "#E50914",
         textColor: "#1A1A1A",
-        url: "/3c-cases/case3.html",
+        url: "/3c-react/index.html#/nexara",
       },
       {
         id: "3c-case4",
@@ -294,7 +294,7 @@ const COPY = {
         bg: "#111111",
         accent: "#C9A84C",
         textColor: "#F5F5F5",
-        url: "/3c-cases/case4.html",
+        url: "/3c-react/index.html#/resoniq",
       },
       {
         id: "3c-case5",
@@ -305,7 +305,7 @@ const COPY = {
         bg: "#050A14",
         accent: "#00D4FF",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case5.html",
+        url: "/3c-react/index.html#/orbiview",
       },
       {
         id: "3c-case6",
@@ -316,7 +316,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#FF4500",
         textColor: "#000000",
-        url: "/3c-cases/case6.html",
+        url: "/3c-react/index.html#/formwerk",
       },
     ],
     demoTitle: "Industry Demos",
@@ -426,7 +426,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#0071E3",
         textColor: "#1D1D1F",
-        url: "/3c-cases/case1.html",
+        url: "/3c-react/index.html#/luminos",
       },
       {
         id: "3c-case2",
@@ -437,7 +437,7 @@ const COPY = {
         bg: "#0A0A0A",
         accent: "#FF6B00",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case2.html",
+        url: "/3c-react/index.html#/skyvex",
       },
       {
         id: "3c-case3",
@@ -448,7 +448,7 @@ const COPY = {
         bg: "#F5F5F5",
         accent: "#E50914",
         textColor: "#1A1A1A",
-        url: "/3c-cases/case3.html",
+        url: "/3c-react/index.html#/nexara",
       },
       {
         id: "3c-case4",
@@ -459,7 +459,7 @@ const COPY = {
         bg: "#111111",
         accent: "#C9A84C",
         textColor: "#F5F5F5",
-        url: "/3c-cases/case4.html",
+        url: "/3c-react/index.html#/resoniq",
       },
       {
         id: "3c-case5",
@@ -470,7 +470,7 @@ const COPY = {
         bg: "#050A14",
         accent: "#00D4FF",
         textColor: "#FFFFFF",
-        url: "/3c-cases/case5.html",
+        url: "/3c-react/index.html#/orbiview",
       },
       {
         id: "3c-case6",
@@ -481,7 +481,7 @@ const COPY = {
         bg: "#FFFFFF",
         accent: "#FF4500",
         textColor: "#000000",
-        url: "/3c-cases/case6.html",
+        url: "/3c-react/index.html#/formwerk",
       },
     ],
     demoTitle: "業界デモ",
